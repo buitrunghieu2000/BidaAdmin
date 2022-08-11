@@ -1,4 +1,5 @@
 import React, { ReactNode } from "react";
+import Navbar from "../components/Navbar";
 
 // components
 
@@ -17,8 +18,8 @@ export default function Admin({ children }: Props) {
     <>
       {/* <Sidebar /> */}
       <div className="relative md:ml-64 bg-blueGray-100">
-        {/* <AdminNavbar /> */}
-        {/* Header */}
+        {/* <Navbar /> */}
+
         {/* <HeaderStats /> */}
         <div className="px-4 md:px-10 mx-auto w-full -m-24">
           {children}
