@@ -1,6 +1,9 @@
 import React from "react";
 import Widget from "../components/Widget/Widget";
 import hero from "../assets/img/happy.svg"
+
+import { PieChart } from "recharts";
+import { Piechart } from "../components/Productchart/Piechart";
 type Props = {};
 
 const Dashboard = (props: Props) => {
@@ -12,7 +15,10 @@ const Dashboard = (props: Props) => {
       <Widget/> 
       <Widget/> 
       </div>
-      <div className="hero grid grid-cols-4 gap-4 mt-[25px] ">
+      <div>
+        <Piechart/>
+      </div>
+      {/* <div className="hero grid grid-cols-4 gap-4 mt-[25px] ">
         <div className="col-span-2 card bg-teal-400 border-teal-400 shadow-md text-white rounded h-[208px] p-[24px]">
           <div className="card-body flex flex-row justify-center">
             <div className="w-[160px] h-[133px]">
@@ -31,9 +37,13 @@ const Dashboard = (props: Props) => {
           </div>
         </div>
         <div className="col-span-2">
-          
+          <div className="bg-slate-600 text-center text-[14px] py-[16px] px-[24px] text-white mb-6">Hi it's me </div>
+          <div className="grid gap-4 grid-cols-2">
+            <div className="">123</div>
+            <div className="">123</div>
+          </div>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 };
