@@ -16,7 +16,7 @@ const Router = (props: Props) => {
   let auth = { token: true };
   return (
     <>{auth.token === false ? <Login/> : (<><Navbar/>
-    <div className="layout h-screen flex">
+    <div className="layout min-h-screen flex">
      <div className="sidebar"><Sidebar/></div>
      <div className="content flex-1  p-[20px]" style={{background: "#e2e8f0"}}>
      <Routes>
