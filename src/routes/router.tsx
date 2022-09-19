@@ -4,9 +4,9 @@ import NotFoundPage from "../components/404";
 import Navbar from "../components/Navbar/Navbar";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Dashboard from "../pages/Dashboard";
-import Login from "../pages/Login";
-import Userlist from "../pages/Userlist";
+import Login from "../pages/login";
 
+import Userlist from "../pages/Userlist";
 
 import PrivateRoute from "../utils/privateRoute";
 
@@ -15,19 +15,38 @@ type Props = {};
 const Router = (props: Props) => {
   let auth = { token: true };
   return (
-    <>{auth.token === false ? <Login/> : (<><Navbar/>
-    <div className="layout min-h-screen flex">
-     <div className="sidebar"><Sidebar/></div>
-     <div className="content flex-1  p-[20px]" style={{background: "#e2e8f0"}}>
-     <Routes>
-     <Route element={<PrivateRoute />}>
-           <Route path="/" element={ auth.token === true ? <Dashboard /> : <Login/>} />
-           <Route path="/userlist" element={ auth.token === true ? <Userlist /> : <Login/>} />
-     </Route>
-     <Route path="*"  element={<NotFoundPage/>} />
-   </Routes>
-    </div>
-   </div></>) }</>
+    <>
+      {auth.token === false ? (
+        <Login />
+      ) : (
+        <>
+          <Navbar />
+          <div className="layout min-h-screen flex">
+            <div className="sidebar">
+              <Sidebar />
+            </div>
+            <div
+              className="content flex-1  p-[20px]"
+              style={{ background: "#e2e8f0" }}
+            >
+              <Routes>
+                <Route element={<PrivateRoute />}>
+                  <Route
+                    path="/"
+                    element={auth.token === true ? <Dashboard /> : <Login />}
+                  />
+                  <Route
+                    path="/userlist"
+                    element={auth.token === true ? <Userlist /> : <Login />}
+                  />
+                </Route>
+                <Route path="*" element={<NotFoundPage />} />
+              </Routes>
+            </div>
+          </div>
+        </>
+      )}
+    </>
   );
 };
 
