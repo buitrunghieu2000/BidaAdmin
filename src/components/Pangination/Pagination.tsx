@@ -1,28 +1,48 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 type Props = {
-//     currentPage: number;
-//   totalPost: number;
-//   limit: number;
-//   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  currentPage: number;
+  total: number;
+  limit: number;
+  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const Pagination = (props: Props) => {
+  let [num, setNum] = useState(1)
+  let [cur, setCur] = useState(1)
+  
+      const pages = [
+        { page: num },
+        { page: num + 1 },
+        { page: num + 2 },
+        { page: num + 3 },
+      ]
+      function Next ()
+      {
+        setNum(++num)
+      }
+      function back ()
+      {
+      num > 1 && setNum(--num)
+      }
   return (
-    <div className="flex flex-col items-center">
-
-<div className="inline-flex mt-2 xs:mt-0">
-    {/* <!-- Buttons --> */}
-    <button className="inline-flex items-center py-2 px-4 text-sm font-medium text-white bg-gray-800 rounded-l hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-        <svg aria-hidden="true" className="mr-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.707 14.707a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l2.293 2.293a1 1 0 010 1.414z" clip-rule="evenodd"></path></svg>
-        Prev
-    </button>
-    <button className="inline-flex items-center py-2 px-4 text-sm font-medium text-white bg-gray-800 rounded-r border-0 border-l border-gray-700 hover:bg-gray-900 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-        Next
-        <svg aria-hidden="true" className="ml-2 w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-    </button>
-</div>
-</div>
+        <div className="flex justify-center mt-20">
+            <button onClick={back} className="h-12 border-2 border-r-0 border-indigo-600
+                  px-4 rounded-l-lg hover:bg-indigo-600 hover:text-white">
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path>
+              </svg>
+            </button>
+            {
+              pages.map((pg, i) => (
+                  <button key={i} onClick={() => setCur(pg.page)} className={`h-12 border-2 border-r-0 border-indigo-600
+                  w-12 ${cur === pg.page && 'bg-indigo-600 text-white'}`}>{pg.page}</button>
+              ))
+            }
+            <button onClick={Next} className="h-12 border-2  border-indigo-600
+                  px-4 rounded-r-lg hover:bg-indigo-600 hover:text-white">
+              <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd" fill-rule="evenodd"></path></svg>
+            </button>
+        </div>
   )
 }
 

@@ -6,10 +6,14 @@ import { USER_MODEL } from '../models/user.model'
 type Props = {}
 
 function Userlist({}: Props) {
+    let newUserList = []
+    const LIMIT = 5
+    const total = 20;
+    const [currentPage, setCurrentPage] = useState<number>(0)
     const [userList, setUserList] = useState([])
     const [searchItem, setSearchItem] = useState('')
     const [order, setOrder] = useState('ACS')
-    let newUserList = []
+    
     React.useEffect(()=>{
         fetch('https://jsonplaceholder.typicode.com/users')
         .then(response => response.json())
@@ -55,9 +59,7 @@ function Userlist({}: Props) {
         <table className="w-full border">
             <thead>
                 <tr className="bg-gray-50 border-b">
-                    <th className="border-r p-2">
-                        <input type="checkbox"/>
-                    </th>
+                
                     <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
                         <div className="flex items-center justify-center" >
                             ID
@@ -87,7 +89,7 @@ function Userlist({}: Props) {
                     </th>
                     <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
                         <div className="flex items-center justify-center">
-                    
+                            Actions
                         </div>
                     </th>
                 </tr>
@@ -100,9 +102,7 @@ function Userlist({}: Props) {
                 }
             }).map((item: USER_MODEL,index: number)=>(
                         <tr className="bg-gray-100 text-center border-b text-sm text-gray-600" key={index}>
-                            <td className="p-2 border-r">
-                                <input type="checkbox"/>
-                            </td>
+                            
                             <td className="p-2 border-r">{item.id}</td>
                             <td className="p-2 border-r">{item.name}</td>
                             <td className="p-2 border-r">{item.email}</td>
@@ -116,7 +116,7 @@ function Userlist({}: Props) {
                     
             </tbody>
         </table>
-        <Pagination />
+        <Pagination limit={LIMIT} currentPage={currentPage } setCurrentPage={setCurrentPage} total={total}/>
 </div>
 )
 }
