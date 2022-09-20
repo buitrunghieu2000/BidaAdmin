@@ -5,45 +5,45 @@ import { USER_MODEL } from "../models/user.model";
 
 type Props = {};
 
-function Userlist(props: Props) {
-  let newUserList = [];
+function Productlist(props: Props) {
+  let newProductList = [];
   const LIMIT = 5;
   const total = 20;
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [userList, setUserList] = useState([]);
+  const [productList, setProductlist] = useState([]);
   const [searchItem, setSearchItem] = useState("");
   const [order, setOrder] = useState("ACS");
 
   React.useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/users")
+    fetch("https://jsonplaceholder.typicode.com/posts")
       .then((response) => response.json())
-      .then((json) => setUserList(json));
+      .then((json) => setProductlist(json));
   }, []);
 
   const handleRemove = (removeId: number) => {
-    newUserList = userList.filter(
+    newProductList = productList.filter(
       (item: USER_MODEL, index: number) => item.id !== removeId
     );
-    setUserList(newUserList);
+    setProductlist(newProductList);
   };
 
   const sorting = (col: string) => {
     if (order === "ACS") {
-      const sorted = [...userList].sort((a: any, b: any) =>
+      const sorted = [...productList].sort((a: any, b: any) =>
         a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
       );
-      setUserList(sorted);
+      setProductlist(sorted);
       setOrder("DCS");
     }
     if (order === "DCS") {
-      const sorted = [...userList].sort((a: any, b: any) =>
+      const sorted = [...productList].sort((a: any, b: any) =>
         a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
       );
-      setUserList(sorted);
+      setProductlist(sorted);
       setOrder("ACS");
     }
   };
-  // console.log(searchItem)
+  console.log(productList)
 
   return (
     <div className="table w-full p-2 max-h-screen">
@@ -157,17 +157,14 @@ function Userlist(props: Props) {
           </tr>
         </thead>
         <tbody>
-          {userList.length > 0 ? (
-            userList
-              .filter((value: USER_MODEL, index: number) => {
+          {productList.length > 0 ? (
+            productList
+              .filter((value: any, index: number) => {
                 if (searchItem == "") {
                   return value;
                 } else if (
-                  value.name.toLowerCase().includes(searchItem.toLowerCase()) ||
-                  value.email
-                    .toLowerCase()
-                    .includes(searchItem.toLowerCase()) ||
-                  value.address.street
+                  value.title.toLowerCase().includes(searchItem.toLowerCase()) ||
+                  value.body
                     .toLowerCase()
                     .includes(searchItem.toLowerCase()) ||
                     value.id.toString()
@@ -176,15 +173,15 @@ function Userlist(props: Props) {
                   return value;
                 }
               })
-              .map((item: USER_MODEL, index: number) => (
+              .map((item: any, index: number) => (
                 <tr
                   className="bg-gray-100 text-center border-b text-sm text-gray-600"
                   key={index}
                 >
+                  <td className="p-2 border-r">{item.userId}</td>
                   <td className="p-2 border-r">{item.id}</td>
-                  <td className="p-2 border-r">{item.name}</td>
-                  <td className="p-2 border-r">{item.email}</td>
-                  <td className="p-2 border-r">{item.address.street}</td>
+                  <td className="p-2 border-r">{item.title}</td>
+                  <td className="p-2 border-r">{item.body}</td>
                   <td>
                     <a className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
                       Edit
@@ -212,4 +209,4 @@ function Userlist(props: Props) {
   );
 }
 
-export default Userlist;
+export default Productlist;

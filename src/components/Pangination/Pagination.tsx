@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Children, useState } from "react";
 
 type Props = {
   currentPage: number;
@@ -9,18 +9,12 @@ type Props = {
 
 const Pagination = (props: Props) => {
   const { total, limit, currentPage, setCurrentPage } = props;
-  // let [num, setNum] = useState(1)
-  // let [cur, setCur] = useState()
+
 
   const pages = Math.ceil(total / limit);
-  // function Next ()
-  // {
-  //   setNum(++num)
-  // }
-  // function back ()
-  // {
-  // num > 1 && setNum(--num)
-  // }
+  
+  
+
   return (
     <div className="flex justify-center mt-20">
       <button
@@ -53,6 +47,7 @@ const Pagination = (props: Props) => {
         onClick={() => setCurrentPage(currentPage + 1)}
         // Disable khi trang hien tai la trang cuoi cung
         disabled={currentPage >= pages - 1}
+      
       >
         <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
           <path

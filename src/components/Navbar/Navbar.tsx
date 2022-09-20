@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { NavLink } from "react-router-dom";
-
+import "./style.css"
 type Props = {};
 
 const Navbar = (props: Props) => {
@@ -61,7 +61,7 @@ const Navbar = (props: Props) => {
           <li>
             <NavLink
               className="text-sm text-gray-400 hover:text-gray-500"
-              to="/userlist"
+              to="/productlist"
               style={({ isActive }) => {
                 return {
                   color: isActive ? "rgb(37 99 235)" : "rgb(156 163 175",
@@ -69,7 +69,7 @@ const Navbar = (props: Props) => {
                 };
               }}
             >
-              User List
+              Product list 
             </NavLink>
           </li>
           <li className="text-gray-300">
@@ -89,9 +89,18 @@ const Navbar = (props: Props) => {
             </svg>
           </li>
           <li>
-            <a className="text-sm text-gray-400 hover:text-gray-500" href="#">
-              Services
-            </a>
+            <NavLink
+              className="text-sm text-gray-400 hover:text-gray-500"
+              to="/userlist"
+              style={({ isActive }) => {
+                return {
+                  color: isActive ? "rgb(37 99 235)" : "rgb(156 163 175",
+                  fontWeight: isActive ? "bold" : "400",
+                };
+              }}
+            >
+              User List
+            </NavLink>
           </li>
           <li className="text-gray-300">
             <svg
@@ -136,18 +145,18 @@ const Navbar = (props: Props) => {
             </a>
           </li>
         </ul>
-        <a
-          className="hidden lg:inline-block lg:ml-auto lg:mr-3 py-2 px-6 bg-gray-50 hover:bg-gray-100 text-sm text-gray-900 font-bold  rounded-xl transition duration-200"
-          href="#"
-        >
-          Sign In
-        </a>
-        <a
-          className="hidden lg:inline-block py-2 px-6 bg-blue-500 hover:bg-blue-600 text-sm text-white font-bold rounded-xl transition duration-200"
-          href="#"
-        >
-          Sign up
-        </a>
+        <div className="relative">
+          <button className="w-10 h-10 avatar">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqekwL2LW2-NBO_FE2f2IjZQnp_1xl-shGcg&usqp=CAU" alt="" className="w-full h-full rounded-[50%]" />
+            <div className="w-48 absolute z-10 right-4 bg-slate-400 text-center rounded-lg shadow-xl menu-dropdown">
+            <a href="" className="block px-4 py-4 text-gray-800 hover:bg-indigo-500 hover:text-white rounded-tl-lg rounded-tr-lg">Profile</a>
+            <a href="" className="block px-4 py-4 text-gray-800 hover:bg-indigo-500 hover:text-white">Awards</a>
+            <a href="" className="block px-4 py-4 text-gray-800 hover:bg-indigo-500 hover:text-white rounded-bl-lg rounded-br-lg border-t-[1px] border-white border-solid ">Logout</a>  
+            </div>
+          </button>
+          
+        </div>
+        
       </nav>
     </div>
   );

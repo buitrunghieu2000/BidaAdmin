@@ -52,8 +52,13 @@ const Sidebar = (props: Props) => {
                 </NavLink>
               </li>
               <li>
-                <a
-                  href="#"
+                <NavLink
+                  to='/productlist'
+                  style={({ isActive }) => {
+                    return {
+                      borderColor: isActive ? "rgb(99 102 241" : "transparent",
+                    };
+                  }}
                   className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-100 text-gray-600 hover:text-gray-800 border-l-4 border-transparent  pr-6"
                 >
                   <span className="inline-flex justify-center items-center ml-4">
@@ -73,12 +78,12 @@ const Sidebar = (props: Props) => {
                     </svg>
                   </span>
                   <span className="ml-2 text-sm tracking-wide truncate">
-                    Inbox
+                    Product List
                   </span>
                   <span className="px-2 py-0.5 ml-auto text-xs font-medium tracking-wide text-indigo-500 bg-indigo-50 rounded-full">
                     New
                   </span>
-                </a>
+                </NavLink>
               </li>
               <li>
                 <NavLink
