@@ -1,49 +1,65 @@
+import { stringifyStyle } from "@vue/shared";
 import React, { useState } from "react";
-import { IResUserList } from "../apis/user/user.type";
-import Pagination from "../components/Pangination/Pagination";
-import { USER_MODEL } from "../models/user.model";
+import { useNavigate } from "react-router-dom";
+import { IResUserList } from "../../apis/user/user.type";
+import Pagination from "../../components/Pangination/Pagination";
+import { USER_MODEL } from "../../models/user.model";
 
 type Props = {};
 
-function Userlist(props: Props) {
-  let newUserList = [];
+function Productlist(props: Props) {
+  let newProductList = [];
+  const navigate = useNavigate()
   const LIMIT = 5;
   const total = 20;
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [userList, setUserList] = useState([]);
+  // const [productList, setProductlist] = useState([]);
   const [searchItem, setSearchItem] = useState("");
   const [order, setOrder] = useState("ACS");
 
-  React.useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((response) => response.json())
-      .then((json) => setUserList(json));
-  }, []);
+  // React.useEffect(() => {
+  //   fetch("https://jsonplaceholder.typicode.com/posts")
+  //     .then((response) => response.json())
+  //     .then((json) => setProductlist(json));
+  // }, []);
+  let productList:any = ([{
+      id: 1,
+      img: 'https://cdn.mediamart.vn/images/product/smart-tivi-4k-sony-kd-50x75k-50-inch-google-tv_2255ad8e.jpg',
+      name: 'Sony 4k',
+      stock: 'Instock',
+      price: '254.000',
+      category: 'Tv',
+      date: 'Date'
+    }])
 
   const handleRemove = (removeId: number) => {
-    newUserList = userList.filter(
+    newProductList = productList.filter(
       (item: USER_MODEL, index: number) => item.id !== removeId
     );
-    setUserList(newUserList);
+    // setProductlist(newProductList);
   };
 
   const sorting = (col: string) => {
     if (order === "ACS") {
-      const sorted = [...userList].sort((a: any, b: any) =>
+      const sorted = [...productList].sort((a: any, b: any) =>
         a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
       );
-      setUserList(sorted);
+      // setProductlist(sorted);
       setOrder("DCS");
     }
     if (order === "DCS") {
-      const sorted = [...userList].sort((a: any, b: any) =>
+      const sorted = [...productList].sort((a: any, b: any) =>
         a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
       );
-      setUserList(sorted);
+      // setProductlist(sorted);
       setOrder("ACS");
     }
   };
-  // console.log(searchItem)
+
+  const handleEdit = (productId: any) => {
+    navigate(`/productlist/updateproduct/${productId}`)
+  }
+  // console.log(productList)
 
   return (
     <div className="table w-full p-2 max-h-screen">
@@ -105,6 +121,9 @@ function Userlist(props: Props) {
               <div className="flex items-center justify-center">ID</div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Image</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
               <div
                 className="flex items-center justify-center"
                 onClick={() => sorting("name")}
@@ -131,7 +150,7 @@ function Userlist(props: Props) {
               onClick={() => sorting("email")}
             >
               <div className="flex items-center justify-center">
-                Email
+                Stock
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-4 w-4"
@@ -149,7 +168,13 @@ function Userlist(props: Props) {
               </div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-              <div className="flex items-center justify-center">Address</div>
+              <div className="flex items-center justify-center">Price</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Category</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Date</div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
               <div className="flex items-center justify-center">Actions</div>
@@ -157,17 +182,14 @@ function Userlist(props: Props) {
           </tr>
         </thead>
         <tbody>
-          {userList.length > 0 ? (
-            userList
-              .filter((value: USER_MODEL, index: number) => {
+          {productList.length > 0 ? (
+            productList
+              .filter((value: any, index: number) => {
                 if (searchItem == "") {
                   return value;
                 } else if (
-                  value.name.toLowerCase().includes(searchItem.toLowerCase()) ||
-                  value.email
-                    .toLowerCase()
-                    .includes(searchItem.toLowerCase()) ||
-                  value.address.street
+                  value.title.toLowerCase().includes(searchItem.toLowerCase()) ||
+                  value.body
                     .toLowerCase()
                     .includes(searchItem.toLowerCase()) ||
                     value.id.toString()
@@ -176,18 +198,21 @@ function Userlist(props: Props) {
                   return value;
                 }
               })
-              .map((item: USER_MODEL, index: number) => (
+              .map((item: any, index: number) => (
                 <tr
                   className="bg-gray-100 text-center border-b text-sm text-gray-600"
                   key={index}
                 >
-                  <td className="p-2 border-r">{item.id}</td>
-                  <td className="p-2 border-r">{item.name}</td>
-                  <td className="p-2 border-r">{item.email}</td>
-                  <td className="p-2 border-r">{item.address.street}</td>
+                  <td className="p-2 border-r w-[1%]">{item.id}</td>
+                  <td className="p-2 border-r h-[70px] w-[10%]"><img src={item.img} className='w-full h-full object-contain'/></td>
+                  <td className="p-2 border-r w-[25%]">{item.name}</td>
+                  <td className="p-2 border-r w-[10%]">{item.stock}</td>
+                  <td className="p-2 border-r w-[15%]">{item.price}</td>
+                  <td className="p-2 border-r w-[15%]">{item.category}</td>
+                  <td className="p-2 border-r w-[10%]">{item.date}</td>
                   <td>
                     <a className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
-                      Edit
+                      <span onClick={()=>handleEdit(item.id)}>Edit</span>
                     </a>
                     <a className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
                       <span onClick={() => handleRemove(item.id)}>Remove</span>
@@ -212,4 +237,4 @@ function Userlist(props: Props) {
   );
 }
 
-export default Userlist;
+export default Productlist;

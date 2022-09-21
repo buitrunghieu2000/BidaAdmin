@@ -1,49 +1,49 @@
 import React, { useState } from "react";
-import { IResUserList } from "../apis/user/user.type";
-import Pagination from "../components/Pangination/Pagination";
-import { USER_MODEL } from "../models/user.model";
+import { IResUserList } from "../../apis/user/user.type";
+import Pagination from "../../components/Pangination/Pagination";
+import { USER_MODEL } from "../../models/user.model";
 
 type Props = {};
 
-function Productlist(props: Props) {
-  let newProductList = [];
+function Userlist(props: Props) {
+  let newUserList = [];
   const LIMIT = 5;
   const total = 20;
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [productList, setProductlist] = useState([]);
+  const [userList, setUserList] = useState([]);
   const [searchItem, setSearchItem] = useState("");
   const [order, setOrder] = useState("ACS");
 
   React.useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/posts")
+    fetch("https://jsonplaceholder.typicode.com/users")
       .then((response) => response.json())
-      .then((json) => setProductlist(json));
+      .then((json) => setUserList(json));
   }, []);
 
   const handleRemove = (removeId: number) => {
-    newProductList = productList.filter(
+    newUserList = userList.filter(
       (item: USER_MODEL, index: number) => item.id !== removeId
     );
-    setProductlist(newProductList);
+    setUserList(newUserList);
   };
 
   const sorting = (col: string) => {
     if (order === "ACS") {
-      const sorted = [...productList].sort((a: any, b: any) =>
+      const sorted = [...userList].sort((a: any, b: any) =>
         a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
       );
-      setProductlist(sorted);
+      setUserList(sorted);
       setOrder("DCS");
     }
     if (order === "DCS") {
-      const sorted = [...productList].sort((a: any, b: any) =>
+      const sorted = [...userList].sort((a: any, b: any) =>
         a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
       );
-      setProductlist(sorted);
+      setUserList(sorted);
       setOrder("ACS");
     }
   };
-  console.log(productList)
+  // console.log(searchItem)
 
   return (
     <div className="table w-full p-2 max-h-screen">
@@ -157,14 +157,17 @@ function Productlist(props: Props) {
           </tr>
         </thead>
         <tbody>
-          {productList.length > 0 ? (
-            productList
-              .filter((value: any, index: number) => {
+          {userList.length > 0 ? (
+            userList
+              .filter((value: USER_MODEL, index: number) => {
                 if (searchItem == "") {
                   return value;
                 } else if (
-                  value.title.toLowerCase().includes(searchItem.toLowerCase()) ||
-                  value.body
+                  value.name.toLowerCase().includes(searchItem.toLowerCase()) ||
+                  value.email
+                    .toLowerCase()
+                    .includes(searchItem.toLowerCase()) ||
+                  value.address.street
                     .toLowerCase()
                     .includes(searchItem.toLowerCase()) ||
                     value.id.toString()
@@ -173,15 +176,15 @@ function Productlist(props: Props) {
                   return value;
                 }
               })
-              .map((item: any, index: number) => (
+              .map((item: USER_MODEL, index: number) => (
                 <tr
                   className="bg-gray-100 text-center border-b text-sm text-gray-600"
                   key={index}
                 >
-                  <td className="p-2 border-r">{item.userId}</td>
                   <td className="p-2 border-r">{item.id}</td>
-                  <td className="p-2 border-r">{item.title}</td>
-                  <td className="p-2 border-r">{item.body}</td>
+                  <td className="p-2 border-r">{item.name}</td>
+                  <td className="p-2 border-r">{item.email}</td>
+                  <td className="p-2 border-r">{item.address.street}</td>
                   <td>
                     <a className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
                       Edit
@@ -209,4 +212,4 @@ function Productlist(props: Props) {
   );
 }
 
-export default Productlist;
+export default Userlist;

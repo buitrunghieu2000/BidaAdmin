@@ -1,8 +1,25 @@
-import React from "react";
-
+import { yupResolver } from "@hookform/resolvers/yup";
+import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+import { updateAuthStatus } from "../../Redux/authSlice";
+import { signInSchema } from "../../validate/auth";
 type Props = {};
 
 const Login = (props: Props) => {
+  type FormValues = {
+    email: string;
+    password: string;
+  };
+
+  const dispatch = useDispatch()
+  const { register, handleSubmit, formState:{errors}} = useForm<FormValues>({
+    resolver: yupResolver(signInSchema),
+    mode: "onChange"
+  });
+    const submit = (data: any, e: any) => {
+      console.log(data)
+      dispatch(updateAuthStatus(true))
+    }
   return (
     <section className="h-screen">
       <div className="container px-6 py-12 h-full m-auto">
@@ -15,32 +32,35 @@ const Login = (props: Props) => {
             />
           </div>
           <div className="md:w-8/12 lg:w-5/12 lg:ml-20">
-            <form>
+            <form onSubmit={handleSubmit(submit)}>
               {/* <!-- Email input --> */}
               <div className="mb-6">
                 <input
+                {...register('email')}
                   type="text"
                   className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   placeholder="Email address"
                 />
+                <p className='text-red-500'>{errors.email?.message}</p>
               </div>
-
               {/* <!-- Password input -->  */}
               <div className="mb-6">
                 <input
+                {...register('password')}
                   type="password"
                   className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   placeholder="Password"
                 />
+                <p className="text-red-500">{errors.password?.message}</p>
               </div>
-
+    
               <div className="flex justify-between items-center mb-6">
                 <div className="form-group form-check">
                   <input
                     type="checkbox"
                     className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                     id="exampleCheck3"
-                    checked
+                    
                   />
                   <label
                     className="form-check-label inline-block text-gray-800"

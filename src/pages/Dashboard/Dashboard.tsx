@@ -1,6 +1,6 @@
-import Widget from "../components/Widget/Widget";
+import Widget from "../../components/Widget/Widget";
 
-import { Productchart, Revanuechart } from "../components/Chart/Chart";
+import { Productchart, Revanuechart } from "../../components/Chart/Chart";
 type Props = {};
 
 const Dashboard = (props: Props) => {

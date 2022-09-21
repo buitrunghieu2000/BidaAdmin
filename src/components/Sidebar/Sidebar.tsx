@@ -53,7 +53,7 @@ const Sidebar = (props: Props) => {
               </li>
               <li>
                 <NavLink
-                  to='/productlist'
+                  end to='/productlist'
                   style={({ isActive }) => {
                     return {
                       borderColor: isActive ? "rgb(99 102 241" : "transparent",
@@ -269,32 +269,6 @@ const Sidebar = (props: Props) => {
                   </span>
                   <span className="ml-2 text-sm tracking-wide truncate">
                     Settings
-                  </span>
-                </a>
-              </li>
-              <li>
-                <a
-                  href="#"
-                  className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-100 text-gray-600 hover:text-gray-800 border-l-4 border-transparent  pr-6"
-                >
-                  <span className="inline-flex justify-center items-center ml-4">
-                    <svg
-                      className="w-5 h-5"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                      ></path>
-                    </svg>
-                  </span>
-                  <span className="ml-2 text-sm tracking-wide truncate">
-                    Logout
                   </span>
                 </a>
               </li>

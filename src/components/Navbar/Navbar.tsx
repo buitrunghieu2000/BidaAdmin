@@ -1,9 +1,15 @@
 import React, { useEffect } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
+import { useDispatch } from "react-redux/es/exports";
 import "./style.css"
+import { updateAuthStatus } from "../../Redux/authSlice";
 type Props = {};
 
 const Navbar = (props: Props) => {
+  const dispatch = useDispatch()
+  const handleLogout = () => {
+    dispatch(updateAuthStatus(false))
+  }
   return (
     <div className="bg-blue-500 border-b">
       <nav className="relative px-4 py-4 flex justify-between items-center bg-white">
@@ -27,7 +33,7 @@ const Navbar = (props: Props) => {
             </svg>
           </button>
         </div>
-        <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto lg:flex lg:items-center lg:w-auto lg:space-x-6">
+        <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex lg:mx-auto  lg:items-center lg:w-auto lg:space-x-6">
           <li>
             <NavLink
               className="text-sm text-gray-400 hover:text-gray-500"
@@ -61,7 +67,7 @@ const Navbar = (props: Props) => {
           <li>
             <NavLink
               className="text-sm text-gray-400 hover:text-gray-500"
-              to="/productlist"
+              end to="/productlist"
               style={({ isActive }) => {
                 return {
                   color: isActive ? "rgb(37 99 235)" : "rgb(156 163 175",
@@ -149,13 +155,13 @@ const Navbar = (props: Props) => {
           <button className="w-10 h-10 avatar">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqekwL2LW2-NBO_FE2f2IjZQnp_1xl-shGcg&usqp=CAU" alt="" className="w-full h-full rounded-[50%]" />
             <div className="w-48 absolute z-10 right-4 bg-slate-400 text-center rounded-lg shadow-xl menu-dropdown">
-            <a href="" className="block px-4 py-4 text-gray-800 hover:bg-indigo-500 hover:text-white rounded-tl-lg rounded-tr-lg">Profile</a>
-            <a href="" className="block px-4 py-4 text-gray-800 hover:bg-indigo-500 hover:text-white">Awards</a>
-            <a href="" className="block px-4 py-4 text-gray-800 hover:bg-indigo-500 hover:text-white rounded-bl-lg rounded-br-lg border-t-[1px] border-white border-solid ">Logout</a>  
+            <div className="px-4 py-4 text-gray-800 hover:bg-indigo-500 hover:text-white rounded-tl-lg rounded-tr-lg"><Link to="/profile">Profile</Link></div>
+            <div className="px-4 py-4 text-gray-800 hover:bg-indigo-500 hover:text-white">Awards</div>
+            <div className="px-4 py-4 text-gray-800 hover:bg-indigo-500 hover:text-white rounded-bl-lg rounded-br-lg border-t-[1px] border-white border-solid" onClick={handleLogout}>Logout</div>
             </div>
           </button>
           
-        </div>
+        </div>  
         
       </nav>
     </div>
