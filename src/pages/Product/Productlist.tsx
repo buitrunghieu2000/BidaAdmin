@@ -1,10 +1,9 @@
-import { stringifyStyle } from "@vue/shared";
-import React, { useState } from "react";
+import { PlusSquareOutlined } from '@ant-design/icons';
+import Modal from "antd/lib/modal/Modal";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { IResUserList } from "../../apis/user/user.type";
 import Pagination from "../../components/Pangination/Pagination";
-import { USER_MODEL } from "../../models/user.model";
-
+import Createproduct from './Createproduct';
 type Props = {};
 
 function Productlist(props: Props) {
@@ -13,30 +12,31 @@ function Productlist(props: Props) {
   const LIMIT = 5;
   const total = 20;
   const [currentPage, setCurrentPage] = useState<number>(0);
-  // const [productList, setProductlist] = useState([]);
+  const [productList, setProductlist] = useState([{
+    id: 1,
+    img: 'https://cdn.mediamart.vn/images/product/smart-tivi-4k-sony-kd-50x75k-50-inch-google-tv_2255ad8e.jpg',
+    name: 'Sony 4k',
+    stock: 'Instock',
+    price: '254.000',
+    category: 'Tv',
+    date: 'Date'
+  }]);
   const [searchItem, setSearchItem] = useState("");
   const [order, setOrder] = useState("ACS");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // React.useEffect(() => {
   //   fetch("https://jsonplaceholder.typicode.com/posts")
   //     .then((response) => response.json())
   //     .then((json) => setProductlist(json));
   // }, []);
-  let productList:any = ([{
-      id: 1,
-      img: 'https://cdn.mediamart.vn/images/product/smart-tivi-4k-sony-kd-50x75k-50-inch-google-tv_2255ad8e.jpg',
-      name: 'Sony 4k',
-      stock: 'Instock',
-      price: '254.000',
-      category: 'Tv',
-      date: 'Date'
-    }])
+  // let productList:any = ()
 
   const handleRemove = (removeId: number) => {
     newProductList = productList.filter(
-      (item: USER_MODEL, index: number) => item.id !== removeId
+      (item: any, index: number) => item.id !== removeId
     );
-    // setProductlist(newProductList);
+    setProductlist(newProductList);
   };
 
   const sorting = (col: string) => {
@@ -44,14 +44,14 @@ function Productlist(props: Props) {
       const sorted = [...productList].sort((a: any, b: any) =>
         a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
       );
-      // setProductlist(sorted);
+      setProductlist(sorted);
       setOrder("DCS");
     }
     if (order === "DCS") {
       const sorted = [...productList].sort((a: any, b: any) =>
         a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
       );
-      // setProductlist(sorted);
+      setProductlist(sorted);
       setOrder("ACS");
     }
   };
@@ -59,10 +59,23 @@ function Productlist(props: Props) {
   const handleEdit = (productId: any) => {
     navigate(`/productlist/updateproduct/${productId}`)
   }
+
+  const showModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleOk = () => {
+    setIsModalOpen(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false);
+  };
   // console.log(productList)
 
   return (
-    <div className="table w-full p-2 max-h-screen">
+    <>
+     <div className="table w-full p-2 max-h-screen">
       <form className="flex items-center mb-[20px] w-[20%] mx-auto">
         <label htmlFor="simple-search" className="sr-only">
           Search
@@ -112,13 +125,15 @@ function Productlist(props: Props) {
           </svg>
           <span className="sr-only">Search</span>
         </button>
+        <div className="flex p-2 items-center gap-2 bg-green-600 ml-2 rounded-lg text-white w-[70px] cursor-pointer" onClick={showModal}> <span className="block" >ADD </span> <PlusSquareOutlined /></div>
       </form>
 
       <table className="w-full border">
         <thead>
           <tr className="bg-gray-50 border-b">
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-              <div className="flex items-center justify-center">ID</div>
+              <div className="flex items-center justify-center"  onClick={() => sorting("id")}
+              >ID</div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
               <div className="flex items-center justify-center">Image</div>
@@ -147,7 +162,7 @@ function Productlist(props: Props) {
             </th>
             <th
               className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-              onClick={() => sorting("email")}
+
             >
               <div className="flex items-center justify-center">
                 Stock
@@ -188,10 +203,10 @@ function Productlist(props: Props) {
                 if (searchItem == "") {
                   return value;
                 } else if (
-                  value.title.toLowerCase().includes(searchItem.toLowerCase()) ||
-                  value.body
-                    .toLowerCase()
-                    .includes(searchItem.toLowerCase()) ||
+                  value.name.toLowerCase().includes(searchItem.toLowerCase()) ||
+                  // value.body
+                  //   .toLowerCase()
+                  //   .includes(searchItem.toLowerCase()) ||
                     value.id.toString()
                       .includes(searchItem.toLowerCase())
                 ) {
@@ -234,6 +249,9 @@ function Productlist(props: Props) {
         total={total}
       />
     </div>
+    <Modal title="Basic Modal" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <Createproduct/>
+      </Modal></>
   );
 }
 

@@ -1,22 +1,20 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { Routes, Route } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
 import NotFoundPage from "../components/404";
 import Navbar from "../components/Navbar/Navbar";
 import Sidebar from "../components/Sidebar/Sidebar";
-import Dashboard from "../pages/Dashboard/Dashboard";
 import Login from "../pages/Auth/Login";
-import Productlist from "../pages/Product/Productlist";
 import Profile from "../pages/Auth/Profile";
-import Userlist from "../pages/User/Userlist";
-import { RootState } from "../Redux/store";
+import Dashboard from "../pages/Dashboard/Dashboard";
+import Productlist from "../pages/Product/Productlist";
 import Updateproduct from "../pages/Product/Updateproduct";
+import Userlist from "../pages/User/Userlist";
 
 
 type Props = {};
 
 const Router = (props: Props) => {
-  const auth = useSelector((state: RootState)=> state.auth.isAuth)
+  // const auth = useSelector((state: RootState)=> state.auth.isAuth)
+  const auth = true
   return (
         (auth ? ( <>
           <Navbar />
