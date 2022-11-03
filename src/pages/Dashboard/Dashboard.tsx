@@ -15,7 +15,6 @@ const Dashboard = (props: Props) => {
       </div>
       <div className="w-100% h-[400px] mt-[20px] flex">
         <Revanuechart />
-        <Revanuechart />
       </div>
       <div className="flex justify-between ">
         <div>

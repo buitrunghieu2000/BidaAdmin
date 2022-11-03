@@ -28,7 +28,7 @@ const Profile = (props: Props) => {
               <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
                 Username
               </label>
-              <input type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+              <input type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" value={'binhphuoi'} />
             </div>
           </div>
           <div className="w-full lg:w-6/12 px-4">
@@ -36,7 +36,7 @@ const Profile = (props: Props) => {
               <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
                 Email address
               </label>
-              <input type="email" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+              <input type="email" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" value={"binhphuoi123@gmail.com"}/>
             </div>
           </div>
           <div className="w-full lg:w-6/12 px-4">
@@ -44,7 +44,7 @@ const Profile = (props: Props) => {
               <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
                 First Name
               </label>
-              <input type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+              <input type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" value={'Pham'}/>
             </div>
           </div>
           <div className="w-full lg:w-6/12 px-4">
@@ -52,7 +52,7 @@ const Profile = (props: Props) => {
               <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
                 Last Name
               </label>
-              <input type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+              <input type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" value={'Binh'} />
             </div>
           </div>
         </div>
@@ -68,7 +68,7 @@ const Profile = (props: Props) => {
               <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
                 Address
               </label>
-              <input type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+              <input type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" value={"28 Luu Chi Hieu, Phuoc Nguyen"}/>
             </div>
           </div>
           <div className="w-full lg:w-4/12 px-4">
@@ -76,7 +76,7 @@ const Profile = (props: Props) => {
               <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
                 City
               </label>
-              <input type="email" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+              <input type="email" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" value={"TP HCM"}/>
             </div>
           </div>
           <div className="w-full lg:w-4/12 px-4">
@@ -84,7 +84,7 @@ const Profile = (props: Props) => {
               <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
                 Country
               </label>
-              <input type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+              <input type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" value={"Viet Nam"} />
             </div>
           </div>
           <div className="w-full lg:w-4/12 px-4">
@@ -92,7 +92,7 @@ const Profile = (props: Props) => {
               <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
                 Postal Code
               </label>
-              <input type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" />
+              <input type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" value={5523}/>
             </div>
           </div>
         </div>
@@ -108,7 +108,7 @@ const Profile = (props: Props) => {
               <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
                 About me
               </label>
-              <textarea typeof='text' className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" rows={4}></textarea>
+              <textarea typeof='text' className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" rows={4} value={'Handsome boizzz'}></textarea>
             </div>
           </div>
         </div>
