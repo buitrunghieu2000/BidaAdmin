@@ -53,7 +53,7 @@ const Imageupload = (props: Props) => {
     const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => setFileList(newFileList);
         
     
-    console.log(fileList)
+    // console.log(fileList)
 
 return (
     <div>
@@ -64,7 +64,7 @@ return (
         onPreview={handlePreview}
         onChange={handleChange}
         beforeUpload={(file)=>{
-            console.log(file)
+            // console.log(file)
             return false;
         }}
       >

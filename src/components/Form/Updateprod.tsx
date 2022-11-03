@@ -31,8 +31,7 @@ const Updateprod = () => {
         status: 'done',
         url: 'https://zos.alipayobjects.com/rmsportal/jkjgkEfvpUPVyRjUImniVslZfWPnJuuZ.png',
     },])
-    const [dataForm, setDataForm] = useState('')
-    const [url, setUrl] = useState<any>('')
+    const [dataForm, setDataForm] = useState<any>({})
 
     const handleCancel = () => setPreviewOpen(false);
     const handlePreview = async (file: UploadFile) => {
@@ -47,9 +46,11 @@ const Updateprod = () => {
     
     const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) => setFileList(newFileList);
     const onFinish = (e: any) => {
-    setDataForm(e)   
+        setDataForm(e)
+    dataForm.fileList = fileList  
 }
-console.log(url);
+
+console.log('123',dataForm);
 return (
     <>
         <Form 

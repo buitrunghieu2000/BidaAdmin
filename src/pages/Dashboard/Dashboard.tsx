@@ -7,10 +7,11 @@ const Dashboard = (props: Props) => {
   return (
     <div className="layout">
       <div className="widget grid grid-cols-4 gap-4">
-        <Widget />
-        <Widget />
-        <Widget />
-        <Widget />
+        <Widget percent={12} quantity={400} icon={"fa-solid fa-tv"} />
+        <Widget percent={8} quantity={1200} icon={"fa-solid fa-mobile"} />
+        <Widget percent={20} quantity={500} icon={"fa-solid fa-laptop"} />
+        <Widget percent={5} quantity={100} icon={"fa-solid fa-desktop"} />
+
       </div>
       <div className="w-100% h-[400px] mt-[20px] flex">
         <Revanuechart />

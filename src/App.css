@@ -1,15 +1,8 @@
 .App {
   font-family: "Poppins", sans-serif;
   box-sizing: border-box;
- 
-}
-.link {
-  text-decoration: none;
-  color: inherit;
-}
 
+}
 a:link {
   text-decoration: none;
 }
-
-

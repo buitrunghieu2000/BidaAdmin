@@ -81,7 +81,7 @@ return (
 export const Revanuechart = () => {
   return(
     <ResponsiveContainer width='50%' height='100%'>
-       <LineChart
+      <LineChart
     width={500}
     height={300}
     data={data}
@@ -98,11 +98,11 @@ export const Revanuechart = () => {
     <YAxis yAxisId="right" orientation="right" />
     <Tooltip />
     <Legend />
-    <Line yAxisId="left" type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
+    <Line yAxisId="left" type="monotone" dataKey="pv" stroke="#8884d8"  />
     <Line yAxisId="right" type="monotone" dataKey="uv" stroke="#82ca9d" />
   </LineChart>
     </ResponsiveContainer>
-   
+  
   )
 
 }
