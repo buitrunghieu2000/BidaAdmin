@@ -9,6 +9,7 @@ const Navbar = (props: Props) => {
   const dispatch = useDispatch()
   const handleLogout = () => {
     dispatch(updateAuthStatus(false))
+    localStorage.removeItem("token");
   }
 
 

@@ -1,7 +1,8 @@
 import { PlusSquareOutlined } from "@ant-design/icons";
-import Modal from "antd/lib/modal/Modal";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Modal from "../../components/Modal";
+import ModalProduct from "../../components/Modal";
 import Pagination from "../../components/Pangination/Pagination";
 import Createproduct from "./Createproduct";
 type Props = {};
@@ -12,20 +13,25 @@ function Productlist(props: Props) {
   const LIMIT = 5;
   const total = 20;
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [showModal, setShowModal] = useState(false);
   const [productList, setProductlist] = useState([
     {
       id: 1,
       img: "https://cdn.mediamart.vn/images/product/smart-tivi-4k-sony-kd-50x75k-50-inch-google-tv_2255ad8e.jpg",
       name: "Sony 4k",
-      stock: "Instock",
+      color: "red",
       price: "254.000",
+      discount: "40.000",
+      quantity: "40",
+      sold: "20",
+      rating: "20",
+      status: "Instock",
       category: "Tv",
       date: "Date",
     },
   ]);
   const [searchItem, setSearchItem] = useState("");
   const [order, setOrder] = useState("ACS");
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // React.useEffect(() => {
   //   fetch("https://jsonplaceholder.typicode.com/posts")
@@ -62,22 +68,9 @@ function Productlist(props: Props) {
     navigate(`/productlist/updateproduct/${productId}`);
   };
 
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleOk = () => {
-    setIsModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
-  // console.log(productList)
-
   return (
     <>
-      <div className="table w-full p-2 max-h-screen">
+      <div className="relative table w-full p-2 h-screen">
         <form className="flex items-center mb-[20px] w-[20%] mx-auto">
           <label htmlFor="simple-search" className="sr-only">
             Search
@@ -107,35 +100,17 @@ function Productlist(props: Props) {
               onChange={(e) => setSearchItem(e.target.value)}
             />
           </div>
-          <button
-            type="submit"
-            className="p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-              ></path>
-            </svg>
-            <span className="sr-only">Search</span>
-          </button>
           <div
             className="flex p-2 items-center gap-2 bg-green-600 ml-2 rounded-lg text-white w-[70px] cursor-pointer"
-            onClick={showModal}
+            onClick={() => {
+              setShowModal(true);
+            }}
           >
-            {" "}
-            <span className="block">ADD </span> <PlusSquareOutlined />
+            <span className="block select-none" >ADD</span>
+            <PlusSquareOutlined />
           </div>
+          {showModal && <Modal setOpenModal={setShowModal} />}
         </form>
-
         <table className="w-full border">
           <thead>
             <tr className="bg-gray-50 border-b">
@@ -173,8 +148,26 @@ function Productlist(props: Props) {
                 </div>
               </th>
               <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div className="flex items-center justify-center">Color</div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div className="flex items-center justify-center">Price</div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div className="flex items-center justify-center">Discount</div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div className="flex items-center justify-center">Quantity</div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div className="flex items-center justify-center">Sold</div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div className="flex items-center justify-center">Rating</div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
                 <div className="flex items-center justify-center">
-                  Stock
+                  Status
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4"
@@ -190,15 +183,6 @@ function Productlist(props: Props) {
                     />
                   </svg>
                 </div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Price</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Category</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Date</div>
               </th>
               <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
                 <div className="flex items-center justify-center">Actions</div>
@@ -235,11 +219,18 @@ function Productlist(props: Props) {
                         className="w-full h-full object-contain"
                       />
                     </td>
-                    <td className="p-2 border-r w-[25%]">{item.name}</td>
-                    <td className="p-2 border-r w-[10%]">{item.stock}</td>
-                    <td className="p-2 border-r w-[15%]">{item.price}</td>
-                    <td className="p-2 border-r w-[15%]">{item.category}</td>
-                    <td className="p-2 border-r w-[10%]">{item.date}</td>
+                    <td className="p-2 border-r w-[15%]">{item.name}</td>
+                    <td className="p-2 border-r w-[5%]">{item.color}</td>
+                    <td className="p-2 border-r w-[10%]">{item.price}</td>
+                    <td className="p-2 border-r w-[10%]">{item.discount}</td>
+                    <td className="p-2 border-r w-[5%]">{item.quantity}</td>
+                    <td className="p-2 border-r w-[5%]">{item.sold}</td>
+                    <td className="p-2 border-r w-[5%]">{item.rating}</td>
+                    <td className="p-2 border-r w-[10%]">
+                      <span className="inline-block p-2 bg-successStock text-green-700 rounded-lg">
+                        {item.status}
+                      </span>
+                    </td>
                     <td>
                       <a className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
                         <span onClick={() => handleEdit(item.id)}>Edit</span>
@@ -259,21 +250,15 @@ function Productlist(props: Props) {
             )}
           </tbody>
         </table>
-        <Pagination
-          limit={LIMIT}
-          currentPage={currentPage}
-          setCurrentPage={setCurrentPage}
-          total={total}
-        />
+        <div className="absolute bottom-0 left-[40%]">
+          <Pagination
+            limit={LIMIT}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            total={total}
+          />
+        </div>
       </div>
-      <Modal
-        title="Basic Modal"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <Createproduct />
-      </Modal>
     </>
   );
 }

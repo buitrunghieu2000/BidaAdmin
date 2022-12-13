@@ -1,4 +1,5 @@
-import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import NotFoundPage from "../components/404";
 import Navbar from "../components/Navbar/Navbar";
@@ -10,6 +11,7 @@ import Dashboard from "../pages/Dashboard/Dashboard";
 import Productlist from "../pages/Product/Productlist";
 import Updateproduct from "../pages/Product/Updateproduct";
 import Userlist from "../pages/User/Userlist";
+import { updateAuthStatus } from "../Redux/authSlice";
 import { RootState } from "../Redux/store";
 
 
@@ -17,7 +19,13 @@ type Props = {};
 
 const Router = (props: Props) => {
   const auth = useSelector((state: RootState)=> state.auth.isAuth)
-  // const auth = true
+  const dispatch = useDispatch()
+  useEffect(()=> {
+    if(localStorage.getItem('token')) {
+      dispatch(updateAuthStatus(true));
+    }
+  },[])
+  
   return (
         (auth ? ( <>
           <Navbar />

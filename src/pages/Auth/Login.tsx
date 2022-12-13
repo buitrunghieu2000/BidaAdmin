@@ -1,13 +1,16 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import { IReqLogin } from "../../apis/auth/auth.interface";
+import authApi from "../../apis/auth/authApi";
+import { saveToLocalStorage } from "../../helper/base.helpers";
 import { updateAuthStatus } from "../../Redux/authSlice";
 import { signInSchema } from "../../validate/auth";
 type Props = {};
 
 const Login = (props: Props) => {
   type FormValues = {
-    email: string;
+    username: string;
     password: string;
   };
 
@@ -16,9 +19,16 @@ const Login = (props: Props) => {
     resolver: yupResolver(signInSchema),
     mode: "onChange"
   });
+
+  const login = async (params: IReqLogin) => {
+      const result = await authApi.login(params);
+      if(result.data.user.role === 'user') {
+        saveToLocalStorage("token", result.data.tokens.access.token);
+        dispatch(updateAuthStatus(true));
+      } return;
+  }
     const submit = (data: any, e: any) => {
-      console.log(data)
-      dispatch(updateAuthStatus(true))
+      login(data);
     }
   return (
     <section className="h-screen">
@@ -36,12 +46,12 @@ const Login = (props: Props) => {
               {/* <!-- Email input --> */}
               <div className="mb-6">
                 <input
-                {...register('email')}
+                {...register('username')}
                   type="text"
                   className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   placeholder="Email address"
                 />
-                <p className='text-red-500'>{errors.email?.message}</p>
+                <p className='text-red-500'>{errors.username?.message}</p>
               </div>
               {/* <!-- Password input -->  */}
               <div className="mb-6">
