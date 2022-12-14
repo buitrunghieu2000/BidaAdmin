@@ -1,10 +1,9 @@
 import { PlusSquareOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Modal from "../../components/Modal";
-import ModalProduct from "../../components/Modal";
+import ModalCreate from "../../components/Modal/modalCreate";
+import ModalImport from "../../components/Modal/modalImport";
 import Pagination from "../../components/Pangination/Pagination";
-import Createproduct from "./Createproduct";
 type Props = {};
 
 function Productlist(props: Props) {
@@ -14,6 +13,7 @@ function Productlist(props: Props) {
   const total = 20;
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [showModal, setShowModal] = useState(false);
+  const [showModalImport, setShowModalImport] = useState(false);
   const [productList, setProductlist] = useState([
     {
       id: 1,
@@ -106,10 +106,9 @@ function Productlist(props: Props) {
               setShowModal(true);
             }}
           >
-            <span className="block select-none" >ADD</span>
+            <span className="block select-none">ADD</span>
             <PlusSquareOutlined />
           </div>
-          {showModal && <Modal setOpenModal={setShowModal} />}
         </form>
         <table className="w-full border">
           <thead>
@@ -232,6 +231,9 @@ function Productlist(props: Props) {
                       </span>
                     </td>
                     <td>
+                      <a className="bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
+                        <span onClick={()=> {setShowModalImport(true)}}>Import</span>
+                      </a>
                       <a className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
                         <span onClick={() => handleEdit(item.id)}>Edit</span>
                       </a>
@@ -259,6 +261,8 @@ function Productlist(props: Props) {
           />
         </div>
       </div>
+      {showModal && <ModalCreate setOpenModal={setShowModal} />}
+      {showModalImport && <ModalImport setOpenModalImport={setShowModalImport} />}
     </>
   );
 }
