@@ -1,22 +1,24 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Upload } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import categoryApi from "../../apis/category/categoryApi";
 
 export default function ModalCreate({ setOpenModal }: any) {
   type FormValues = {
-    name: string;
-    code: number;
-    price: number;
-    sale: number;
-    des: string;
-    image: Array<any>;
+    name: string; //
+    code: number; //
+    price: number; //
+    sale: number; //
+    desc: string; //
   };
 
-  const [category, setCategory] = useState('')
-  const [image, setImage] = useState<any>([]);
+  const [category, setCategory] = useState<Array<any>>([]);
+  const [selectCategory, setSelectCategory] = useState("");
+  const [specs, setSpecs] = useState<Array<any>>([]);
   const [imagesBase64, setImagesBase64] = React.useState<any>("");
-
+  const [specsPayload, setspecsPayload] = useState({});
+  const [selectValue, setSelectValue] = useState('')
 
   const getBase64 = (file: any, cb: any) => {
     let reader = new FileReader();
@@ -29,26 +31,46 @@ export default function ModalCreate({ setOpenModal }: any) {
     };
   };
 
+  const handleSelectCat = (e: any) => {
+    if (e.target.value !== "Select") {
+      setSelectCategory(e.target.value);
+      (async () => {
+        const result = await categoryApi.getSelectCategory(e.target.value);
+        setSpecs(result.data.specsModel);
+        console.log(result.data.specsModel);
+      })();
+    }
+  };
+
+  const handleSelectSpecs = (e: any) => {
+    if (e.target.value !== "Select") {
+      setSelectValue(e.target.value);
+    }
+  }
 
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
-  } = useForm<FormValues>({
-  });
+  } = useForm<FormValues>({});
 
   const submit = (data: any, e: any) => {
     e.preventDefault();
-    data.category = category;
-    data.image = imagesBase64;
+    data.image_base64 = imagesBase64;
+    data.category = selectCategory;
+    data.value = selectValue;
     console.log(data);
     reset();
   };
 
-  const handleSelect = (e: any) => {
-    setCategory(e.target.value);
-  }
+  useEffect(() => {
+    (async () => {
+      const result = await categoryApi.getCategory();
+      setCategory(result.data);
+      console.log(result);
+    })();
+  }, []);
 
   return (
     <>
@@ -58,8 +80,10 @@ export default function ModalCreate({ setOpenModal }: any) {
           onClick={() => setOpenModal(false)}
         ></div>
         <div className="flex items-center min-h-screen px-4 py-8">
-          <div className="relative w-full max-w-[700px] p-4 mx-auto bg-white rounded-md shadow-lg">
-              <div className="text-center mb-4 uppercase text-lg">Add product</div>
+          <div className="relative w-full max-w-[1000px] p-4 mx-auto bg-white rounded-md shadow-lg">
+            <div className="text-center mb-4 uppercase text-lg">
+              Add product
+            </div>
             <form onSubmit={handleSubmit(submit)}>
               <div className="flex justify-between gap-4">
                 <div className="left">
@@ -106,22 +130,7 @@ export default function ModalCreate({ setOpenModal }: any) {
                     />
                   </div>
                 </div>
-                <div className="right flex-1">
-                  <div className="flex justify-between items-center gap-2 mb-[20px]">
-                    <label
-                      htmlFor="countries_disabled"
-                      className="block flex-0 flex-shrink-0 basis-[105px] mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Category:
-                    </label>
-                    <select onChange={handleSelect} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                      <option defaultValue="Phone">Choose a category</option>
-                      <option value="Phone">Phone</option>
-                      <option value="Laptpop">Laptpop</option>
-                      <option value="desktop">desktop</option>
-                    </select>
-                  </div>
-
+                <div className="center flex-1">
                   <div className="name flex justify-between gap-2 mb-[20px]">
                     <label
                       aria-label="message"
@@ -130,7 +139,7 @@ export default function ModalCreate({ setOpenModal }: any) {
                       Description:
                     </label>
                     <textarea
-                      {...register("des")}
+                      {...register("desc")}
                       id="message"
                       rows={4}
                       className="block shadow p-2.5 w-full text-sm text-gray-900  rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 resize-none"
@@ -151,15 +160,51 @@ export default function ModalCreate({ setOpenModal }: any) {
                       }}
                       accept=".png, .jpg"
                       beforeUpload={(file: any) => {
-                          getBase64(file, (result: any) => {
-                            const base64 = result.split(",");
-                            setImagesBase64(base64[1]);
-                          });
+                        getBase64(file, (result: any) => {
+                          const base64 = result.split(",");
+                          setImagesBase64(base64[1]);
+                        });
                         return false;
                       }}
                     >
                       <Button>Upload file</Button>
                     </Upload.Dragger>
+                  </div>
+                </div>
+                <div className="right w-[200px]">
+                  <div className="flex flex-1 gap-[10px] mb-[20px]">
+                    <label htmlFor="">Category:</label>
+                    <select
+                      className="flex items-start h-[25px]"
+                      onChange={handleSelectCat}
+                    >
+                      <option value="Select" key={-1}>
+                        Select:
+                      </option>
+                      {category.map((item: any, index: number) => (
+                        <option key={index} value={item.name}>
+                          {item.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div className="flex-1 text-center">
+                    <div className="">Spec</div>
+                    {specs.map((item: any, index: number) => (
+                      <div key={index} className="flex">
+                        <div className="flex-1">{item.name}</div>
+                        <div className="flex-1 text-end">
+                          <select name="" id="" onClick={handleSelectSpecs}>
+                            <option value="Select" key={-1}>Select</option>
+                            {item.values.map((item: any, index: number) => (
+                              <option key={index} value={item.value}>
+                                {item.value}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </div>

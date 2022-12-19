@@ -23,7 +23,7 @@ function Productlist(props: Props) {
   const [showModalDiscount, setShowModalDiscount] = useState(false);
   const [productList, setProductlist] = useState<Array<any>>([
     {
-      id: 2,
+      id: 1,
       img: "https://cdn.mediamart.vn/images/product/smart-tivi-4k-sony-kd-50x75k-50-inch-google-tv_2255ad8e.jpg",
       name: "Sony 4k",
       color: "red",
@@ -58,6 +58,20 @@ function Productlist(props: Props) {
       price: "254.000",
       discount: "40.000",
       quantity: "40",
+      sold: "105",
+      rating: "1",
+      status: "Instock",
+      category: "Tv",
+      date: "Date",
+    },
+    {
+      id: 4,
+      img: "https://cdn.mediamart.vn/images/product/smart-tivi-4k-sony-kd-50x75k-50-inch-google-tv_2255ad8e.jpg",
+      name: "Sony 4k",
+      color: "red",
+      price: "254.000",
+      discount: "40.000",
+      quantity: "40",
       sold: "100",
       rating: "1",
       status: "Instock",
@@ -77,16 +91,17 @@ function Productlist(props: Props) {
   };
 
   const sorting = (col: string) => {
+    console.log(col);
     if (order === "ACS") {
       const sorted = [...productList].sort((a: any, b: any) =>
-        a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
+        a[col] > b[col] ? 1 : -1
       );
       setProductlist(sorted);
       setOrder("DCS");
     }
     if (order === "DCS") {
       const sorted = [...productList].sort((a: any, b: any) =>
-        a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
+        a[col] < b[col] ? 1 : -1
       );
       setProductlist(sorted);
       setOrder("ACS");
@@ -104,7 +119,7 @@ function Productlist(props: Props) {
   //     setProductlist(result.data.data);
   //   })();
   // }, []);
-  
+
   return (
     <>
       <div className="relative table w-full p-2 h-screen">
@@ -150,13 +165,11 @@ function Productlist(props: Props) {
         <table className="w-full border">
           <thead>
             <tr className="bg-gray-50 border-b">
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div
-                  className="flex items-center justify-center"
-                  onClick={() => sorting("id")}
-                >
-                  ID
-                </div>
+              <th
+                className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
+                onClick={() => sorting("id")}
+              >
+                <div className="flex items-center justify-center">ID</div>
               </th>
               <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
                 <div className="flex items-center justify-center">Image</div>
@@ -167,11 +180,11 @@ function Productlist(props: Props) {
               <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
                 <div className="flex items-center justify-center">Color</div>
               </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div
-                  className="flex items-center justify-center"
-                  onClick={() => sorting("price")}
-                >
+              <th
+                className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
+                onClick={() => sorting("price")}
+              >
+                <div className="flex items-center justify-center">
                   Price{" "}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -189,11 +202,11 @@ function Productlist(props: Props) {
                   </svg>
                 </div>
               </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div
-                  className="flex items-center justify-center"
-                  onClick={() => sorting("discount")}
-                >
+              <th
+                className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
+                onClick={() => sorting("discount")}
+              >
+                <div className="flex items-center justify-center">
                   Discount
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -211,11 +224,11 @@ function Productlist(props: Props) {
                   </svg>
                 </div>
               </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div
-                  className="flex items-center justify-center"
-                  onClick={() => sorting("quantity")}
-                >
+              <th
+                className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
+                onClick={() => sorting("quantity")}
+              >
+                <div className="flex items-center justify-center">
                   Quantity
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -233,33 +246,18 @@ function Productlist(props: Props) {
                   </svg>
                 </div>
               </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div
-                  className="flex items-center justify-center"
-                  onClick={() => sorting("sold")}
-                >
+              <th
+                className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
+              >
+                <div className="flex items-center justify-center">
                   Sold
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                    />
-                  </svg>
                 </div>
               </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div
-                  className="flex items-center justify-center"
-                  onClick={() => sorting("rating")}
-                >
+              <th
+                className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
+                onClick={() => sorting("rating")}
+              >
+                <div className="flex items-center justify-center">
                   Rating
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

@@ -1,4 +1,5 @@
 import { yupResolver } from "@hookform/resolvers/yup";
+import Password from "antd/lib/input/Password";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { IReqLogin } from "../../apis/auth/auth.interface";
@@ -14,22 +15,24 @@ const Login = (props: Props) => {
     password: string;
   };
 
-  const dispatch = useDispatch()
-  const { register, handleSubmit, formState:{errors}} = useForm<FormValues>({
-    resolver: yupResolver(signInSchema),
-    mode: "onChange"
-  });
+  const dispatch = useDispatch();
+  const {
+    register,
+    handleSubmit,
+  } = useForm<FormValues>();
 
   const login = async (params: IReqLogin) => {
-      const result = await authApi.login(params);
-      if(result.data.user.role === 'user') {
-        saveToLocalStorage("token", result.data.tokens.access.token);
-        dispatch(updateAuthStatus(true));
-      } return;
-  }
-    const submit = (data: any, e: any) => {
-      login(data);
+    const result = await authApi.login(params);
+    if (result.data.user.role === "Customer") {
+      saveToLocalStorage("token", result.data.tokens.access.token);
+      dispatch(updateAuthStatus(true));
     }
+    return;
+  };
+  const submit = (data: any, e: any) => {
+    console.log(data);
+    login(data);
+  };
   return (
     <section className="h-screen">
       <div className="container px-6 py-12 h-full m-auto">
@@ -46,31 +49,29 @@ const Login = (props: Props) => {
               {/* <!-- Email input --> */}
               <div className="mb-6">
                 <input
-                {...register('username')}
+                  {...register("username")}
                   type="text"
                   className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   placeholder="Email address"
                 />
-                <p className='text-red-500'>{errors.username?.message}</p>
               </div>
               {/* <!-- Password input -->  */}
               <div className="mb-6">
                 <input
-                {...register('password')}
+                  {...register("password")}
                   type="password"
-                  className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                  name="password"
+                  className=" block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white  border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                   placeholder="Password"
                 />
-                <p className="text-red-500">{errors.password?.message}</p>
               </div>
-    
+
               <div className="flex justify-between items-center mb-6">
                 <div className="form-group form-check">
                   <input
                     type="checkbox"
                     className="form-check-input appearance-none h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
                     id="exampleCheck3"
-                    
                   />
                   <label
                     className="form-check-label inline-block text-gray-800"

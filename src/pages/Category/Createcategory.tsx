@@ -1,5 +1,7 @@
+import { PlusSquareOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 import { IResUserList } from "../../apis/user/user.type";
+import ModalCreateCategory from "../../components/Modal/ModalCategory/modalCreateCategory";
 import Pagination from "../../components/Pangination/Pagination";
 import { USER_MODEL } from "../../models/user.model";
 
@@ -10,19 +12,41 @@ function Category(props: Props) {
   const LIMIT = 5;
   const total = 20;
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [userList, setUserList] = useState([]);
+  const [showModalCreateCategory, setShowModalCreateCategory] = useState(false);
+  const [userList, setUserList] = useState([
+    {
+      id: 1,
+      name: "phone",
+      quantity: 30,
+    },
+    {
+      id: 2,
+      name: "desktop",
+      quantity: 60,
+    },
+    {
+      id: 3,
+      name: "laptop",
+      quantity: 90,
+    },
+    {
+      id: 4,
+      name: "laptop",
+      quantity: 90,
+    },
+  ]);
   const [searchItem, setSearchItem] = useState("");
   const [order, setOrder] = useState("ACS");
 
-  React.useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((response) => response.json())
-      .then((json) => setUserList(json));
-  }, []);
+  // React.useEffect(() => {
+  //   fetch("https://jsonplaceholder.typicode.com/users")
+  //     .then((response) => response.json())
+  //     .then((json) => setUserList(json));
+  // }, []);
 
   const handleRemove = (removeId: number) => {
     newUserList = userList.filter(
-      (item: USER_MODEL, index: number) => item.id !== removeId
+      (item: any, index: number) => item.id !== removeId
     );
     setUserList(newUserList);
   };
@@ -30,14 +54,14 @@ function Category(props: Props) {
   const sorting = (col: string) => {
     if (order === "ACS") {
       const sorted = [...userList].sort((a: any, b: any) =>
-        a[col].toLowerCase() > b[col].toLowerCase() ? 1 : -1
+        a[col] > b[col] ? 1 : -1
       );
       setUserList(sorted);
       setOrder("DCS");
     }
     if (order === "DCS") {
       const sorted = [...userList].sort((a: any, b: any) =>
-        a[col].toLowerCase() < b[col].toLowerCase() ? 1 : -1
+        a[col] < b[col] ? 1 : -1
       );
       setUserList(sorted);
       setOrder("ACS");
@@ -72,44 +96,29 @@ function Category(props: Props) {
             id="simple-search"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
             placeholder="Search"
-            required
             onChange={(e) => setSearchItem(e.target.value)}
           />
         </div>
-        <button
-          type="submit"
-          className="p-2.5 ml-2 text-sm font-medium text-white bg-blue-700 rounded-lg border border-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+        <div
+          className="flex p-2 items-center gap-2 bg-green-600 ml-2 rounded-lg text-white w-[70px] cursor-pointer"
+          onClick={() => {
+            setShowModalCreateCategory(true);
+          }}
         >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-            ></path>
-          </svg>
-          <span className="sr-only">Search</span>
-        </button>
+          <span className="block select-none">ADD</span>
+          <PlusSquareOutlined />
+        </div>
       </form>
 
       <table className="w-full border">
         <thead>
           <tr className="bg-gray-50 border-b">
-            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-              <div className="flex items-center justify-center">ID</div>
-            </th>
-            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-              <div
-                className="flex items-center justify-center"
-                onClick={() => sorting("name")}
-              >
-                Name
+            <th
+              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
+              onClick={() => sorting("id")}
+            >
+              <div className="flex items-center justify-center">
+                ID
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-4 w-4"
@@ -128,10 +137,19 @@ function Category(props: Props) {
             </th>
             <th
               className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-              onClick={() => sorting("email")}
             >
               <div className="flex items-center justify-center">
-                Email
+                Name
+              </div>
+            </th>
+            <th
+              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
+              onClick={() => {
+                sorting("quantity");
+              }}
+            >
+              <div className="flex items-center justify-center">
+                Quantity
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   className="h-4 w-4"
@@ -149,9 +167,6 @@ function Category(props: Props) {
               </div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-              <div className="flex items-center justify-center">Address</div>
-            </th>
-            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
               <div className="flex items-center justify-center">Actions</div>
             </th>
           </tr>
@@ -159,32 +174,25 @@ function Category(props: Props) {
         <tbody>
           {userList.length > 0 ? (
             userList
-              .filter((value: USER_MODEL, index: number) => {
+              .filter((value: any, index: number) => {
                 if (searchItem == "") {
                   return value;
                 } else if (
+                  value.id.toString().includes(searchItem.toLowerCase()) ||
                   value.name.toLowerCase().includes(searchItem.toLowerCase()) ||
-                  value.email
-                    .toLowerCase()
-                    .includes(searchItem.toLowerCase()) ||
-                  value.address.street
-                    .toLowerCase()
-                    .includes(searchItem.toLowerCase()) ||
-                    value.id.toString()
-                      .includes(searchItem.toLowerCase())
+                  value.quantity.toString().includes(searchItem.toLowerCase())
                 ) {
                   return value;
                 }
               })
-              .map((item: USER_MODEL, index: number) => (
+              .map((item: any, index: number) => (
                 <tr
                   className="bg-gray-100 text-center border-b text-sm text-gray-600"
                   key={index}
                 >
                   <td className="p-2 border-r">{item.id}</td>
                   <td className="p-2 border-r">{item.name}</td>
-                  <td className="p-2 border-r">{item.email}</td>
-                  <td className="p-2 border-r">{item.address.street}</td>
+                  <td className="p-2 border-r">{item.quantity}</td>
                   <td>
                     <a className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
                       Edit
@@ -202,6 +210,11 @@ function Category(props: Props) {
           )}
         </tbody>
       </table>
+      {showModalCreateCategory && (
+        <ModalCreateCategory
+          setOpenModalCreateCategory={setShowModalCreateCategory}
+        />
+      )}
       <Pagination
         limit={LIMIT}
         currentPage={currentPage}
