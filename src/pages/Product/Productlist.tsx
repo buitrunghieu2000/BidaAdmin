@@ -84,13 +84,13 @@ function Productlist(props: Props) {
     navigate(`/productlist/updateproduct/${productId}`);
   };
 
-  // useEffect(() => {
-  //   (async () => {
-  //     const result = await productApi.getProduct();
-  //     console.log(result);
-  //     setProductlist(result.data.data);
-  //   })();
-  // }, []);
+  useEffect(() => {
+    (async () => {
+      const result = await productApi.getProduct();
+      console.log(result);
+      setProductlist(result.data.data);
+    })();
+  }, []);
 
   return (
     <>
@@ -279,26 +279,26 @@ function Productlist(props: Props) {
                     <td className="p-2 border-r w-[1%]">{item.id}</td>
                     <td className="p-2 border-r h-[70px] w-[10%]">
                       <img
-                        src={item.img}
+                        src={item.colors?.length ? item?.colors[0]?.image_url : ""}
                         className="w-full h-full object-contain"
                       />
                     </td>
                     <td className="p-2 border-r w-[15%]">{item.name}</td>
                     <td className="p-2 border-r w-[5%]">{item.color}</td>
                     <td className="p-2 border-r w-[10%]">{item.price}</td>
-                    <td className="p-2 border-r w-[10%]">{item.discount}</td>
+                    <td className="p-2 border-r w-[10%]">{item.sale}</td>
                     <td className="p-2 border-r w-[5%]">{item.quantity}</td>
                     <td className="p-2 border-r w-[5%]">{item.sold}</td>
                     <td className="p-2 border-r w-[5%]">{item.rating}</td>
                     <td className="p-2 border-r w-[10%]">
                       <span
                         className={`inline-block p-2 rounded-lg capitalize ${
-                          item.status === "instock"
+                          item.enable === true
                             ? "text-green-700  bg-successStock"
                             : "text-red-700 bg-red-100"
                         } `}
                       >
-                        {item.status}
+                        {item.enable ? "InStock" : "Stocked"}
                       </span>
                     </td>
                     <td className="flex justify-center items-center m-[20px] gap-[8px]">

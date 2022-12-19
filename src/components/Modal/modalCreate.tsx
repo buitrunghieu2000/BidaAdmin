@@ -89,6 +89,7 @@ export default function ModalCreate({ setOpenModal }: any) {
     })();
     console.log("payload", payload);
     reset();
+    setFlag(false);
   };
 
   useEffect(() => {
