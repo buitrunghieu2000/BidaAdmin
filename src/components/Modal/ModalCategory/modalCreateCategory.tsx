@@ -40,6 +40,8 @@ export default function ModalCreateCategory({
 
     const nameCategory = data.name;
     delete data.name;
+    const slug = data.slug;
+    delete data.slug;
     var arr1 = Object.keys(data);
     var arr2 = Object.values(data);
     let values: any[] = [];
@@ -63,15 +65,14 @@ export default function ModalCreateCategory({
         specs_model.push(obj);
       }
     });
-    data.name = nameCategory;
     data.specsModel = specs_model;
 
     const payload = {
-      name: data.name,
+      name: nameCategory,
       specsModel: data.specsModel,
       image_base64: imagesBase64,
       icon_base64: iconBase64,
-      slug: data.slug,
+      slug: slug,
     };
 
     (async () => {

@@ -3,22 +3,23 @@ import { Button, Upload } from "antd";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import categoryApi from "../../apis/category/categoryApi";
+import productApi from "../../apis/product/product";
 
 export default function ModalCreate({ setOpenModal }: any) {
   type FormValues = {
-    name: string; //
-    code: number; //
-    price: number; //
-    sale: number; //
-    desc: string; //
+    name: string;
+    code: number;
+    price: number;
+    sale: number;
+    desc: string;
   };
 
+  const [flag, setFlag] = useState(false);
   const [category, setCategory] = useState<Array<any>>([]);
   const [selectCategory, setSelectCategory] = useState("");
   const [specs, setSpecs] = useState<Array<any>>([]);
   const [imagesBase64, setImagesBase64] = React.useState<any>("");
-  const [specsPayload, setspecsPayload] = useState({});
-  const [selectValue, setSelectValue] = useState('')
+  const [selectValue, setSelectValue] = useState([]);
 
   const getBase64 = (file: any, cb: any) => {
     let reader = new FileReader();
@@ -37,20 +38,19 @@ export default function ModalCreate({ setOpenModal }: any) {
       (async () => {
         const result = await categoryApi.getSelectCategory(e.target.value);
         setSpecs(result.data.specsModel);
-        console.log(result.data.specsModel);
+        // console.log(result.data.specsModel);
+        setFlag(true);
       })();
+    } else {
+      setFlag(false);
     }
   };
-
-  const handleSelectSpecs = (e: any) => {
-    if (e.target.value !== "Select") {
-      setSelectValue(e.target.value);
-    }
-  }
+  // console.log(category);
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
     reset,
   } = useForm<FormValues>({});
@@ -60,7 +60,34 @@ export default function ModalCreate({ setOpenModal }: any) {
     data.image_base64 = imagesBase64;
     data.category = selectCategory;
     data.value = selectValue;
-    console.log(data);
+
+    let arr1 = Object.keys(data);
+    let specs: { [k: string]: any } = {};
+    const indexName = arr1.filter((item) => item.toString().startsWith("spec"));
+    const indexValue = arr1.filter((item) =>
+      item.toString().startsWith("value")
+    );
+    indexName.forEach((item, index) => {
+      if (data[indexValue[index]]) {
+        specs[data[item]] = data[indexValue[index]];
+      }
+    });
+    const payload = {
+      name: data.name,
+      code: data.code,
+      desc: data.desc,
+      category: data.category,
+      specs: specs,
+      price: data.price,
+      sale: data.sale,
+      image_base64: imagesBase64,
+    };
+
+    (async () => {
+      const result = await productApi.createProduct(payload);
+      console.log("result", result);
+    })();
+    console.log("payload", payload);
     reset();
   };
 
@@ -68,7 +95,6 @@ export default function ModalCreate({ setOpenModal }: any) {
     (async () => {
       const result = await categoryApi.getCategory();
       setCategory(result.data);
-      console.log(result);
     })();
   }, []);
 
@@ -80,7 +106,7 @@ export default function ModalCreate({ setOpenModal }: any) {
           onClick={() => setOpenModal(false)}
         ></div>
         <div className="flex items-center min-h-screen px-4 py-8">
-          <div className="relative w-full max-w-[1000px] p-4 mx-auto bg-white rounded-md shadow-lg">
+          <div className="relative w-full max-w-[1200px] p-4 mx-auto bg-white rounded-md shadow-lg">
             <div className="text-center mb-4 uppercase text-lg">
               Add product
             </div>
@@ -130,7 +156,7 @@ export default function ModalCreate({ setOpenModal }: any) {
                     />
                   </div>
                 </div>
-                <div className="center flex-1">
+                <div className="center w-[400px]">
                   <div className="name flex justify-between gap-2 mb-[20px]">
                     <label
                       aria-label="message"
@@ -171,41 +197,29 @@ export default function ModalCreate({ setOpenModal }: any) {
                     </Upload.Dragger>
                   </div>
                 </div>
-                <div className="right w-[200px]">
-                  <div className="flex flex-1 gap-[10px] mb-[20px]">
-                    <label htmlFor="">Category:</label>
-                    <select
-                      className="flex items-start h-[25px]"
-                      onChange={handleSelectCat}
-                    >
-                      <option value="Select" key={-1}>
-                        Select:
+                <div className="right w-[450px]">
+                  <select
+                    className="flex items-start h-[25px] mb-4"
+                    onChange={handleSelectCat}
+                  >
+                    <option value="Select" key={-1}>
+                      Select:
+                    </option>
+                    {category.map((item: any, index: number) => (
+                      <option key={index} value={item.name}>
+                        {item.name}
                       </option>
-                      {category.map((item: any, index: number) => (
-                        <option key={index} value={item.name}>
-                          {item.name}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <div className="flex-1 text-center">
-                    <div className="">Spec</div>
-                    {specs.map((item: any, index: number) => (
-                      <div key={index} className="flex">
-                        <div className="flex-1">{item.name}</div>
-                        <div className="flex-1 text-end">
-                          <select name="" id="" onClick={handleSelectSpecs}>
-                            <option value="Select" key={-1}>Select</option>
-                            {item.values.map((item: any, index: number) => (
-                              <option key={index} value={item.value}>
-                                {item.value}
-                              </option>
-                            ))}
-                          </select>
-                        </div>
-                      </div>
                     ))}
-                  </div>
+                  </select>
+                  {flag ? (
+                    <SpecsCategory
+                      setValue={setValue}
+                      register={register}
+                      listSpecs={specs}
+                    />
+                  ) : (
+                    ""
+                  )}
                 </div>
               </div>
               <button
@@ -221,3 +235,63 @@ export default function ModalCreate({ setOpenModal }: any) {
     </>
   );
 }
+
+type Props = {
+  register: any;
+  id: number;
+  name: string;
+  values: any;
+};
+
+const SpecsCategory = ({
+  register,
+  listSpecs,
+  setValue,
+}: {
+  register: any;
+  setValue: any;
+  listSpecs: any;
+}) => {
+  return (
+    <div className="flex flex-col gap-[10px]">
+      {listSpecs.map((item: any, index: any) => {
+        setValue(`spec${index + 1}`, item.name);
+        return (
+          <ShowSpecs
+            register={register}
+            id={index + 1}
+            key={index}
+            name={item.name}
+            values={item.values}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
+const ShowSpecs = ({ register, id, name, values }: Props) => {
+  return (
+    <div className="formInput flex flex-col gap-[5px]">
+      <div className="specs-input flex">
+        <input
+          //   {...register(`spec${id}`)}
+          type="text"
+          value={name}
+          disabled
+          placeholder="Name Spec"
+        />
+        <div className="select">
+          <select {...register(`value${id}`)} className="flex w-[250px]">
+            <option value={""}>Chọn</option>
+            {values.map((item: any, index: any) => (
+              <option key={index} value={item.value}>
+                {item.value}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+    </div>
+  );
+};

@@ -1,8 +1,9 @@
 import React, { useEffect } from "react";
+import "./style.css";
 import { Link, NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux/es/exports";
-import "./style.css";
 import { updateAuthStatus } from "../../Redux/authSlice";
+import logo from "../../Images/logo.png"
 type Props = {};
 
 const Navbar = (props: Props) => {
@@ -17,8 +18,8 @@ const Navbar = (props: Props) => {
       <nav className="relative px-4 py-4 flex justify-between items-center bg-white">
         <Link to="/" className="text-3xl font-bold leading-none">
           <img
-            src="https://a.pinatafarm.com/312x296/ae7f8ccd22/sad-thumbs-up-cat.jpg/m/522x0"
-            className="w-20 h-15 ml-16"
+            src={logo}
+            className="w-14 h-15 ml-20"
             alt=""
           />
         </Link>
@@ -34,7 +35,7 @@ const Navbar = (props: Props) => {
             </svg>
           </button>
         </div>
-        <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex  lg:items-center lg:w-auto lg:space-x-6 ml-[100px]">
+        <ul className="hidden absolute top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 lg:flex  lg:items-center lg:space-x-6 ml-[100px] w-[700px]">
           <li>
             <NavLink
               className="text-sm text-gray-400 hover:text-gray-500"
@@ -108,6 +109,36 @@ const Navbar = (props: Props) => {
               }}
             >
               Category List
+            </NavLink>
+          </li>
+          <li className="text-gray-300">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              stroke="currentColor"
+              className="w-4 h-4 current-fill"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+              />
+            </svg>
+          </li>
+          <li>
+            <NavLink
+              className="text-sm text-gray-400 hover:text-gray-500"
+              to="billlist"
+              style={({ isActive }) => {
+                return {
+                  color: isActive ? "rgb(37 99 235)" : "rgb(156 163 175",
+                  fontWeight: isActive ? "bold" : "400",
+                };
+              }}
+            >
+              Bill
             </NavLink>
           </li>
           <li className="text-gray-300">

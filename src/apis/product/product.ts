@@ -8,6 +8,10 @@ const productApi = {
     const url = "/product/list"; //params : page, filter
     return axiosClient.get(url);
   },
+  createProduct(payload: any): Promise<ReturnReponse<any>> {
+    const url = "/product/create"; //params : page, filter
+    return axiosClient.post(url, payload);
+  },
 };
 
 export default productApi;

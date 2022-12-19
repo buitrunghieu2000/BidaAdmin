@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar/Navbar";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Login from "../pages/Auth/Login";
 import Profile from "../pages/Auth/Profile";
+import BillList from "../pages/Bill/BillList";
 import Category from "../pages/Category/Createcategory";
 
 import Contact from "../pages/Contact/Contact";
@@ -50,6 +51,7 @@ const Router = (props: Props) => {
             />
             <Route path="/contact" element={<Contact />} />
             <Route path="/categorylist" element={<Category />} />
+            <Route path="/billlist" element={<BillList />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>
