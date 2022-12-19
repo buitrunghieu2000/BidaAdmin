@@ -15,6 +15,20 @@ export default function ModalCreate({ setOpenModal }: any) {
 
   const [category, setCategory] = useState('')
   const [image, setImage] = useState<any>([]);
+  const [imagesBase64, setImagesBase64] = React.useState<any>("");
+
+
+  const getBase64 = (file: any, cb: any) => {
+    let reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function () {
+      cb(reader.result);
+    };
+    reader.onerror = function (error) {
+      console.log("Error: ", error);
+    };
+  };
+
 
   const {
     register,
@@ -27,7 +41,7 @@ export default function ModalCreate({ setOpenModal }: any) {
   const submit = (data: any, e: any) => {
     e.preventDefault();
     data.category = category;
-    data.image = image;
+    data.image = imagesBase64;
     console.log(data);
     reset();
   };
@@ -101,10 +115,10 @@ export default function ModalCreate({ setOpenModal }: any) {
                       Category:
                     </label>
                     <select onChange={handleSelect} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                      <option defaultValue="Viet Nam">Choose a country</option>
-                      <option value="US">United States</option>
-                      <option value="US">United States</option>
-                      <option value="US">United States</option>
+                      <option defaultValue="Phone">Choose a category</option>
+                      <option value="Phone">Phone</option>
+                      <option value="Laptpop">Laptpop</option>
+                      <option value="desktop">desktop</option>
                     </select>
                   </div>
 
@@ -129,7 +143,7 @@ export default function ModalCreate({ setOpenModal }: any) {
                       Image:{" "}
                     </div>
                     <Upload.Dragger
-                      multiple
+                      maxCount={1}
                       listType="picture-card"
                       showUploadList={{
                         showRemoveIcon: true,
@@ -137,7 +151,10 @@ export default function ModalCreate({ setOpenModal }: any) {
                       }}
                       accept=".png, .jpg"
                       beforeUpload={(file: any) => {
-                          setImage([...image, file]);
+                          getBase64(file, (result: any) => {
+                            const base64 = result.split(",");
+                            setImagesBase64(base64[1]);
+                          });
                         return false;
                       }}
                     >

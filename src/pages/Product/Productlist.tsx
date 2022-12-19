@@ -1,7 +1,12 @@
 import { PlusSquareOutlined } from "@ant-design/icons";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ProductModel } from "../../apis/product/model/productModel";
+import productApi from "../../apis/product/product";
+import { IReqProduct } from "../../apis/product/product.interface";
 import ModalCreate from "../../components/Modal/modalCreate";
+import ModalColor from "../../components/Modal/modalCreateColor";
+import ModalDiscount from "../../components/Modal/modalCreateDiscount";
 import ModalImport from "../../components/Modal/modalImport";
 import Pagination from "../../components/Pangination/Pagination";
 type Props = {};
@@ -14,31 +19,55 @@ function Productlist(props: Props) {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [showModal, setShowModal] = useState(false);
   const [showModalImport, setShowModalImport] = useState(false);
-  const [productList, setProductlist] = useState([
+  const [showModalColor, setShowModalColor] = useState(false);
+  const [showModalDiscount, setShowModalDiscount] = useState(false);
+  const [productList, setProductlist] = useState<Array<any>>([
     {
-      id: 1,
+      id: 2,
+      img: "https://cdn.mediamart.vn/images/product/smart-tivi-4k-sony-kd-50x75k-50-inch-google-tv_2255ad8e.jpg",
+      name: "Sony 4k",
+      color: "red",
+      price: "254.000",
+      discount: "40.000",
+      quantity: "10",
+      sold: "10",
+      rating: "20",
+      status: "Instock",
+      category: "Tv",
+      date: "Date",
+    },
+    {
+      id: 2,
+      img: "https://cdn.mediamart.vn/images/product/smart-tivi-4k-sony-kd-50x75k-50-inch-google-tv_2255ad8e.jpg",
+      name: "Sony 4k",
+      color: "red",
+      price: "254.000",
+      discount: "40.000",
+      quantity: "10",
+      sold: "5",
+      rating: "20",
+      status: "Instock",
+      category: "Tv",
+      date: "Date",
+    },
+    {
+      id: 3,
       img: "https://cdn.mediamart.vn/images/product/smart-tivi-4k-sony-kd-50x75k-50-inch-google-tv_2255ad8e.jpg",
       name: "Sony 4k",
       color: "red",
       price: "254.000",
       discount: "40.000",
       quantity: "40",
-      sold: "20",
-      rating: "20",
+      sold: "100",
+      rating: "1",
       status: "Instock",
       category: "Tv",
       date: "Date",
     },
   ]);
+
   const [searchItem, setSearchItem] = useState("");
   const [order, setOrder] = useState("ACS");
-
-  // React.useEffect(() => {
-  //   fetch("https://jsonplaceholder.typicode.com/posts")
-  //     .then((response) => response.json())
-  //     .then((json) => setProductlist(json));
-  // }, []);
-  // let productList:any = ()
 
   const handleRemove = (removeId: number) => {
     newProductList = productList.filter(
@@ -68,6 +97,14 @@ function Productlist(props: Props) {
     navigate(`/productlist/updateproduct/${productId}`);
   };
 
+  // useEffect(() => {
+  //   (async () => {
+  //     const result = await productApi.getProduct();
+  //     console.log(result);
+  //     setProductlist(result.data.data);
+  //   })();
+  // }, []);
+  
   return (
     <>
       <div className="relative table w-full p-2 h-screen">
@@ -125,48 +162,17 @@ function Productlist(props: Props) {
                 <div className="flex items-center justify-center">Image</div>
               </th>
               <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div
-                  className="flex items-center justify-center"
-                  onClick={() => sorting("name")}
-                >
-                  Name
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                    />
-                  </svg>
-                </div>
+                <div className="flex items-center justify-center">Name</div>
               </th>
               <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
                 <div className="flex items-center justify-center">Color</div>
               </th>
               <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Price</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Discount</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Quantity</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Sold</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Rating</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">
-                  Status
+                <div
+                  className="flex items-center justify-center"
+                  onClick={() => sorting("price")}
+                >
+                  Price{" "}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     className="h-4 w-4"
@@ -182,6 +188,97 @@ function Productlist(props: Props) {
                     />
                   </svg>
                 </div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div
+                  className="flex items-center justify-center"
+                  onClick={() => sorting("discount")}
+                >
+                  Discount
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+                    />
+                  </svg>
+                </div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div
+                  className="flex items-center justify-center"
+                  onClick={() => sorting("quantity")}
+                >
+                  Quantity
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+                    />
+                  </svg>
+                </div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div
+                  className="flex items-center justify-center"
+                  onClick={() => sorting("sold")}
+                >
+                  Sold
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+                    />
+                  </svg>
+                </div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div
+                  className="flex items-center justify-center"
+                  onClick={() => sorting("rating")}
+                >
+                  Rating
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+                    />
+                  </svg>
+                </div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div className="flex items-center justify-center">Status</div>
               </th>
               <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
                 <div className="flex items-center justify-center">Actions</div>
@@ -198,10 +295,8 @@ function Productlist(props: Props) {
                     value.name
                       .toLowerCase()
                       .includes(searchItem.toLowerCase()) ||
-                    // value.body
-                    //   .toLowerCase()
-                    //   .includes(searchItem.toLowerCase()) ||
-                    value.id.toString().includes(searchItem.toLowerCase())
+                    value.price.includes(searchItem) ||
+                    value.id.toString().includes(searchItem)
                   ) {
                     return value;
                   }
@@ -226,21 +321,52 @@ function Productlist(props: Props) {
                     <td className="p-2 border-r w-[5%]">{item.sold}</td>
                     <td className="p-2 border-r w-[5%]">{item.rating}</td>
                     <td className="p-2 border-r w-[10%]">
-                      <span className="inline-block p-2 bg-successStock text-green-700 rounded-lg">
+                      <span
+                        className={`inline-block p-2 rounded-lg capitalize ${
+                          item.status === "instock"
+                            ? "text-green-700  bg-successStock"
+                            : "text-red-700 bg-red-100"
+                        } `}
+                      >
                         {item.status}
                       </span>
                     </td>
-                    <td>
-                      <a className="bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
-                        <span onClick={()=> {setShowModalImport(true)}}>Import</span>
+                    <td className="flex justify-center items-center m-[20px] gap-[8px]">
+                      <a
+                        onClick={() => {
+                          setShowModalImport(true);
+                        }}
+                        className="bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                      >
+                        <span>Import</span>
                       </a>
-                      <a className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
-                        <span onClick={() => handleEdit(item.id)}>Edit</span>
+                      <a
+                        onClick={() => {
+                          setShowModalColor(true);
+                        }}
+                        className="bg-yellow-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                      >
+                        <span>Colors</span>
                       </a>
-                      <a className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
-                        <span onClick={() => handleRemove(item.id)}>
-                          Remove
-                        </span>
+                      <a
+                        onClick={() => {
+                          setShowModalDiscount(true);
+                        }}
+                        className="bg-orange-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                      >
+                        <span>Discount</span>
+                      </a>
+                      <a
+                        onClick={() => handleEdit(item.id)}
+                        className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                      >
+                        <span>Edit</span>
+                      </a>
+                      <a
+                        onClick={() => handleRemove(item.id)}
+                        className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                      >
+                        <span>Remove</span>
                       </a>
                     </td>
                   </tr>
@@ -262,7 +388,13 @@ function Productlist(props: Props) {
         </div>
       </div>
       {showModal && <ModalCreate setOpenModal={setShowModal} />}
-      {showModalImport && <ModalImport setOpenModalImport={setShowModalImport} />}
+      {showModalImport && (
+        <ModalImport setOpenModalImport={setShowModalImport} />
+      )}
+      {showModalColor && <ModalColor setOpenModalColor={setShowModalColor} />}
+      {showModalDiscount && (
+        <ModalDiscount setOpenModalDiscount={setShowModalDiscount} />
+      )}
     </>
   );
 }

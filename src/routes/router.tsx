@@ -6,6 +6,7 @@ import Navbar from "../components/Navbar/Navbar";
 import Sidebar from "../components/Sidebar/Sidebar";
 import Login from "../pages/Auth/Login";
 import Profile from "../pages/Auth/Profile";
+import Category from "../pages/Category/CreateCategory";
 import Contact from "../pages/Contact/Contact";
 import Dashboard from "../pages/Dashboard/Dashboard";
 import Productlist from "../pages/Product/Productlist";
@@ -61,6 +62,10 @@ const Router = (props: Props) => {
                     <Route
                       path="/contact"
                       element={ <Contact />}
+                    />
+                    <Route
+                      path="/categorylist"
+                      element={ <Category />}
                     />
                   <Route path="*" element={<NotFoundPage />} />
                 </Routes>

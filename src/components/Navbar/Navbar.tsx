@@ -1,23 +1,26 @@
 import React, { useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux/es/exports";
-import "./style.css"
+import "./style.css";
 import { updateAuthStatus } from "../../Redux/authSlice";
 type Props = {};
 
 const Navbar = (props: Props) => {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const handleLogout = () => {
-    dispatch(updateAuthStatus(false))
+    dispatch(updateAuthStatus(false));
     localStorage.removeItem("token");
-  }
-
+  };
 
   return (
     <div className="bg-blue-500 border-b">
       <nav className="relative px-4 py-4 flex justify-between items-center bg-white">
-        <Link to='/' className="text-3xl font-bold leading-none" >
-          <img src="https://a.pinatafarm.com/312x296/ae7f8ccd22/sad-thumbs-up-cat.jpg/m/522x0" className="w-20 h-15 ml-16" alt="" />
+        <Link to="/" className="text-3xl font-bold leading-none">
+          <img
+            src="https://a.pinatafarm.com/312x296/ae7f8ccd22/sad-thumbs-up-cat.jpg/m/522x0"
+            className="w-20 h-15 ml-16"
+            alt=""
+          />
         </Link>
         <div className="lg:hidden">
           <button className="navbar-burger flex items-center text-blue-600 p-3">
@@ -65,7 +68,8 @@ const Navbar = (props: Props) => {
           <li>
             <NavLink
               className="text-sm text-gray-400 hover:text-gray-500"
-              end to="/productlist"
+              end
+              to="/productlist"
               style={({ isActive }) => {
                 return {
                   color: isActive ? "rgb(37 99 235)" : "rgb(156 163 175",
@@ -73,7 +77,37 @@ const Navbar = (props: Props) => {
                 };
               }}
             >
-              Product list 
+              Product list
+            </NavLink>
+          </li>
+          <li className="text-gray-300">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              stroke="currentColor"
+              className="w-4 h-4 current-fill"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="2"
+                d="M12 5v0m0 7v0m0 7v0m0-13a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"
+              />
+            </svg>
+          </li>
+          <li>
+            <NavLink
+              className="text-sm text-gray-400 hover:text-gray-500"
+              to="/categorylist"
+              style={({ isActive }) => {
+                return {
+                  color: isActive ? "rgb(37 99 235)" : "rgb(156 163 175",
+                  fontWeight: isActive ? "bold" : "400",
+                };
+              }}
+            >
+              Category List
             </NavLink>
           </li>
           <li className="text-gray-300">
@@ -123,28 +157,44 @@ const Navbar = (props: Props) => {
             </svg>
           </li>
           <li>
-            <NavLink to="/contact" style={({ isActive }) => {
+            <NavLink
+              to="/contact"
+              style={({ isActive }) => {
                 return {
                   color: isActive ? "rgb(37 99 235)" : "rgb(156 163 175",
                   fontWeight: isActive ? "bold" : "400",
                 };
-              }}>
+              }}
+            >
               Contact
             </NavLink>
           </li>
         </ul>
         <div className="relative">
           <button className="w-10 h-10 avatar">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqekwL2LW2-NBO_FE2f2IjZQnp_1xl-shGcg&usqp=CAU" alt="" className="w-full h-full rounded-[50%]" />
+            <img
+              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqekwL2LW2-NBO_FE2f2IjZQnp_1xl-shGcg&usqp=CAU"
+              alt=""
+              className="w-full h-full rounded-[50%]"
+            />
             <div className="w-48 absolute z-10 right-4 bg-slate-400 text-center rounded-lg shadow-xl menu-dropdown">
-            <div className="px-4 py-4  hover:bg-indigo-500 hover:text-white rounded-tl-lg rounded-tr-lg no-underline"><Link className="text-gray-800" to="/profile">Profile</Link></div>
-            <div className="px-4 py-4 text-gray-800 hover:bg-indigo-500 hover:text-white">Awards</div>  
-            <div className="px-4 py-4 text-gray-800 hover:bg-indigo-500 hover:text-white rounded-bl-lg rounded-br-lg border-t-[1px] border-white border-solid" onClick={handleLogout}>Logout</div>
+              <div className="px-4 py-4  hover:bg-indigo-500 hover:text-white rounded-tl-lg rounded-tr-lg no-underline">
+                <Link className="text-gray-800" to="/profile">
+                  Profile
+                </Link>
+              </div>
+              <div className="px-4 py-4 text-gray-800 hover:bg-indigo-500 hover:text-white">
+                Awards
+              </div>
+              <div
+                className="px-4 py-4 text-gray-800 hover:bg-indigo-500 hover:text-white rounded-bl-lg rounded-br-lg border-t-[1px] border-white border-solid"
+                onClick={handleLogout}
+              >
+                Logout
+              </div>
             </div>
           </button>
-          
-        </div>  
-        
+        </div>
       </nav>
     </div>
   );
