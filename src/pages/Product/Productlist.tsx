@@ -331,8 +331,9 @@ const ProductRow = (props: any) => {
         <img src={item.image_url} className="w-full h-full object-contain" />
       </td>
       <td className="p-2 border-r w-[15%]">{item.name}</td>
-      <td className="p-2 border-r w-[5%]">
+      <td className="p-2 border-r w-[15%]">
         <select
+        className="w-full"
           onChange={(e: any) => {
             setColorQuantity(e.target.value);
           }}
