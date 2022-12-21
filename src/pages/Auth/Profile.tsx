@@ -28,7 +28,7 @@ const Profile = (props: Props) => {
               <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
                 Username
               </label>
-              <input type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" value={'binhphuoi'} />
+              <input type="text" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" value='binhpham' />
             </div>
           </div>
           <div className="w-full lg:w-6/12 px-4">
@@ -36,7 +36,7 @@ const Profile = (props: Props) => {
               <label className="block uppercase text-blueGray-600 text-xs font-bold mb-2" htmlFor="grid-password">
                 Email address
               </label>
-              <input type="email" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" value={"binhphuoi123@gmail.com"}/>
+              <input type="email" className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150" value="binhpham123@gmail.com"/>
             </div>
           </div>
           <div className="w-full lg:w-6/12 px-4">

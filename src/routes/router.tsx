@@ -11,6 +11,7 @@ import Category from "../pages/Category/Createcategory";
 
 import Contact from "../pages/Contact/Contact";
 import Dashboard from "../pages/Dashboard/Dashboard";
+import DiscountList from "../pages/Discount/Discount";
 import Productlist from "../pages/Product/Productlist";
 import Updateproduct from "../pages/Product/Updateproduct";
 import Userlist from "../pages/User/Userlist";
@@ -52,6 +53,7 @@ const Router = (props: Props) => {
             <Route path="/contact" element={<Contact />} />
             <Route path="/categorylist" element={<Category />} />
             <Route path="/billlist" element={<BillList />} />
+            <Route path="/discountlist" element={<DiscountList />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>

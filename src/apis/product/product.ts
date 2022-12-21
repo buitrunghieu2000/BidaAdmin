@@ -12,6 +12,18 @@ const productApi = {
     const url = "/product/create"; //params : page, filter
     return axiosClient.post(url, payload);
   },
+  importProduct(payload: any): Promise<ReturnReponse<any>> {
+    const url = "/product/import"; //params : page, filter
+    return axiosClient.post(url, payload);
+  },
+  importColors(payload: any): Promise<ReturnReponse<any>> {
+    const url = "/product/addColor"; //params : page, filter
+    return axiosClient.post(url, payload);
+  },
+  getDetilaProduct(_id: any): Promise<ReturnReponse<any>> {
+    const url = `/product/read?_id=${_id}`; //params : page, filter
+    return axiosClient.get(url);
+  },
 };
 
 export default productApi;

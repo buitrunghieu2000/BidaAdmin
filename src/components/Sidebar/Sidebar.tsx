@@ -50,9 +50,11 @@ const Sidebar = (props: Props) => {
                   </span>
                 </NavLink>
               </li>
+
               <li>
                 <NavLink
-                  end to='/categorylist'
+                  end
+                  to="/categorylist"
                   style={({ isActive }) => {
                     return {
                       borderColor: isActive ? "rgb(99 102 241" : "transparent",
@@ -84,9 +86,11 @@ const Sidebar = (props: Props) => {
                   </span>
                 </NavLink>
               </li>
+
               <li>
                 <NavLink
-                  end to='/productlist'
+                  end
+                  to="/productlist"
                   style={({ isActive }) => {
                     return {
                       borderColor: isActive ? "rgb(99 102 241" : "transparent",
@@ -118,9 +122,43 @@ const Sidebar = (props: Props) => {
                   </span>
                 </NavLink>
               </li>
+
               <li>
                 <NavLink
-                  end to='/billlist'
+                  to="/discountlist"
+                  className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-gray-100 text-gray-600 hover:text-gray-800 border-l-[5px] border-transparent  pr-6"
+                  style={({ isActive }) => {
+                    return {
+                      borderColor: isActive ? "rgb(99 102 241" : "transparent",
+                    };
+                  }}
+                >
+                  <span className="inline-flex justify-center items-center ml-4">
+                    <svg
+                      className="w-5 h-5"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+                      ></path>
+                    </svg>
+                  </span>
+                  <span className="ml-2 text-sm tracking-wide truncate">
+                    Discount
+                  </span>
+                </NavLink>
+              </li>
+
+              <li>
+                <NavLink
+                  end
+                  to="/billlist"
                   style={({ isActive }) => {
                     return {
                       borderColor: isActive ? "rgb(99 102 241" : "transparent",
@@ -152,6 +190,7 @@ const Sidebar = (props: Props) => {
                   </span>
                 </NavLink>
               </li>
+
               <li>
                 <NavLink
                   to="userlist"
@@ -163,7 +202,7 @@ const Sidebar = (props: Props) => {
                   }}
                 >
                   <span className="inline-flex justify-center items-center ml-4">
-                  <svg
+                    <svg
                       className="w-5 h-5"
                       fill="none"
                       stroke="currentColor"

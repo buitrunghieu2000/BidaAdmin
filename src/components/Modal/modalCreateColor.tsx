@@ -2,8 +2,9 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Upload } from "antd";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import productApi from "../../apis/product/product";
 
-export default function ModalColor({ setOpenModalColor }: any) {
+export default function ModalColor({ setOpenModalColor, _id }: any) {
   type FormValues = {
     color: string;
     image_base64: Array<any>;
@@ -31,9 +32,14 @@ export default function ModalColor({ setOpenModalColor }: any) {
 
   const submit = (data: any, e: any) => {
     e.preventDefault();
-    data.image = imagesBase64;
-    console.log(data);
+    data.image_base64 = imagesBase64;
+    data._id = _id;
     reset();
+    console.log(data);
+    (async () => {
+      const result = await productApi.importColors(data);
+      console.log(result);
+    })();
   };
 
   return (
@@ -61,28 +67,26 @@ export default function ModalColor({ setOpenModalColor }: any) {
                   />
                 </div>
                 <div className="name flex items-center gap-[45px] mb-[20px]">
-                    <div >
-                      Image:{" "}
-                    </div>
-                    <Upload.Dragger
-                      maxCount={1}
-                      listType="picture-card"
-                      showUploadList={{
-                        showRemoveIcon: true,
-                        showPreviewIcon: false,
-                      }}
-                      accept=".png, .jpg"
-                      beforeUpload={(file: any) => {
-                          getBase64(file, (result: any) => {
-                            const base64 = result.split(",");
-                            setImagesBase64(base64[1]);
-                          });
-                        return false;
-                      }}
-                    >
-                      <Button>Upload file</Button>
-                    </Upload.Dragger>
-                  </div>
+                  <div>Image: </div>
+                  <Upload.Dragger
+                    maxCount={1}
+                    listType="picture-card"
+                    showUploadList={{
+                      showRemoveIcon: true,
+                      showPreviewIcon: false,
+                    }}
+                    accept=".png, .jpg"
+                    beforeUpload={(file: any) => {
+                      getBase64(file, (result: any) => {
+                        const base64 = result.split(",");
+                        setImagesBase64(base64[1]);
+                      });
+                      return false;
+                    }}
+                  >
+                    <Button>Upload file</Button>
+                  </Upload.Dragger>
+                </div>
               </div>
               <button
                 type="submit"

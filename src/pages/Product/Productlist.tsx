@@ -9,6 +9,7 @@ import ModalColor from "../../components/Modal/modalCreateColor";
 import ModalDiscount from "../../components/Modal/modalCreateDiscount";
 import ModalImport from "../../components/Modal/modalImport";
 import Pagination from "../../components/Pangination/Pagination";
+import { notifySuccess } from "../../utils/notify";
 type Props = {};
 
 function Productlist(props: Props) {
@@ -21,45 +22,27 @@ function Productlist(props: Props) {
   const [showModalImport, setShowModalImport] = useState(false);
   const [showModalColor, setShowModalColor] = useState(false);
   const [showModalDiscount, setShowModalDiscount] = useState(false);
-  const [productList, setProductlist] = useState<Array<any>>([
-    {
-      id: 1,
-      img: "https://cdn.mediamart.vn/images/product/smart-tivi-4k-sony-kd-50x75k-50-inch-google-tv_2255ad8e.jpg",
-      name: "Sony 4k",
-      color: "red",
-      price: "254.000",
-      discount: "40.000",
-      quantity: "10",
-      sold: "10",
-      rating: "20",
-      status: "Instock",
-      category: "Tv",
-      date: "Date",
-    },
-    {
-      id: 2,
-      img: "https://www.lg.com/vn/images/tivi/md07552928/gallery/D-01.jpg",
-      name: "Lg 4k",
-      color: "blue",
-      price: "120.000",
-      discount: "40.000",
-      quantity: "50",
-      sold: "5",
-      rating: "30",
-      status: "Instock",
-      category: "Tv",
-      date: "Date",
-    }
-  ]);
+  const [productList, setProductlist] = useState<Array<any>>([]);
 
   const [searchItem, setSearchItem] = useState("");
   const [order, setOrder] = useState("ACS");
+  const [idColor, setIdcolor] = useState("ACS");
+  const [_idProduct, set_idProduct] = useState("ACS");
 
   const handleRemove = (removeId: number) => {
-    newProductList = productList.filter(
-      (item: any, index: number) => item.id !== removeId
-    );
+    newProductList = productList.filter((item: any) => item._id !== removeId);
+    notifySuccess("Remove Success");
     setProductlist(newProductList);
+  };
+
+  const hadnleAddColor = (_id: any) => {
+    setIdcolor(_id);
+    setShowModalColor(true);
+  };
+
+  const handleImportProduct = (_id: any) => {
+    set_idProduct(_id);
+    setShowModalImport(true);
   };
 
   const sorting = (col: string) => {
@@ -87,10 +70,11 @@ function Productlist(props: Props) {
   useEffect(() => {
     (async () => {
       const result = await productApi.getProduct();
-      console.log(result);
+      console.log("result", result);
       setProductlist(result.data.data);
     })();
   }, []);
+  console.log("product", productList);
 
   return (
     <>
@@ -218,12 +202,8 @@ function Productlist(props: Props) {
                   </svg>
                 </div>
               </th>
-              <th
-                className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-              >
-                <div className="flex items-center justify-center">
-                  Sold
-                </div>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div className="flex items-center justify-center">Sold</div>
               </th>
               <th
                 className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
@@ -279,15 +259,32 @@ function Productlist(props: Props) {
                     <td className="p-2 border-r w-[1%]">{item.id}</td>
                     <td className="p-2 border-r h-[70px] w-[10%]">
                       <img
-                        src={item.colors?.length ? item?.colors[0]?.image_url : ""}
+                        src={
+                          item.colors?.length ? item?.colors[0]?.image_url : ""
+                        }
                         className="w-full h-full object-contain"
                       />
                     </td>
                     <td className="p-2 border-r w-[15%]">{item.name}</td>
-                    <td className="p-2 border-r w-[5%]">{item.color}</td>
+                    <td className="p-2 border-r w-[5%]">
+                      <select>
+                        <option value="Select">Select</option>
+
+                        {item.colors.map((color: any, index: number) => (
+                          <option key={index} value={color.color}>
+                            {color.color}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
                     <td className="p-2 border-r w-[10%]">{item.price}</td>
                     <td className="p-2 border-r w-[10%]">{item.sale}</td>
-                    <td className="p-2 border-r w-[5%]">{item.quantity}</td>
+                    <td className="p-2 border-r w-[5%]">
+                      {item.colors.reduce(
+                        (prev: any, current: any) => prev + current.quantity,
+                        0
+                      )}
+                    </td>
                     <td className="p-2 border-r w-[5%]">{item.sold}</td>
                     <td className="p-2 border-r w-[5%]">{item.rating}</td>
                     <td className="p-2 border-r w-[10%]">
@@ -304,7 +301,7 @@ function Productlist(props: Props) {
                     <td className="flex justify-center items-center m-[20px] gap-[8px]">
                       <a
                         onClick={() => {
-                          setShowModalImport(true);
+                          handleImportProduct(item._id);
                         }}
                         className="bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
                       >
@@ -312,7 +309,7 @@ function Productlist(props: Props) {
                       </a>
                       <a
                         onClick={() => {
-                          setShowModalColor(true);
+                          hadnleAddColor(item._id);
                         }}
                         className="bg-yellow-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
                       >
@@ -327,13 +324,13 @@ function Productlist(props: Props) {
                         <span>Discount</span>
                       </a>
                       <a
-                        onClick={() => handleEdit(item.id)}
+                        onClick={() => handleEdit(item._id)}
                         className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
                       >
                         <span>Edit</span>
                       </a>
                       <a
-                        onClick={() => handleRemove(item.id)}
+                        onClick={() => handleRemove(item._id)}
                         className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
                       >
                         <span>Remove</span>
@@ -359,9 +356,11 @@ function Productlist(props: Props) {
       </div>
       {showModal && <ModalCreate setOpenModal={setShowModal} />}
       {showModalImport && (
-        <ModalImport setOpenModalImport={setShowModalImport} />
+        <ModalImport setOpenModalImport={setShowModalImport} _id={_idProduct} />
       )}
-      {showModalColor && <ModalColor setOpenModalColor={setShowModalColor} />}
+      {showModalColor && (
+        <ModalColor setOpenModalColor={setShowModalColor} _id={idColor} />
+      )}
       {showModalDiscount && (
         <ModalDiscount setOpenModalDiscount={setShowModalDiscount} />
       )}

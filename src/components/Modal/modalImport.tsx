@@ -1,15 +1,17 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Upload } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import productApi from "../../apis/product/product";
 
-export default function ModalImport({ setOpenModalImport }: any) {
+export default function ModalImport({ setOpenModalImport, _id }: any) {
   type FormValues = {
     quantity: number;
     price: number;
   };
 
-  const [color, setColor] = useState("");
+  const [colorModal, setColorModal] = useState<Array<any>>([]);
+  const [colorSubmit, setColorSubmit] = useState("");
 
   const {
     register,
@@ -20,14 +22,39 @@ export default function ModalImport({ setOpenModalImport }: any) {
 
   const submit = (data: any, e: any) => {
     e.preventDefault();
-    data.color = color;
-    console.log(data);
+    const payload = {
+      data: [
+        {
+          _id: _id,
+          color: colorSubmit,
+          quantity: data.quantity,
+          price: data.price,
+        },
+      ],
+    };
+    console.log(payload);
+    (async () => {
+      const result = await productApi.importProduct(payload);
+      console.log("resultApi", result);
+    })();
+    setColorSubmit("");
     reset();
   };
 
   const handleSelect = (e: any) => {
-    setColor(e.target.value);
+    if (e.target.value !== "Select") {
+      console.log(1);
+      setColorSubmit(e.target.value);
+    }
   };
+
+  useEffect(() => {
+    (async () => {
+      const result = await productApi.getDetilaProduct(_id);
+      console.log(result);
+      setColorModal(result.data.colors);
+    })();
+  }, []);
 
   return (
     <>
@@ -55,10 +82,12 @@ export default function ModalImport({ setOpenModalImport }: any) {
                     onChange={handleSelect}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
-                    <option defaultValue="red">Choose a color</option>
-                    <option value="red">red</option>
-                    <option value="green">Green</option>
-                    <option value="blue">Blue</option>
+                    <option value="Select">Select</option>
+                    {colorModal.map((color: any, index: number) => (
+                      <option key={index} value={color.color}>
+                        {color.color}
+                      </option>
+                    ))}
                   </select>
                 </div>
 
