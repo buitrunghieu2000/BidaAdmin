@@ -24,6 +24,16 @@ const productApi = {
     const url = `/product/read?_id=${_id}`; //params : page, filter
     return axiosClient.get(url);
   },
+
+  updateProduct(payload:any): Promise<ReturnReponse<any>> {
+    const url = '/product/update'; //params : page, filter
+    return axiosClient.post(url, payload);
+  },
+
+  // addDiscount(payload:any): Promise<ReturnReponse<any>> {
+  //   const url = '/product/'; //params : page, filter
+  //   return axiosClient.post(url,payload);
+  // },
 };
 
 export default productApi;

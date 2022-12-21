@@ -10,7 +10,7 @@ type Props = {};
 const Updateproduct = (props: Props) => {
   const { productId } = useParams();
   useEffect(() => {
-    (async() => {
+    (async () => {
       const result = await productApi.getDetilaProduct(productId);
       console.log(result);
     })();
@@ -38,7 +38,32 @@ const Updateproduct = (props: Props) => {
         </div>
       </Carousel>
       <div className="flex-1">
-        <Updateprod />
+        <form>
+          <div className="flex items-center mb-4">
+            <div className="w-[50px]">Name</div>
+            <input className="w-[300px] shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" />
+          </div>
+
+          <div className="flex items-center mb-4">
+            <div className="w-[50px]">Name</div>
+            <input className="w-[300px] shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" />
+          </div>
+          
+          <div className="flex items-center mb-4">
+            <div className="w-[50px]">Name</div>
+            <input className="w-[300px] shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" />
+          </div>
+
+          <div className="flex items-center mb-4">
+            <div className="w-[50px]">Name</div>
+            <input className="w-[300px] shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" />
+          </div>
+
+          <div className="flex items-center mb-4">
+            <div className="w-[50px]">Name</div>
+            <input className="w-[300px] shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" type="text" />
+          </div>
+        </form>
       </div>
     </div>
   );

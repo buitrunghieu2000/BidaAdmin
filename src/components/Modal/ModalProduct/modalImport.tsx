@@ -9,7 +9,7 @@ export default function ModalImport({ setOpenModalImport, _id }: any) {
     quantity: number;
     price: number;
   };
-
+  
   const [colorModal, setColorModal] = useState<Array<any>>([]);
   const [colorSubmit, setColorSubmit] = useState("");
 

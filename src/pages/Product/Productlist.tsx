@@ -8,6 +8,7 @@ import ModalCreate from "../../components/Modal/ModalProduct/modalCreate";
 import ModalColor from "../../components/Modal/ModalProduct/modalCreateColor";
 import ModalDiscount from "../../components/Modal/ModalProduct/modalCreateDiscount";
 import ModalImport from "../../components/Modal/ModalProduct/modalImport";
+import ModalUpdateProduct from "../../components/Modal/ModalProduct/modalUpdateProduct";
 
 import Pagination from "../../components/Pangination/Pagination";
 import { notifySuccess } from "../../utils/notify";
@@ -23,13 +24,15 @@ function Productlist(props: Props) {
   const [showModalImport, setShowModalImport] = useState(false);
   const [showModalColor, setShowModalColor] = useState(false);
   const [showModalDiscount, setShowModalDiscount] = useState(false);
+  const [showModalUpdateProduct, setShowModalUpdateProduct] = useState(false);
   const [productList, setProductlist] = useState<Array<any>>([]);
+  const [reLoad, setReload] = useState(0);
 
   const [searchItem, setSearchItem] = useState("");
   const [order, setOrder] = useState("ACS");
   const [idColor, setIdcolor] = useState("ACS");
-  const [_idProduct, set_idProduct] = useState("ACS");
-
+  const [_idProduct, set_idProduct] = useState("");
+  console.log(showModalUpdateProduct);
   const handleRemove = (removeId: number) => {
     newProductList = productList.filter((item: any) => item._id !== removeId);
     notifySuccess("Remove Success");
@@ -46,8 +49,13 @@ function Productlist(props: Props) {
     setShowModalImport(true);
   };
 
+  const handleUpdateProduct = (_id: any) => {
+    set_idProduct(_id);
+    setShowModalUpdateProduct(true);
+  };
+
   const sorting = (col: string) => {
-    console.log(col);
+    // console.log(col);
     if (order === "ACS") {
       const sorted = [...productList].sort((a: any, b: any) =>
         a[col] > b[col] ? 1 : -1
@@ -74,9 +82,8 @@ function Productlist(props: Props) {
       console.log("result", result);
       setProductlist(result.data.data);
     })();
-  }, []);
-  console.log("product", productList);
-
+  }, [reLoad]);
+  console.log(reLoad);
   return (
     <>
       <div className="relative table w-full p-2 h-screen">
@@ -253,91 +260,16 @@ function Productlist(props: Props) {
                   }
                 })
                 .map((item: any, index: number) => (
-                  <tr
-                    className="bg-gray-100 text-center border-b text-sm text-gray-600"
+                  <ProductRow
+                    item={item}
                     key={index}
-                  >
-                    <td className="p-2 border-r w-[1%]">{item.id}</td>
-                    <td className="p-2 border-r h-[70px] w-[10%]">
-                      <img
-                        src={
-                          item.colors?.length ? item?.colors[0]?.image_url : ""
-                        }
-                        className="w-full h-full object-contain"
-                      />
-                    </td>
-                    <td className="p-2 border-r w-[15%]">{item.name}</td>
-                    <td className="p-2 border-r w-[5%]">
-                      <select>
-                        <option value="Select">Select</option>
-
-                        {item.colors.map((color: any, index: number) => (
-                          <option key={index} value={color.color}>
-                            {color.color}
-                          </option>
-                        ))}
-                      </select>
-                    </td>
-                    <td className="p-2 border-r w-[10%]">{item.price}</td>
-                    <td className="p-2 border-r w-[10%]">{item.sale}</td>
-                    <td className="p-2 border-r w-[5%]">
-                      {item.colors.reduce(
-                        (prev: any, current: any) => prev + current.quantity,
-                        0
-                      )}
-                    </td>
-                    <td className="p-2 border-r w-[5%]">{item.sold}</td>
-                    <td className="p-2 border-r w-[5%]">{item.rating}</td>
-                    <td className="p-2 border-r w-[10%]">
-                      <span
-                        className={`inline-block p-2 rounded-lg capitalize ${
-                          item.enable === true
-                            ? "text-green-700  bg-successStock"
-                            : "text-red-700 bg-red-100"
-                        } `}
-                      >
-                        {item.enable ? "InStock" : "Stocked"}
-                      </span>
-                    </td>
-                    <td className="flex justify-center items-center m-[20px] gap-[8px]">
-                      <a
-                        onClick={() => {
-                          handleImportProduct(item._id);
-                        }}
-                        className="bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
-                      >
-                        <span>Import</span>
-                      </a>
-                      <a
-                        onClick={() => {
-                          hadnleAddColor(item._id);
-                        }}
-                        className="bg-yellow-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
-                      >
-                        <span>Colors</span>
-                      </a>
-                      <a
-                        onClick={() => {
-                          setShowModalDiscount(true);
-                        }}
-                        className="bg-orange-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
-                      >
-                        <span>Discount</span>
-                      </a>
-                      <a
-                        onClick={() => handleEdit(item._id)}
-                        className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
-                      >
-                        <span>Edit</span>
-                      </a>
-                      <a
-                        onClick={() => handleRemove(item._id)}
-                        className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
-                      >
-                        <span>Remove</span>
-                      </a>
-                    </td>
-                  </tr>
+                    handleImportProduct={handleImportProduct}
+                    hadnleAddColor={hadnleAddColor}
+                    setShowModalDiscount={setShowModalDiscount}
+                    handleEdit={handleEdit}
+                    handleRemove={handleRemove}
+                    handleUpdateProduct={handleUpdateProduct}
+                  />
                 ))
             ) : (
               <tr>
@@ -355,7 +287,9 @@ function Productlist(props: Props) {
           />
         </div>
       </div>
-      {showModal && <ModalCreate setOpenModal={setShowModal} />}
+      {showModal && (
+        <ModalCreate setOpenModal={setShowModal} setReload={setReload} />
+      )}
       {showModalImport && (
         <ModalImport setOpenModalImport={setShowModalImport} _id={_idProduct} />
       )}
@@ -365,8 +299,110 @@ function Productlist(props: Props) {
       {showModalDiscount && (
         <ModalDiscount setOpenModalDiscount={setShowModalDiscount} />
       )}
+      {showModalUpdateProduct && (
+        <ModalUpdateProduct
+          setOpenModalUpdateProduct={setShowModalUpdateProduct}
+          _id={_idProduct}
+        />
+      )}
     </>
   );
 }
 
 export default Productlist;
+
+const ProductRow = (props: any) => {
+  const {
+    item,
+    handleImportProduct,
+    hadnleAddColor,
+    setShowModalDiscount,
+    handleRemove,
+    handleUpdateProduct,
+  } = props;
+
+  const [colorQuantity, setColorQuantity] = useState(
+    item.colors?.[0]?.quantity || 0
+  );
+
+  return (
+    <tr className="bg-gray-100 text-center border-b text-sm text-gray-600">
+      <td className="p-2 border-r w-[1%]">{item.id}</td>
+      <td className="p-2 border-r h-[70px] w-[10%]">
+        <img src={item.image_url} className="w-full h-full object-contain" />
+      </td>
+      <td className="p-2 border-r w-[15%]">{item.name}</td>
+      <td className="p-2 border-r w-[5%]">
+        <select
+          onChange={(e: any) => {
+            setColorQuantity(e.target.value);
+          }}
+        >
+          <option value="0">Select</option>
+
+          {item.colors.map((color: any, index: number) => (
+            <option key={index} value={color?.quantity}>
+              {color.color}
+            </option>
+          ))}
+        </select>
+      </td>
+      <td className="p-2 border-r w-[10%]">{item.price}</td>
+      <td className="p-2 border-r w-[10%]">{item.sale}</td>
+      <td className="p-2 border-r w-[5%]">{colorQuantity}</td>
+      <td className="p-2 border-r w-[5%]">{item.sold}</td>
+      <td className="p-2 border-r w-[5%]">{item.rating}</td>
+      <td className="p-2 border-r w-[10%]">
+        <span
+          className={`inline-block p-2 rounded-lg capitalize ${
+            item.enable === true
+              ? "text-green-700  bg-successStock"
+              : "text-red-700 bg-red-100"
+          } `}
+        >
+          {item.enable ? "InStock" : "Stocked"}
+        </span>
+      </td>
+      <td className="flex justify-center items-center m-[20px] gap-[8px]">
+        <a
+          onClick={() => {
+            handleImportProduct(item._id);
+          }}
+          className="bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+        >
+          <span>Import</span>
+        </a>
+        <a
+          onClick={() => {
+            hadnleAddColor(item._id);
+          }}
+          className="bg-yellow-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+        >
+          <span>Colors</span>
+        </a>
+        <a
+          onClick={() => {
+            setShowModalDiscount(true);
+          }}
+          className="bg-orange-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+        >
+          <span>Discount</span>
+        </a>
+        <a
+          onClick={() => {
+            handleUpdateProduct(item._id);
+          }}
+          className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+        >
+          <span>Edit</span>
+        </a>
+        <a
+          onClick={() => handleRemove(item._id)}
+          className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+        >
+          <span>Remove</span>
+        </a>
+      </td>
+    </tr>
+  );
+};

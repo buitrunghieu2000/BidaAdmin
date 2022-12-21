@@ -1,10 +1,12 @@
 import { PlusSquareOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import discountApi from "../../apis/discount/discount.api";
 import { IResUserList } from "../../apis/user/user.type";
 import ModalCreateCategory from "../../components/Modal/ModalCategory/modalCreateCategory";
 import ModalAddDiscount from "../../components/Modal/Modaldiscout/modalAddDiscount";
 import Pagination from "../../components/Pangination/Pagination";
 import { USER_MODEL } from "../../models/user.model";
+import { formatDate } from "../../utils/dateFormater";
 
 type Props = {};
 
@@ -18,21 +20,21 @@ function DiscountList(props: Props) {
   const [showModalDiscount, setShowModalDiscount] = useState(false);
 
   const [discountList, setDiscountList] = useState([
-    {
-      id: 1,
-      code: "502",
-      dateStart: "12-12-2022",
-      dateEnd: "15-12-2022",
-      quantity: "50",
-      status: "Not available",
-      subject: "All",
-      timeofuses: "No Limit",
-      typeofdiscount: "Value",
-      shipdiscount: "Bill total",
-      maxdiscount: "Bill total",
-      minbill: "0 vnd",
-      discountvalue: "0 vnd",
-    },
+    // {
+    //   id: 1,
+    //   code: "502",
+    //   dateStart: "12-12-2022",
+    //   dateEnd: "15-12-2022",
+    //   quantity: "50",
+    //   status: "Not available",
+    //   subject: "All",
+    //   timeofuses: "No Limit",
+    //   typeofdiscount: "Value",
+    //   shipdiscount: "Bill total",
+    //   maxdiscount: "Bill total",
+    //   minbill: "0 vnd",
+    //   discountvalue: "0 vnd",
+    // },
   ]);
 
   const handleRemove = (removeId: number) => {
@@ -57,6 +59,13 @@ function DiscountList(props: Props) {
     }
   };
   // console.log(searchItem)
+  useEffect(()=>{
+    (async()=>{
+      const result = await discountApi.getListDiscount();
+      console.log('list',result);
+      setDiscountList(result.data);
+    })()
+  },[])
 
   return (
     <div className="table w-full p-2 max-h-screen">
@@ -134,27 +143,22 @@ function DiscountList(props: Props) {
               <div className="flex items-center justify-center">Date End</div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-              <div className="flex items-center justify-center">Quantity</div>
-            </th>
-            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
               <div className="flex items-center justify-center">Status</div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-              <div className="flex items-center justify-center">Subject</div>
+              <div className="flex items-center justify-center">Customer</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Expired</div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
               <div className="flex items-center justify-center">
-                Number Of Uses
+                Is Percent
               </div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
               <div className="flex items-center justify-center">
-                Type Of Discount
-              </div>
-            </th>
-            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-              <div className="flex items-center justify-center">
-                Ship Discount
+                is Ship
               </div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
@@ -163,7 +167,12 @@ function DiscountList(props: Props) {
               </div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-              <div className="flex items-center justify-center">Min Bill</div>
+              <div className="flex items-center justify-center">
+                Min Discount
+              </div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Quantity</div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
               <div className="flex items-center justify-center">
@@ -192,19 +201,19 @@ function DiscountList(props: Props) {
                   className="bg-gray-100 text-center border-b text-sm text-gray-600"
                   key={index}
                 >
-                  <td className="p-2 border-r">{item.id}</td>
+                  <td className="p-2 border-r">{index + 1}</td>
                   <td className="p-2 border-r">{item.code}</td>
-                  <td className="p-2 border-r">{item.dateStart}</td>
-                  <td className="p-2 border-r">{item.dateEnd}</td>
+                  <td className="p-2 border-r">{formatDate(item.dateStart)}</td>
+                  <td className="p-2 border-r">{formatDate(item.dateStart)}</td>
+                  <td className="p-2 border-r">{item.enable.toString()}</td>
+                  <td className="p-2 border-r">{item.is_oic.toString()}</td>
+                  <td className="p-2 border-r">{item.is_oid.toString()}</td>
+                  <td className="p-2 border-r">{item.is_percent.toString()}</td>
+                  <td className="p-2 border-r">{item.is_ship.toString()}</td>
+                  <td className="p-2 border-r">{item.maxPrice}</td>
+                  <td className="p-2 border-r">{item.minPrice}</td>
                   <td className="p-2 border-r">{item.quantity}</td>
-                  <td className="p-2 border-r">{item.status}</td>
-                  <td className="p-2 border-r">{item.subject}</td>
-                  <td className="p-2 border-r">{item.timeofuses}</td>
-                  <td className="p-2 border-r">{item.typeofdiscount}</td>
-                  <td className="p-2 border-r">{item.shipfee}</td>
-                  <td className="p-2 border-r">{item.maxdiscount}</td>
-                  <td className="p-2 border-r">{item.minbill}</td>
-                  <td className="p-2 border-r">{item.discountvalue}</td>
+                  <td className="p-2 border-r">{item.value}</td>
                   <td className="flex justify-center items-center m-[10px] gap-[8px]">
                     <a className="bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
                       Enable
