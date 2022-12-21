@@ -4,10 +4,11 @@ import { useNavigate } from "react-router-dom";
 import { ProductModel } from "../../apis/product/model/productModel";
 import productApi from "../../apis/product/product";
 import { IReqProduct } from "../../apis/product/product.interface";
-import ModalCreate from "../../components/Modal/modalCreate";
-import ModalColor from "../../components/Modal/modalCreateColor";
-import ModalDiscount from "../../components/Modal/modalCreateDiscount";
-import ModalImport from "../../components/Modal/modalImport";
+import ModalCreate from "../../components/Modal/ModalProduct/modalCreate";
+import ModalColor from "../../components/Modal/ModalProduct/modalCreateColor";
+import ModalDiscount from "../../components/Modal/ModalProduct/modalCreateDiscount";
+import ModalImport from "../../components/Modal/ModalProduct/modalImport";
+
 import Pagination from "../../components/Pangination/Pagination";
 import { notifySuccess } from "../../utils/notify";
 type Props = {};

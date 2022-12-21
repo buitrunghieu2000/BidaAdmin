@@ -2,7 +2,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Upload } from "antd";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import productApi from "../../apis/product/product";
+import productApi from "../../../apis/product/product"
 
 export default function ModalImport({ setOpenModalImport, _id }: any) {
   type FormValues = {

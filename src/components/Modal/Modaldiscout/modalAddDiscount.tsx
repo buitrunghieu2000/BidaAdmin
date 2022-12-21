@@ -7,6 +7,7 @@ export default function ModalAddDiscount({ setShowModalDiscount }: any) {
   type FormValues = {
     quantity: number;
     price: number;
+    code: number;
   };
 
   console.log(setShowModalDiscount);
@@ -50,7 +51,7 @@ export default function ModalAddDiscount({ setShowModalDiscount }: any) {
           onClick={() => setShowModalDiscount(false)}
         ></div>
         <div className="flex items-center justify-center min-h-screen px-4 py-8">
-          <div className="relative w-full max-w-[550px] p-4 mx-auto bg-white rounded-md shadow-lg">
+          <div className="relative w-full max-w-[600px] p-4 mx-auto bg-white rounded-md shadow-lg">
             <div className="text-center mb-4 uppercase text-lg">
               Import Product
             </div>
@@ -58,9 +59,9 @@ export default function ModalAddDiscount({ setShowModalDiscount }: any) {
               <div className="flex gap-4">
                 <div>
                   <div className="name flex justify-center items-center  gap-2 mb-[20px]">
-                    <div className="flex-1 text-end">Quantity: </div>
+                    <div className="flex-1 text-end">Code: </div>
                     <input
-                      {...register("quantity")}
+                      {...register("code")}
                       className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="username"
                       type="text"
@@ -110,12 +111,12 @@ export default function ModalAddDiscount({ setShowModalDiscount }: any) {
                 </div>
 
                 <div>
-                  <div className="flex items-center gap-4 mb-4">
+                  <div className="flex items-center gap-4 mb-2  ">
                     <label
                       htmlFor="countries_disabled"
                       className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      Colors:
+                      Enable
                     </label>
                     <select
                       required
@@ -126,56 +127,26 @@ export default function ModalAddDiscount({ setShowModalDiscount }: any) {
                     </select>
                   </div>
 
-                  <div className="flex items-center gap-4 mb-4">
+                  
+
+                  <div className="flex items-center justify-between gap-4">
                     <label
                       htmlFor="countries_disabled"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      Colors:
+                      Date Start
                     </label>
-                    <select
-                      required
-                      onChange={handleSelect}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    >
-                      <option value="Select">Select</option>
-                    </select>
+                    <input type="date" className="" name="date"/>
                   </div>
 
-                  <div className="flex items-center gap-4 mb-4">
+                  <div className="flex items-center justify-between gap-4">
                     <label
                       htmlFor="countries_disabled"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      className="block  text-sm font-medium text-gray-900 dark:text-white"
                     >
-                      Colors:
+                      Date End
                     </label>
-                    <select
-                      required
-                      onChange={handleSelect}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    >
-                      <option value="Select">Select</option>
-                    </select>
-                  </div>
-
-                  <div className="flex items-center gap-4 mb-4">
-                    <label
-                      htmlFor="countries_disabled"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Colors:
-                    </label>
-                    <input type="date" />
-                  </div>
-
-                  <div className="flex items-center gap-4 mb-4">
-                    <label
-                      htmlFor="countries_disabled"
-                      className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-                    >
-                      Colors:
-                    </label>
-                    <input type="date" />
+                    <input type="date" name="date" />
                   </div>
                 </div>
               </div>

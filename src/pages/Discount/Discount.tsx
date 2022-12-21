@@ -2,7 +2,7 @@ import { PlusSquareOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
 import { IResUserList } from "../../apis/user/user.type";
 import ModalCreateCategory from "../../components/Modal/ModalCategory/modalCreateCategory";
-import ModalAddDiscount from "../../components/Modal/Modaldiscout/modalImport";
+import ModalAddDiscount from "../../components/Modal/Modaldiscout/modalAddDiscount";
 import Pagination from "../../components/Pangination/Pagination";
 import { USER_MODEL } from "../../models/user.model";
 
