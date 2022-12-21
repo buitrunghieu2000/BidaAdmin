@@ -25,7 +25,7 @@ export default function ModalImport({ setOpenModalImport, _id }: any) {
     const payload = {
       data: [
         {
-          _id: _id,
+          code: _id,
           color: colorSubmit,
           quantity: data.quantity,
           price: data.price,
@@ -50,7 +50,8 @@ export default function ModalImport({ setOpenModalImport, _id }: any) {
 
   useEffect(() => {
     (async () => {
-      const result = await productApi.getDetilaProduct(_id);
+      const sendId = 'code='+ _id
+      const result = await productApi.getDetilaProduct(sendId);
       console.log(result);
       setColorModal(result.data.colors);
     })();

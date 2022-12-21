@@ -32,7 +32,7 @@ function Productlist(props: Props) {
   const [order, setOrder] = useState("ACS");
   const [idColor, setIdcolor] = useState("ACS");
   const [_idProduct, set_idProduct] = useState("");
-  console.log(showModalUpdateProduct);
+  // console.log(showModalUpdateProduct);
   const handleRemove = (removeId: number) => {
     newProductList = productList.filter((item: any) => item._id !== removeId);
     notifySuccess("Remove Success");
@@ -72,18 +72,20 @@ function Productlist(props: Props) {
     }
   };
 
-  const handleEdit = (productId: any) => {
-    navigate(`/productlist/updateproduct/${productId}`);
-  };
-
   useEffect(() => {
     (async () => {
       const result = await productApi.getProduct();
-      console.log("result", result);
+      // console.log("result", result);
       setProductlist(result.data.data);
+      result.data.data.map((item: any, index: number) => {
+        item.totalQuantity = item.colors.reduce((prev: any, next: any) => 
+          prev + next.quantity, 0
+        );
+      });
+      console.log(result.data.data);
     })();
   }, [reLoad]);
-  console.log(reLoad);
+
   return (
     <>
       <div className="relative table w-full p-2 h-screen">
@@ -266,7 +268,6 @@ function Productlist(props: Props) {
                     handleImportProduct={handleImportProduct}
                     hadnleAddColor={hadnleAddColor}
                     setShowModalDiscount={setShowModalDiscount}
-                    handleEdit={handleEdit}
                     handleRemove={handleRemove}
                     handleUpdateProduct={handleUpdateProduct}
                   />
@@ -321,9 +322,7 @@ const ProductRow = (props: any) => {
     handleUpdateProduct,
   } = props;
 
-  const [colorQuantity, setColorQuantity] = useState(
-    item.colors?.[0]?.quantity || 0
-  );
+  const [colorQuantity, setColorQuantity] = useState(item.totalQuantity);
 
   return (
     <tr className="bg-gray-100 text-center border-b text-sm text-gray-600">
@@ -338,7 +337,7 @@ const ProductRow = (props: any) => {
             setColorQuantity(e.target.value);
           }}
         >
-          <option value="0">Select</option>
+          <option value={item.totalQuantity}>All</option>
 
           {item.colors.map((color: any, index: number) => (
             <option key={index} value={color?.quantity}>
@@ -366,7 +365,7 @@ const ProductRow = (props: any) => {
       <td className="flex justify-center items-center m-[20px] gap-[8px]">
         <a
           onClick={() => {
-            handleImportProduct(item._id);
+            handleImportProduct(item.code);
           }}
           className="bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
         >

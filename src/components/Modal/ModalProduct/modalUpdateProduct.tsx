@@ -91,7 +91,8 @@ export default function ModalUpdateProduct({
   useEffect(() => {
     (async () => {
       const result = await categoryApi.getCategory();
-      const resultProduct = await productApi.getDetilaProduct(_id);
+      const sendId = '_id='+_id
+      const resultProduct = await productApi.getDetilaProduct(sendId);
       //   console.log("detail", resultProduct);
       setCategory(result.data);
       setProduct(resultProduct.data);

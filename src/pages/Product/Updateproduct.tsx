@@ -9,9 +9,11 @@ type Props = {};
 
 const Updateproduct = (props: Props) => {
   const { productId } = useParams();
+  const sendId = '_id='+ productId
   useEffect(() => {
     (async () => {
-      const result = await productApi.getDetilaProduct(productId);
+
+      const result = await productApi.getDetilaProduct(sendId);
       console.log(result);
     })();
   }, []);

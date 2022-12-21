@@ -1,4 +1,3 @@
-
 import axiosClient from "../axiosClient";
 import { ReturnReponse } from "../response.interface";
 import { IResProduct } from "./product.type";
@@ -21,12 +20,12 @@ const productApi = {
     return axiosClient.post(url, payload);
   },
   getDetilaProduct(_id: any): Promise<ReturnReponse<any>> {
-    const url = `/product/read?_id=${_id}`; //params : page, filter
+    const url = `/product/read?${_id}`; //params : page, filter
     return axiosClient.get(url);
   },
 
-  updateProduct(payload:any): Promise<ReturnReponse<any>> {
-    const url = '/product/update'; //params : page, filter
+  updateProduct(payload: any): Promise<ReturnReponse<any>> {
+    const url = "/product/update"; //params : page, filter
     return axiosClient.post(url, payload);
   },
 
