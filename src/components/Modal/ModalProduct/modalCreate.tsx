@@ -1,9 +1,10 @@
 import { yupResolver } from "@hookform/resolvers/yup";
-import { Button, Upload } from "antd";
+import { Button, notification, Upload } from "antd";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import categoryApi from "../../../apis/category/categoryApi";
 import productApi from "../../../apis/product/product";
+import { notifyError, notifySuccess } from "../../../utils/notify";
 
 export default function ModalCreate({ setOpenModal, setReload }: any) {
   type FormValues = {
@@ -20,6 +21,15 @@ export default function ModalCreate({ setOpenModal, setReload }: any) {
   const [specs, setSpecs] = useState<Array<any>>([]);
   const [imagesBase64, setImagesBase64] = React.useState<any>("");
   const [selectValue, setSelectValue] = useState([]);
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+    reset,
+  } = useForm<FormValues>({});
+  
   const getBase64 = (file: any, cb: any) => {
     let reader = new FileReader();
     reader.readAsDataURL(file);
@@ -46,13 +56,7 @@ export default function ModalCreate({ setOpenModal, setReload }: any) {
   };
   // console.log(category);
 
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-    reset,
-  } = useForm<FormValues>({});
+
 
   const submit = async (data: any, e: any) => {
     e.preventDefault();
@@ -83,12 +87,18 @@ export default function ModalCreate({ setOpenModal, setReload }: any) {
     };
 
     const result = await productApi.createProduct(payload);
-    console.log("result", result);
+    console.log("resultApi", result);
 
-    console.log("payload", payload);
-    setFlag(false);
-    setReload((ref: number) => ref + 1);
-    reset();
+    // console.log("payload", payload);
+
+    if(result.statusCode === 200) {
+      notifySuccess("Create Success");
+      setReload((ref: number) => ref + 1);
+      setFlag(false);
+      reset();
+    } else {
+      notifyError("Create Fail");
+    }
     return;
   };
 

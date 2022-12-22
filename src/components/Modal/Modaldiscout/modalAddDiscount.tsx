@@ -12,7 +12,7 @@ export default function ModalAddDiscount({ setShowModalDiscount }: any) {
     reset,
   } = useForm<any>({});
 
-  const submit = (data: any, e: any) => {
+  const submit = async(data: any, e: any) => {
     e.preventDefault();
     const payload = {
       code: data.code,
@@ -28,11 +28,10 @@ export default function ModalAddDiscount({ setShowModalDiscount }: any) {
       is_oid: Boolean(data.is_oid),
       value: Number(data.value),
     };
+    
     console.log(payload);
-    (async()=> {
         const result  = await discountApi.addDiscount(payload)
         console.log(result);
-    })()
     reset();
   };
 

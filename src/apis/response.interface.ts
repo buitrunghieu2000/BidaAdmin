@@ -1,6 +1,8 @@
 interface ResponseInstant {
-  message: string;
-  status: number;
+  msg: string;
+  statusCode: number;
+  error: boolean;
+  failure: Array<any>
 }
 
 export interface ReturnReponse<T> extends ResponseInstant {

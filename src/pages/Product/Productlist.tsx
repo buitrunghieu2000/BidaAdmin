@@ -32,7 +32,7 @@ function Productlist(props: Props) {
   const [order, setOrder] = useState("ACS");
   const [idColor, setIdcolor] = useState("ACS");
   const [_idProduct, set_idProduct] = useState("");
-  // console.log(showModalUpdateProduct);
+
   const handleRemove = (removeId: number) => {
     newProductList = productList.filter((item: any) => item._id !== removeId);
     notifySuccess("Remove Success");
@@ -75,6 +75,7 @@ function Productlist(props: Props) {
   useEffect(() => {
     (async () => {
       const result = await productApi.getProduct();
+      console.log('rerender');
       // console.log("result", result);
       setProductlist(result.data.data);
       result.data.data.map((item: any, index: number) => {
@@ -82,9 +83,11 @@ function Productlist(props: Props) {
           prev + next.quantity, 0
         );
       });
-      console.log(result.data.data);
+      
     })();
   }, [reLoad]);
+
+  console.log(reLoad);
 
   return (
     <>
@@ -128,12 +131,13 @@ function Productlist(props: Props) {
             <PlusSquareOutlined />
           </div>
         </form>
-        <table className="w-full border">
+
+      <div className="overflow-x-auto">
+        <table className="border w-full">
           <thead>
             <tr className="bg-gray-50 border-b">
               <th
                 className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-                onClick={() => sorting("id")}
               >
                 <div className="flex items-center justify-center">ID</div>
               </th>
@@ -192,24 +196,10 @@ function Productlist(props: Props) {
               </th>
               <th
                 className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-                onClick={() => sorting("quantity")}
               >
                 <div className="flex items-center justify-center">
                   Quantity
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                    />
-                  </svg>
+
                 </div>
               </th>
               <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
@@ -248,7 +238,7 @@ function Productlist(props: Props) {
           <tbody>
             {productList.length > 0 ? (
               productList
-                .filter((value: any, index: number) => {
+                .filter((value: any) => {
                   if (searchItem == "") {
                     return value;
                   } else if (
@@ -264,12 +254,13 @@ function Productlist(props: Props) {
                 .map((item: any, index: number) => (
                   <ProductRow
                     item={item}
-                    key={index}
                     handleImportProduct={handleImportProduct}
                     hadnleAddColor={hadnleAddColor}
                     setShowModalDiscount={setShowModalDiscount}
                     handleRemove={handleRemove}
                     handleUpdateProduct={handleUpdateProduct}
+                    id={index}
+                    key={item._id}
                   />
                 ))
             ) : (
@@ -279,7 +270,9 @@ function Productlist(props: Props) {
             )}
           </tbody>
         </table>
-        <div className="absolute bottom-0 left-[40%]">
+      </div>
+
+      <div className="absolute bottom-0 left-[40%]">
           <Pagination
             limit={LIMIT}
             currentPage={currentPage}
@@ -292,13 +285,13 @@ function Productlist(props: Props) {
         <ModalCreate setOpenModal={setShowModal} setReload={setReload} />
       )}
       {showModalImport && (
-        <ModalImport setOpenModalImport={setShowModalImport} _id={_idProduct} />
+        <ModalImport setOpenModalImport={setShowModalImport} _id={_idProduct} setReload={setReload}/>
       )}
       {showModalColor && (
-        <ModalColor setOpenModalColor={setShowModalColor} _id={idColor} />
+        <ModalColor setOpenModalColor={setShowModalColor} _id={idColor} setReload={setReload}/>
       )}
       {showModalDiscount && (
-        <ModalDiscount setOpenModalDiscount={setShowModalDiscount} />
+        <ModalDiscount setOpenModalDiscount={setShowModalDiscount} setReload={setReload}/>
       )}
       {showModalUpdateProduct && (
         <ModalUpdateProduct
@@ -320,18 +313,19 @@ const ProductRow = (props: any) => {
     setShowModalDiscount,
     handleRemove,
     handleUpdateProduct,
+    id
   } = props;
 
   const [colorQuantity, setColorQuantity] = useState(item.totalQuantity);
 
   return (
     <tr className="bg-gray-100 text-center border-b text-sm text-gray-600">
-      <td className="p-2 border-r w-[1%]">{item.id}</td>
-      <td className="p-2 border-r h-[70px] w-[10%]">
-        <img src={item.image_url} className="w-full h-full object-contain" />
+      <td className="p-2 border-r">{id + 1}</td>
+      <td className="p-2 border-r w-[100px] h-[100px]">
+        <img src={item.image_url} className="w-full h-full object-cover" />
       </td>
-      <td className="p-2 border-r w-[15%]">{item.name}</td>
-      <td className="p-2 border-r w-[15%]">
+      <td className="p-2 border-r w-[200px]">{item.name}</td>
+      <td className="p-2 border-r ">
         <select
         className="w-full"
           onChange={(e: any) => {
@@ -347,12 +341,12 @@ const ProductRow = (props: any) => {
           ))}
         </select>
       </td>
-      <td className="p-2 border-r w-[10%]">{item.price}</td>
-      <td className="p-2 border-r w-[10%]">{item.sale}</td>
-      <td className="p-2 border-r w-[5%]">{colorQuantity}</td>
-      <td className="p-2 border-r w-[5%]">{item.sold}</td>
-      <td className="p-2 border-r w-[5%]">{item.rating}</td>
-      <td className="p-2 border-r w-[10%]">
+      <td className="p-2 border-r ">{item.price}</td>
+      <td className="p-2 border-r ">{item.sale}</td>
+      <td className="p-2 border-r ">{colorQuantity}</td>
+      <td className="p-2 border-r">{item.sold}</td>
+      <td className="p-2 border-r">{item.rating}</td>
+      <td className="p-2 border-r ">
         <span
           className={`inline-block p-2 rounded-lg capitalize ${
             item.enable === true
