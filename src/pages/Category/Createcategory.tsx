@@ -1,7 +1,9 @@
 import { PlusSquareOutlined } from "@ant-design/icons";
 import React, { useState } from "react";
+import categoryApi from "../../apis/category/categoryApi";
 import { IResUserList } from "../../apis/user/user.type";
 import ModalCreateCategory from "../../components/Modal/ModalCategory/modalCreateCategory";
+import ModalUpdateCategory from "../../components/Modal/ModalCategory/modalUpdateCategory";
 import Pagination from "../../components/Pangination/Pagination";
 import { USER_MODEL } from "../../models/user.model";
 
@@ -13,61 +15,73 @@ function Category(props: Props) {
   const total = 20;
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [showModalCreateCategory, setShowModalCreateCategory] = useState(false);
-  const [userList, setUserList] = useState([
-    {
-      id: 1,
-      name: "phone",
-      quantity: 30,
-    },
-    {
-      id: 2,
-      name: "desktop",
-      quantity: 60,
-    },
-    {
-      id: 3,
-      name: "laptop",
-      quantity: 90,
-    },
-    {
-      id: 4,
-      name: "laptop",
-      quantity: 90,
-    },
+  const [showModalUpdateCategory, setShowModalUpdateCategory] = useState(false);
+  const [categoryList, setCategoryList] = useState([
+    // {
+    //   id: 1,
+    //   name: "phone",
+    //   quantity: 30,
+    // },
+    // {
+    //   id: 2,
+    //   name: "desktop",
+    //   quantity: 60,
+    // },
+    // {
+    //   id: 3,
+    //   name: "laptop",
+    //   quantity: 90,
+    // },
+    // {
+    //   id: 4,
+    //   name: "laptop",
+    //   quantity: 90,
+    // },
   ]);
   const [searchItem, setSearchItem] = useState("");
+  const [idCategory, setIdCategory] = useState("");
+  const [idCategorySelect, setIdCategorySelect] = useState("");
   const [order, setOrder] = useState("ACS");
 
-  // React.useEffect(() => {
-  //   fetch("https://jsonplaceholder.typicode.com/users")
-  //     .then((response) => response.json())
-  //     .then((json) => setUserList(json));
-  // }, []);
-
+  
   const handleRemove = (removeId: number) => {
-    newUserList = userList.filter(
+    newUserList = categoryList.filter(
       (item: any, index: number) => item.id !== removeId
-    );
-    setUserList(newUserList);
-  };
+      );
+      setCategoryList(newUserList);
+    };
 
-  const sorting = (col: string) => {
-    if (order === "ACS") {
-      const sorted = [...userList].sort((a: any, b: any) =>
+    const handleGetIDProduct = (_id: any, idCategory: any) => {
+      setIdCategory(_id)
+      setIdCategorySelect(idCategory)
+      setShowModalUpdateCategory(true);
+    }
+    
+    
+    const sorting = (col: string) => {
+      if (order === "ACS") {
+        const sorted = [...categoryList].sort((a: any, b: any) =>
         a[col] > b[col] ? 1 : -1
-      );
-      setUserList(sorted);
-      setOrder("DCS");
-    }
-    if (order === "DCS") {
-      const sorted = [...userList].sort((a: any, b: any) =>
+        );
+        setCategoryList(sorted);
+        setOrder("DCS");
+      }
+      if (order === "DCS") {
+        const sorted = [...categoryList].sort((a: any, b: any) =>
         a[col] < b[col] ? 1 : -1
-      );
-      setUserList(sorted);
-      setOrder("ACS");
-    }
-  };
-  // console.log(searchItem)
+        );
+        setCategoryList(sorted);
+        setOrder("ACS");
+      }
+    };
+    // console.log(searchItem)
+    React.useEffect(() => {
+      (async () => {
+        const result = await categoryApi.getCategory();
+        console.log(result);
+        setCategoryList(result.data);
+      })();
+    }, []);
 
   return (
     <div className="table w-full p-2 max-h-screen">
@@ -113,74 +127,27 @@ function Category(props: Props) {
       <table className="w-full border">
         <thead>
           <tr className="bg-gray-50 border-b">
-            <th
-              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-              onClick={() => sorting("id")}
-            >
-              <div className="flex items-center justify-center">
-                ID
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                  />
-                </svg>
-              </div>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">ID</div>
             </th>
-            <th
-              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-            >
-              <div className="flex items-center justify-center">
-                Name
-              </div>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Name</div>
             </th>
-            <th
-              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-              onClick={() => {
-                sorting("quantity");
-              }}
-            >
-              <div className="flex items-center justify-center">
-                Quantity
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                  />
-                </svg>
-              </div>
-            </th>
+
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
               <div className="flex items-center justify-center">Actions</div>
             </th>
           </tr>
         </thead>
         <tbody>
-          {userList.length > 0 ? (
-            userList
+          {categoryList?.length > 0 ? (
+            categoryList
               .filter((value: any, index: number) => {
                 if (searchItem == "") {
                   return value;
                 } else if (
-                  value.id.toString().includes(searchItem.toLowerCase()) ||
-                  value.name.toLowerCase().includes(searchItem.toLowerCase()) ||
-                  value.quantity.toString().includes(searchItem.toLowerCase())
+                  index.toString().includes(searchItem.toLowerCase()) ||
+                  value.name.toLowerCase().includes(searchItem.toLowerCase())
                 ) {
                   return value;
                 }
@@ -190,11 +157,15 @@ function Category(props: Props) {
                   className="bg-gray-100 text-center border-b text-sm text-gray-600"
                   key={index}
                 >
-                  <td className="p-2 border-r">{item.id}</td>
+                  <td className="p-2 border-r">{index + 1}</td>
                   <td className="p-2 border-r">{item.name}</td>
-                  <td className="p-2 border-r">{item.quantity}</td>
                   <td>
-                    <a className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
+                    <a
+                      onClick={() => {
+                        handleGetIDProduct(item.name, item._id)
+                      }}
+                      className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                    >
                       Edit
                     </a>
                     <a className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
@@ -213,6 +184,11 @@ function Category(props: Props) {
       {showModalCreateCategory && (
         <ModalCreateCategory
           setOpenModalCreateCategory={setShowModalCreateCategory}
+        />
+      )}
+      {showModalUpdateCategory && (
+        <ModalUpdateCategory
+          setOpenModalUpdateCategory={setShowModalUpdateCategory} _id={idCategory} idCategory={idCategorySelect}
         />
       )}
       <Pagination

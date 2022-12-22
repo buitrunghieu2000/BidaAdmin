@@ -28,7 +28,7 @@ export default function ModalImport({ setOpenModalImport, _id, setReload }: any)
         {
           code: _id,
           color: colorSubmit,
-          quantity: data.quantity,
+          quantity: Number(data.quantity),
           price: data.price,
         },
       ],

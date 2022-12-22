@@ -15,6 +15,10 @@ const categoryApi = {
     const url = `/category/read?name=${name}`; //params : page, filter
     return axiosClient.get(url);
   },
+  editCategory(data: any): Promise<ReturnReponse<any>> {
+    const url = "/category/edit"; //params : page, filter
+    return axiosClient.put(url, data);
+  },
 };
 
 export default categoryApi;

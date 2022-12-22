@@ -3,8 +3,9 @@ import { Button, Upload } from "antd";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import productApi from "../../../apis/product/product";
+import { notifyError, notifySuccess } from "../../../utils/notify";
 
-export default function ModalColor({ setOpenModalColor, _id }: any) {
+export default function ModalColor({ setOpenModalColor, _id, setReload }: any) {
   type FormValues = {
     color: string;
     image_base64: Array<any>;
@@ -30,16 +31,20 @@ export default function ModalColor({ setOpenModalColor, _id }: any) {
     reset,
   } = useForm<FormValues>({});
 
-  const submit = (data: any, e: any) => {
+  const submit = async (data: any, e: any) => {
     e.preventDefault();
     data.image_base64 = imagesBase64;
     data._id = _id;
     reset();
-    console.log(data);
-    (async () => {
-      const result = await productApi.importColors(data);
-      console.log(result);
-    })();
+    // console.log(data);
+
+    const result = await productApi.importColors(data);
+    console.log(result);
+    if ((result.msg = "Thành công ")) {
+      notifySuccess("Success");
+      reset();
+      setReload((ref: number) => ref + 1);
+    } else notifyError("Fail");
   };
 
   return (
@@ -60,6 +65,7 @@ export default function ModalColor({ setOpenModalColor, _id }: any) {
                   <div className="flex-1 text-end">Color: </div>
                   <input
                     {...register("color")}
+                    required
                     className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                     id="username"
                     type="text"

@@ -1,4 +1,5 @@
 import React, { Children, useState } from "react";
+import productApi from "../../apis/product/product";
 
 type Props = {
   currentPage: number;
@@ -13,7 +14,14 @@ const Pagination = (props: Props) => {
 
   const pages = Math.ceil(total / limit);
   
-  
+//   const skip = async () => {
+//     const result = await productApi.getSkipProduct(
+//       limit,
+//       (currentPage - 1) * 10
+//     );
+//     console.log("skip", result);
+//   };
+// skip()
 
   return (
     <div className="flex justify-center mt-20">

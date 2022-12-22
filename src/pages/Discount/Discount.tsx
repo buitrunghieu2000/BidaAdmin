@@ -7,6 +7,7 @@ import ModalAddDiscount from "../../components/Modal/Modaldiscout/modalAddDiscou
 import Pagination from "../../components/Pangination/Pagination";
 import { USER_MODEL } from "../../models/user.model";
 import { formatDate } from "../../utils/dateFormater";
+import { notifyError, notifySuccess } from "../../utils/notify";
 
 type Props = {};
 
@@ -18,24 +19,9 @@ function DiscountList(props: Props) {
   const [searchItem, setSearchItem] = useState("");
   const [order, setOrder] = useState("ACS");
   const [showModalDiscount, setShowModalDiscount] = useState(false);
+  const [reload, setReload] = useState(0);
 
-  const [discountList, setDiscountList] = useState([
-    // {
-    //   id: 1,
-    //   code: "502",
-    //   dateStart: "12-12-2022",
-    //   dateEnd: "15-12-2022",
-    //   quantity: "50",
-    //   status: "Not available",
-    //   subject: "All",
-    //   timeofuses: "No Limit",
-    //   typeofdiscount: "Value",
-    //   shipdiscount: "Bill total",
-    //   maxdiscount: "Bill total",
-    //   minbill: "0 vnd",
-    //   discountvalue: "0 vnd",
-    // },
-  ]);
+  const [discountList, setDiscountList] = useState([]);
 
   const handleRemove = (removeId: number) => {
     newUserList = discountList.filter((item: any) => item.id !== removeId);
@@ -58,14 +44,28 @@ function DiscountList(props: Props) {
       setOrder("ACS");
     }
   };
-  // console.log(searchItem)
-  useEffect(()=>{
-    (async()=>{
+
+  const handleEditDiscount = async (status: boolean, code: any) => {
+    const payload = {
+      code: code,
+      enable: !status,
+    };
+
+    const resultEnable = await discountApi.eidtDiscount(payload);
+    console.log(resultEnable);
+    if ((resultEnable.msg = "Thành công ")) {
+      notifySuccess("Success");
+      setReload(reload + 1);
+    } else notifyError("Fail");
+  };
+  console.log(searchItem);
+  useEffect(() => {
+    (async () => {
       const result = await discountApi.getListDiscount();
-      console.log('list',result);
+      console.log("list", result);
       setDiscountList(result.data);
-    })()
-  },[])
+    })();
+  }, [reload]);
 
   return (
     <div className="table w-full p-2 max-h-screen">
@@ -113,24 +113,10 @@ function DiscountList(props: Props) {
           <tr className="bg-gray-50 border-b">
             <th
               className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-              onClick={() => sorting("id")}
             >
               <div className="flex items-center justify-center">
                 ID
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                  />
-                </svg>
+                
               </div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
@@ -152,14 +138,10 @@ function DiscountList(props: Props) {
               <div className="flex items-center justify-center">Expired</div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-              <div className="flex items-center justify-center">
-                Is Percent
-              </div>
+              <div className="flex items-center justify-center">Is Percent</div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-              <div className="flex items-center justify-center">
-                is Ship
-              </div>
+              <div className="flex items-center justify-center">is Ship</div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
               <div className="flex items-center justify-center">
@@ -185,13 +167,13 @@ function DiscountList(props: Props) {
           </tr>
         </thead>
         <tbody>
-          {discountList.length > 0 ? (
+          {discountList?.length > 0 ? (
             discountList
               .filter((value: any, index: number) => {
                 if (searchItem == "") {
                   return value;
                 } else if (
-                  value.id.toString().includes(searchItem.toLowerCase())
+                  value.code.toLowerCase().includes(searchItem.toLowerCase())
                 ) {
                   return value;
                 }
@@ -215,12 +197,21 @@ function DiscountList(props: Props) {
                   <td className="p-2 border-r">{item.quantity}</td>
                   <td className="p-2 border-r">{item.value}</td>
                   <td className="flex justify-center items-center m-[10px] gap-[8px]">
-                    <a className="bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
-                      Enable
+                    <a
+                      className={
+                        item.enable === false
+                          ? "bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                          : "bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                      }
+                      onClick={() => {
+                        handleEditDiscount(item.enable, item.code);
+                      }}
+                    >
+                      {item.enable === false ? "Enable" : "Disable"}
                     </a>
-                    <a className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
+                    {/* <a className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
                       <span onClick={() => handleRemove(item.id)}>Remove</span>
-                    </a>
+                    </a> */}
                   </td>
                 </tr>
               ))
@@ -232,7 +223,10 @@ function DiscountList(props: Props) {
         </tbody>
       </table>
       {showModalDiscount && (
-        <ModalAddDiscount setShowModalDiscount={setShowModalDiscount} />
+        <ModalAddDiscount
+          setShowModalDiscount={setShowModalDiscount}
+          reload={setReload}
+        />
       )}
       <Pagination
         limit={LIMIT}

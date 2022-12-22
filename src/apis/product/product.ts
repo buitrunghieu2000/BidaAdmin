@@ -7,6 +7,11 @@ const productApi = {
     const url = "/product/list"; //params : page, filter
     return axiosClient.get(url);
   },
+  getSkipProduct(skip: number, limit: number): Promise<ReturnReponse<IResProduct>> {
+    const url = `/product/list?skip=${skip}&limit=${limit}`; //params : page, filter
+    return axiosClient.get(url);
+  },
+
   createProduct(payload: any): Promise<ReturnReponse<any>> {
     const url = "/product/create"; //params : page, filter
     return axiosClient.post(url, payload);
@@ -29,10 +34,10 @@ const productApi = {
     return axiosClient.post(url, payload);
   },
 
-  // addDiscount(payload:any): Promise<ReturnReponse<any>> {
-  //   const url = '/product/'; //params : page, filter
-  //   return axiosClient.post(url,payload);
-  // },
+  editDiscount(payload:any): Promise<ReturnReponse<any>> {
+    const url = '/discount/edit'; //params : page, filter
+    return axiosClient.put(url,payload);
+  },
 };
 
 export default productApi;

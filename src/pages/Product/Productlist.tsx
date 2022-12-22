@@ -18,8 +18,8 @@ function Productlist(props: Props) {
   let newProductList = [];
   const navigate = useNavigate();
   const LIMIT = 5;
-  const total = 20;
-  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [total, setTotal] = useState(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
   const [showModal, setShowModal] = useState(false);
   const [showModalImport, setShowModalImport] = useState(false);
   const [showModalColor, setShowModalColor] = useState(false);
@@ -32,6 +32,7 @@ function Productlist(props: Props) {
   const [order, setOrder] = useState("ACS");
   const [idColor, setIdcolor] = useState("ACS");
   const [_idProduct, set_idProduct] = useState("");
+  // const [codeProduct, setCodeProduct] = useState(0);
 
   const handleRemove = (removeId: number) => {
     newProductList = productList.filter((item: any) => item._id !== removeId);
@@ -47,6 +48,11 @@ function Productlist(props: Props) {
   const handleImportProduct = (_id: any) => {
     set_idProduct(_id);
     setShowModalImport(true);
+  };
+
+  const handleImportDiscount = (_id: any) => {
+    set_idProduct(_id);
+    setShowModalDiscount(true);
   };
 
   const handleUpdateProduct = (_id: any) => {
@@ -75,15 +81,16 @@ function Productlist(props: Props) {
   useEffect(() => {
     (async () => {
       const result = await productApi.getProduct();
-      console.log('rerender');
-      // console.log("result", result);
+      console.log("rerender");
+      console.log("result", result);
       setProductlist(result.data.data);
+      setTotal(result.data.count);
       result.data.data.map((item: any, index: number) => {
-        item.totalQuantity = item.colors.reduce((prev: any, next: any) => 
-          prev + next.quantity, 0
+        item.totalQuantity = item.colors.reduce(
+          (prev: any, next: any) => prev + next.quantity,
+          0
         );
       });
-      
     })();
   }, [reLoad]);
 
@@ -132,147 +139,128 @@ function Productlist(props: Props) {
           </div>
         </form>
 
-      <div className="overflow-x-auto">
-        <table className="border w-full">
-          <thead>
-            <tr className="bg-gray-50 border-b">
-              <th
-                className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-              >
-                <div className="flex items-center justify-center">ID</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Image</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Name</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Color</div>
-              </th>
-              <th
-                className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-                onClick={() => sorting("price")}
-              >
-                <div className="flex items-center justify-center">
-                  Price{" "}
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                    />
-                  </svg>
-                </div>
-              </th>
-              <th
-                className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-                onClick={() => sorting("discount")}
-              >
-                <div className="flex items-center justify-center">
-                  Discount
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                    />
-                  </svg>
-                </div>
-              </th>
-              <th
-                className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-              >
-                <div className="flex items-center justify-center">
-                  Quantity
-
-                </div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Sold</div>
-              </th>
-              <th
-                className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-                onClick={() => sorting("rating")}
-              >
-                <div className="flex items-center justify-center">
-                  Rating
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                    />
-                  </svg>
-                </div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Status</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Actions</div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {productList.length > 0 ? (
-              productList
-                .filter((value: any) => {
-                  if (searchItem == "") {
-                    return value;
-                  } else if (
-                    value.name
-                      .toLowerCase()
-                      .includes(searchItem.toLowerCase()) ||
-                    value.price.includes(searchItem) ||
-                    value.id.toString().includes(searchItem)
-                  ) {
-                    return value;
-                  }
-                })
-                .map((item: any, index: number) => (
-                  <ProductRow
-                    item={item}
-                    handleImportProduct={handleImportProduct}
-                    hadnleAddColor={hadnleAddColor}
-                    setShowModalDiscount={setShowModalDiscount}
-                    handleRemove={handleRemove}
-                    handleUpdateProduct={handleUpdateProduct}
-                    id={index}
-                    key={item._id}
-                  />
-                ))
-            ) : (
-              <tr>
-                <td>-</td>
+        <div className="overflow-x-auto">
+          <table className="border w-full">
+            <thead>
+              <tr className="bg-gray-50 border-b">
+                <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                  <div className="flex items-center justify-center">ID</div>
+                </th>
+                <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                  <div className="flex items-center justify-center">Image</div>
+                </th>
+                <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                  <div className="flex items-center justify-center">Name</div>
+                </th>
+                <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                  <div className="flex items-center justify-center">Color</div>
+                </th>
+                <th
+                  className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
+                  onClick={() => sorting("price")}
+                >
+                  <div className="flex items-center justify-center">
+                    Price{" "}
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+                      />
+                    </svg>
+                  </div>
+                </th>
+                <th
+                  className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
+                  onClick={() => sorting("discount")}
+                >
+                  <div className="flex items-center justify-center">
+                    Discount
+                  </div>
+                </th>
+                <th
+                  className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
+                  onClick={() => sorting("discount")}
+                >
+                  <div className="flex items-center justify-center">
+                    Quantity
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-4 w-4"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth="2"
+                        d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+                      />
+                    </svg>
+                  </div>
+                </th>
+                <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                  <div className="flex items-center justify-center">Sold</div>
+                </th>
+                <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                  <div className="flex items-center justify-center">Rating</div>
+                </th>
+                <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                  <div className="flex items-center justify-center">Status</div>
+                </th>
+                <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                  <div className="flex items-center justify-center">
+                    Actions
+                  </div>
+                </th>
               </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+            </thead>
+            <tbody>
+              {productList?.length > 0 ? (
+                productList
+                  .filter((value: any, index: number) => {
+                    if (searchItem == "") {
+                      return value;
+                    } else if (
+                      value.name
+                        .toLowerCase()
+                        .includes(searchItem.toLowerCase()) ||
+                      value.price.toString().includes(searchItem)
+                    ) {
+                      return value;
+                    }
+                  })
+                  .map((item: any, index: number) => (
+                    <ProductRow
+                      item={item}
+                      handleImportProduct={handleImportProduct}
+                      hadnleAddColor={hadnleAddColor}
+                      setShowModalDiscount={setShowModalDiscount}
+                      handleRemove={handleRemove}
+                      handleUpdateProduct={handleUpdateProduct}
+                      id={index}
+                      key={item._id}
+                      handleImportDiscount={handleImportDiscount}
+                    />
+                  ))
+              ) : (
+                <tr>
+                  <td>-</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
 
-      <div className="absolute bottom-0 left-[40%]">
+        <div className="absolute bottom-0 left-[40%]">
           <Pagination
             limit={LIMIT}
             currentPage={currentPage}
@@ -285,13 +273,25 @@ function Productlist(props: Props) {
         <ModalCreate setOpenModal={setShowModal} setReload={setReload} />
       )}
       {showModalImport && (
-        <ModalImport setOpenModalImport={setShowModalImport} _id={_idProduct} setReload={setReload}/>
+        <ModalImport
+          setOpenModalImport={setShowModalImport}
+          _id={_idProduct}
+          setReload={setReload}
+        />
       )}
       {showModalColor && (
-        <ModalColor setOpenModalColor={setShowModalColor} _id={idColor} setReload={setReload}/>
+        <ModalColor
+          setOpenModalColor={setShowModalColor}
+          _id={idColor}
+          setReload={setReload}
+        />
       )}
       {showModalDiscount && (
-        <ModalDiscount setOpenModalDiscount={setShowModalDiscount} setReload={setReload}/>
+        <ModalDiscount
+          setOpenModalDiscount={setShowModalDiscount}
+          setReload={setReload}
+          _idProduct={_idProduct}
+        />
       )}
       {showModalUpdateProduct && (
         <ModalUpdateProduct
@@ -313,7 +313,8 @@ const ProductRow = (props: any) => {
     setShowModalDiscount,
     handleRemove,
     handleUpdateProduct,
-    id
+    id,
+    handleImportDiscount,
   } = props;
 
   const [colorQuantity, setColorQuantity] = useState(item.totalQuantity);
@@ -327,7 +328,7 @@ const ProductRow = (props: any) => {
       <td className="p-2 border-r w-[200px]">{item.name}</td>
       <td className="p-2 border-r ">
         <select
-        className="w-full"
+          className="w-full"
           onChange={(e: any) => {
             setColorQuantity(e.target.value);
           }}
@@ -345,7 +346,7 @@ const ProductRow = (props: any) => {
       <td className="p-2 border-r ">{item.sale}</td>
       <td className="p-2 border-r ">{colorQuantity}</td>
       <td className="p-2 border-r">{item.sold}</td>
-      <td className="p-2 border-r">{item.rating}</td>
+      <td className="p-2 border-r">{item.rating || 0}</td>
       <td className="p-2 border-r ">
         <span
           className={`inline-block p-2 rounded-lg capitalize ${
@@ -357,7 +358,7 @@ const ProductRow = (props: any) => {
           {item.enable ? "InStock" : "Stocked"}
         </span>
       </td>
-      <td className="flex justify-center items-center m-[20px] gap-[8px]">
+      <td className="flex justify-center items-center mb-[40px] mt-[40px] gap-[8px]">
         <a
           onClick={() => {
             handleImportProduct(item.code);
@@ -376,7 +377,7 @@ const ProductRow = (props: any) => {
         </a>
         <a
           onClick={() => {
-            setShowModalDiscount(true);
+            handleImportDiscount(item._id);
           }}
           className="bg-orange-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
         >

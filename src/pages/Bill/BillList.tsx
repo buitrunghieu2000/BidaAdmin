@@ -1,34 +1,32 @@
-import { PlusSquareOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
-import { IResUserList } from "../../apis/user/user.type";
-import ModalCreateCategory from "../../components/Modal/ModalCategory/modalCreateCategory";
+import { useState } from "react";
+import ModalBill from "../../components/Modal/ModalBill/modalBill";
+import ModalUpdateBill from "../../components/Modal/ModalBill/modalUpdateBill";
 import Pagination from "../../components/Pangination/Pagination";
-import { USER_MODEL } from "../../models/user.model";
 
 type Props = {};
 
 function BillList(props: Props) {
-  let newUserList = [];
+  let newBillList = [];
   const LIMIT = 5;
   const total = 20;
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [showModalCreateCategory, setShowModalCreateCategory] = useState(false);
-  const [userList, setUserList] = useState([
+  const [showModalBill, setShowModalBill] = useState(false);
+  const [showModalUpdateBill, setShowModalUpdateBill] = useState(false);
+  const [billList, setBillList] = useState([
     {
       id: 1,
-      code: '502',
-      name:"Binh Pham",
-      phone: '0925100721',
+      code: "502",
+      name: "Binh Pham",
+      phone: "0925100721",
       email: "binhpham@gmail.com",
       address: "Sg",
       sale: "50%",
       shipfee: "50000",
-      total: '100000',
-      status: 'Is delivering',
-      payed:'not pay',
+      total: "100000",
+      status: "Is delivering",
+      payed: "not pay",
       refund: "no",
       authorize: "yes",
-
     },
   ]);
   const [searchItem, setSearchItem] = useState("");
@@ -37,33 +35,32 @@ function BillList(props: Props) {
   // React.useEffect(() => {
   //   fetch("https://jsonplaceholder.typicode.com/users")
   //     .then((response) => response.json())
-  //     .then((json) => setUserList(json));
+  //     .then((json) => setBillList(json));
   // }, []);
 
-  const handleRemove = (removeId: number) => {
-    newUserList = userList.filter(
-      (item: any) => item.id !== removeId
-    );
-    setUserList(newUserList);
-  };
+ 
 
   const sorting = (col: string) => {
     if (order === "ACS") {
-      const sorted = [...userList].sort((a: any, b: any) =>
+      const sorted = [...billList].sort((a: any, b: any) =>
         a[col] > b[col] ? 1 : -1
       );
-      setUserList(sorted);
+      setBillList(sorted);
       setOrder("DCS");
     }
     if (order === "DCS") {
-      const sorted = [...userList].sort((a: any, b: any) =>
+      const sorted = [...billList].sort((a: any, b: any) =>
         a[col] < b[col] ? 1 : -1
       );
-      setUserList(sorted);
+      setBillList(sorted);
       setOrder("ACS");
     }
   };
   // console.log(searchItem)
+
+  const handleSelect = (e: any) => {
+    console.log(e.target.value);
+  };
 
   return (
     <div className="table w-full p-2 max-h-screen">
@@ -95,6 +92,18 @@ function BillList(props: Props) {
             onChange={(e) => setSearchItem(e.target.value)}
           />
         </div>
+        <div className="ml-[20px] w-[250px]">
+          <select
+            onChange={handleSelect}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          >
+            <option value="">Select</option>
+            <option value="preparing">Preparing</option>
+            <option value="delivering">Delivering</option>
+            <option value="done">Done</option>
+            <option value="canceled">Canceled</option>
+          </select>
+        </div>
       </form>
 
       <table className="w-full border">
@@ -102,109 +111,47 @@ function BillList(props: Props) {
           <tr className="bg-gray-50 border-b">
             <th
               className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-              onClick={() => sorting("id")}
             >
               <div className="flex items-center justify-center">
                 ID
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                  />
-                </svg>
+
               </div>
             </th>
-            <th
-              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-            >
-              <div className="flex items-center justify-center">
-                Code
-              </div>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Code</div>
             </th>
-            <th
-              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-            >
-              <div className="flex items-center justify-center">
-                Name
-              </div>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Name</div>
             </th>
-            <th
-              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-            >
-              <div className="flex items-center justify-center">
-                Phone
-              </div>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Phone</div>
             </th>
-            <th
-              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-            >
-              <div className="flex items-center justify-center">
-                Email
-              </div>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Email</div>
             </th>
-            <th
-              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-            >
-              <div className="flex items-center justify-center">
-                Address
-              </div>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Address</div>
             </th>
-            <th
-              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-            >
-              <div className="flex items-center justify-center">
-                Sold
-              </div>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Sold</div>
             </th>
-            <th
-              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-            >
-              <div className="flex items-center justify-center">
-                Fhip Fee
-              </div>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Fhip Fee</div>
             </th>
-            <th
-              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-            >
-              <div className="flex items-center justify-center">
-                Toltal
-              </div>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Toltal</div>
             </th>
-            <th
-              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-            >
-              <div className="flex items-center justify-center">
-                Status
-              </div>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Status</div>
             </th>
-            <th
-              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-            >
-              <div className="flex items-center justify-center">
-                Payed
-              </div>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Payed</div>
             </th>
-            <th
-              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-            >
-              <div className="flex items-center justify-center">
-                Refund
-              </div>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Refund</div>
             </th>
-            <th
-              className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-            >
-              <div className="flex items-center justify-center">
-                Authorize
-              </div>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Authorize</div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
               <div className="flex items-center justify-center">Actions</div>
@@ -212,13 +159,13 @@ function BillList(props: Props) {
           </tr>
         </thead>
         <tbody>
-          {userList.length > 0 ? (
-            userList
+          {billList?.length > 0 ? (
+            billList
               .filter((value: any, index: number) => {
                 if (searchItem == "") {
                   return value;
                 } else if (
-                  value.id.toString().includes(searchItem.toLowerCase()) 
+                  value.name.toString().includes(searchItem.toLowerCase())
                 ) {
                   return value;
                 }
@@ -242,14 +189,19 @@ function BillList(props: Props) {
                   <td className="p-2 border-r">{item.refund}</td>
                   <td className="p-2 border-r">{item.authorize}</td>
                   <td className="flex justify-center items-center m-[10px] gap-[8px]">
-                    <a className="bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
+                    <a
+                      onClick={() => {
+                        setShowModalBill(true);
+                      }}
+                      className="bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                    >
                       View
                     </a>
-                    <a className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
+                    <a
+                      onClick={() => {setShowModalUpdateBill(true)}}
+                      className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                    >
                       Update
-                    </a>
-                    <a className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
-                      <span onClick={() => handleRemove(item.id)}>Remove</span>
                     </a>
                   </td>
                 </tr>
@@ -261,11 +213,8 @@ function BillList(props: Props) {
           )}
         </tbody>
       </table>
-      {showModalCreateCategory && (
-        <ModalCreateCategory
-          setOpenModalCreateCategory={setShowModalCreateCategory}
-        />
-      )}
+      {showModalBill && <ModalBill setShowModalBill={setShowModalBill} />}
+      {showModalUpdateBill && <ModalUpdateBill setShowModalUpdateBill={setShowModalUpdateBill} />}
       <Pagination
         limit={LIMIT}
         currentPage={currentPage}

@@ -8,6 +8,7 @@ import Login from "../pages/Auth/Login";
 import Profile from "../pages/Auth/Profile";
 import BillList from "../pages/Bill/BillList";
 import Category from "../pages/Category/Createcategory";
+import Chat from "../pages/Chat/chat";
 
 import Contact from "../pages/Contact/Contact";
 import Dashboard from "../pages/Dashboard/Dashboard";
@@ -54,6 +55,7 @@ const Router = (props: Props) => {
             <Route path="/categorylist" element={<Category />} />
             <Route path="/billlist" element={<BillList />} />
             <Route path="/discountlist" element={<DiscountList />} />
+            <Route path="/chat" element={<Chat />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </div>

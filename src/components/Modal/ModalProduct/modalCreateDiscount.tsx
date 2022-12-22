@@ -1,25 +1,22 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Upload } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import discountApi from "../../../apis/discount/discount.api";
+import productApi from "../../../apis/product/product";
+import { notifyError, notifySuccess } from "../../../utils/notify";
 
-export default function ModalDiscount({ setOpenModalDiscount }: any) {
+export default function ModalDiscount({
+  setOpenModalDiscount,
+  _idProduct,
+}: any) {
   type FormValues = {
     image_base64: Array<any>;
   };
 
-  const [imagesBase64, setImagesBase64] = React.useState<any>("");
-
-  const getBase64 = (file: any, cb: any) => {
-    let reader = new FileReader();
-    reader.readAsDataURL(file);
-    reader.onload = function () {
-      cb(reader.result);
-    };
-    reader.onerror = function (error) {
-      console.log("Error: ", error);
-    };
-  };
+  const [codeDiscount, setCodeDiscount] = useState(0);
+  const [listDiscount, setListDiscount] = useState<Array<any>>([]);
+  const [disabled, setDisabled] = useState(false);
 
   const {
     register,
@@ -28,12 +25,55 @@ export default function ModalDiscount({ setOpenModalDiscount }: any) {
     reset,
   } = useForm<FormValues>({});
 
-  const submit = (data: any, e: any) => {
-    e.preventDefault();
-    data.image = imagesBase64;
-    console.log(data);
-    reset();
+  const payloadDelete = {
+    code: codeDiscount,
+    products_del: [_idProduct],
   };
+
+  const submit = async (data: any, e: any) => {
+    e.preventDefault();
+    setDisabled(true);
+    // console.log(data);
+    const payload = {
+      code: codeDiscount,
+      products_add: [_idProduct],
+    };
+    console.log(payload);
+
+    const submit = await productApi.editDiscount(payload);
+    if ((submit.msg = "Thành công ")) {
+      setDisabled(false);
+      notifySuccess("Success");
+      reset();
+    } else notifyError("Fail");
+    console.log(submit);
+  };
+
+  const handleSelect = (e: any) => {
+    if (e.target.value !== "Select") {
+      setCodeDiscount(e.target.value);
+    }
+  };
+  // console.log(codeDiscount);
+
+  const handleDeleteDiscout = async () => {
+    setDisabled(true);
+    const submitDel = await productApi.editDiscount(payloadDelete);
+    if ((submitDel.msg = "Thành công ")) {
+      setDisabled(false);
+      notifySuccess("Success");
+      reset();
+    } else notifyError("Fail");
+    console.log(submitDel);
+  };
+
+  useEffect(() => {
+    (async () => {
+      const result = await discountApi.getListDiscount();
+      // console.log("listDiscount", result);
+      setListDiscount(result.data);
+    })();
+  }, []);
 
   return (
     <>
@@ -50,33 +90,34 @@ export default function ModalDiscount({ setOpenModalDiscount }: any) {
             <form onSubmit={handleSubmit(submit)}>
               <div>
                 <div className="name flex items-center gap-[45px] mb-[20px]">
-                  <div>Image: </div>
-                  <Upload.Dragger
-                    maxCount={1}
-                    listType="picture-card"
-                    showUploadList={{
-                      showRemoveIcon: true,
-                      showPreviewIcon: false,
-                    }}
-                    accept=".png, .jpg"
-                    beforeUpload={(file: any) => {
-                      getBase64(file, (result: any) => {
-                        const base64 = result.split(",");
-                        setImagesBase64(base64[1]);
-                      });
-                      return false;
-                    }}
-                  >
-                    <Button>Upload file</Button>
-                  </Upload.Dragger>
+                  <div>Discount: </div>
+                  <select name="" id="" onChange={handleSelect}>
+                    <option value="Select">Select</option>
+                    {listDiscount.map((item: any, index: number) => (
+                      <option key={index} value={item.code}>
+                        {item.code}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
-              <button
-                type="submit"
-                className="w-[100px] p-2 rounded-sm text-center bg-green-500 relative left-[35%] text-white"
-              >
-                Submit
-              </button>
+              <div className="relative left-[10%] flex gap-[10px]">
+                <button
+                disabled={disabled}
+                  type="submit"
+                  className="w-[100px] p-2 rounded-sm text-center bg-green-500  text-white"
+                >
+                  Submit
+                </button>
+                <button
+                disabled={disabled}
+                  onClick={handleDeleteDiscout}
+                  type="button"
+                  className="w-[100px] p-2 rounded-sm text-center bg-red-500  text-white"
+                >
+                  Delete
+                </button>
+              </div>
             </form>
           </div>
         </div>

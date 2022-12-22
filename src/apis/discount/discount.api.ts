@@ -11,6 +11,11 @@ const discountApi = {
     const url = "/discount/list"; //params : page, filter
     return axiosClient.get(url);
   },
+
+  eidtDiscount(payload:any): Promise<ReturnReponse<any>> {
+    const url = '/discount/edit'; //params : page, filter
+    return axiosClient.put(url,payload);
+  },
 };
 
 export default discountApi;

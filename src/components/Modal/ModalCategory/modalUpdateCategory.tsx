@@ -1,19 +1,24 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Upload } from "antd";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import categoryApi from "../../../apis/category/categoryApi";
 import Specs from "./specs";
 
-export default function ModalCreateCategory({
-  setOpenModalCreateCategory,
+export default function ModalUpdateCategory({
+  setOpenModalUpdateCategory,
+  _id,
+  idCategory,
 }: any) {
   type FormValues = {
     name: string;
     slug: string;
   };
 
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState<any>({});
+  const [selectValue, setSelectValue] = useState([]);
+  const [specs, setSpecs] = useState<Array<any>>([]);
+
   const [imagesBase64, setImagesBase64] = React.useState<any>("");
   const [iconBase64, setIconBase64] = React.useState<any>("");
 
@@ -31,6 +36,7 @@ export default function ModalCreateCategory({
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
     reset,
   } = useForm<FormValues>({});
@@ -68,6 +74,7 @@ export default function ModalCreateCategory({
     data.specsModel = specs_model;
 
     const payload = {
+        _id: idCategory,
       name: nameCategory,
       specsModel: data.specsModel,
       image_base64: imagesBase64,
@@ -75,24 +82,53 @@ export default function ModalCreateCategory({
       slug: slug,
     };
 
-    const result = await categoryApi.createCategory(payload);
+    const result = await categoryApi.editCategory(payload);
     console.log(result);
 
-    console.log(payload);
+    console.log('payload',payload);
     reset();
   };
+  function toDataUrl(url: any, callback: any) {
+    var xhr = new XMLHttpRequest();
+    xhr.onload = function () {
+      var reader = new FileReader();
+      reader.onloadend = function () {
+        callback(reader.result);
+      };
+      reader.readAsDataURL(xhr.response);
+    };
+    xhr.open("GET", url);
+    xhr.responseType = "blob";
+    xhr.send();
+  }
+
+  useEffect(() => {
+    (async () => {
+      const result = await categoryApi.getSelectCategory(_id);
+    //   console.log('123',result);
+      setCategory(result.data);
+      toDataUrl(result.data.image_url, function (res: any) {
+        const base64 = res.split(",");
+        setImagesBase64(base64[1]);
+      });
+      toDataUrl(result.data.icon_url, function (res: any) {
+        const base64 = res.split(",");
+        setIconBase64(base64[1]);
+      });
+    })();
+  }, []);
 
   return (
     <>
       <div className="fixed inset-0 z-10 overflow-y-auto">
         <div
           className="fixed inset-0 w-full h-full bg-black opacity-40"
-          onClick={() => setOpenModalCreateCategory(false)}
+          onClick={() => setOpenModalUpdateCategory(false)}
         ></div>
         <div className="flex items-center justify-center min-h-screen px-4 py-8">
           <div className="relative w-full max-w-[500px] p-4 mx-auto bg-white rounded-md shadow-lg">
             <div className="text-center mb-4 uppercase text-lg">
-              Import Category
+              Edit Category
             </div>
             <form onSubmit={handleSubmit(submit)}>
               <div>
@@ -117,6 +153,7 @@ export default function ModalCreateCategory({
                     >
                       <Button>Upload Img</Button>
                     </Upload.Dragger>
+                    <img src={category.image_url} alt="" className="w-[105px] h-[100px] object-cover"/>
                   </div>
                   <div>
                     <div className="text-center">Icon: </div>
@@ -138,6 +175,7 @@ export default function ModalCreateCategory({
                     >
                       <Button>Upload Icon</Button>
                     </Upload.Dragger>
+                    <img src={category.icon_url} alt=""  className="w-[105px] h-[100px] object-cover"/>
                   </div>
                 </div>
               </div>
@@ -146,6 +184,7 @@ export default function ModalCreateCategory({
                   {...register("name")}
                   required
                   className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                  defaultValue={category?.name}
                   id="username"
                   type="text"
                   placeholder="Name Category"
@@ -155,11 +194,16 @@ export default function ModalCreateCategory({
                   required
                   className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                   id="username"
+                  defaultValue={category?.slug}
                   type="text"
                   placeholder="Slug"
                 />
               </div>
-              <ExtendableInputs register={register} />
+              <ListCategory
+                register={register}
+                list={category?.specsModel}
+                setValue={setValue}
+              />
               <button
                 type="submit"
                 className="w-[100px] p-2 rounded-sm text-center bg-green-500 relative left-[40%] text-white"
@@ -173,39 +217,103 @@ export default function ModalCreateCategory({
     </>
   );
 }
+const ListCategory = ({
+  register,
+  list,
+  setValue,
+}: {
+  register: any;
+  list: any;
+  setValue: any;
+}) => {
+  React.useEffect(() => {
+    if (list) {
+      list.map((item: any, index: number) => {
+        const specs: any = [];
+        item.values.map((i: any) => {
+          specs.push(i.value);
+        });
 
-const ExtendableInputs = ({ register }: { register: any }) => {
-  const [inputCount, setInputCount] = React.useState(1);
+        setValue(`values_${index}`, specs.join(";"));
+        item.specs = specs.join(";");
+      });
+    }
+  }, [list]);
+//   console.log("list", list);
+  return (
+    <div className="flex flex-col items-center">
+      <label>Specs</label>
+      {list &&
+        list.map((item: any, index: any) => (
+          <div key={index} className="formInput">
+            <div className="specs-input flex items-center justify-center">
+              <input
+                {...register(`name_${index}`)}
+                required
+                style={{ width: "190px" }}
+                type="text"
+                defaultValue={item.name}
+                placeholder="Name Spec"
+              />
+              <textarea
+              className="h-10 pt-2 resize-none"
+                style={{ width: "230px" }}
+                {...register(`values_${index}`)}
+                defaultValue={item.specs}
+                placeholder="Value"
+              />
+            </div>
+          </div>
+        ))}
+      <ExtendableInputs register={register} initialLength={list?.length || 0} />
+    </div>
+  );
+};
+
+const ExtendableInputs = ({
+  register,
+  initialLength,
+}: {
+  register: any;
+  initialLength: number;
+}) => {
+  const [inputCount, setInputCount] = React.useState(0);
+
+  // React.useEffect(() => {
+  //   if (initialLength > 0) setInputCount(initialLength);
+  // }, [initialLength]);
 
   const handleAddInput = () => setInputCount(inputCount + 1);
   const handleSubInput = () => setInputCount(inputCount - 1);
+  // const handleAddInput = () => setInputCount(inputCount + 1);
 
   return (
-    <>
-      <div className="flex flex-col items-center mb-[30px] gap-[10px]">
-        <label>Specifications</label>
+    <div className="flex items-center gap-4 flex-col mb-4">
+      <div className="mt-4">
         {[...Array(inputCount)].map((_, index) => (
-          <Specs register={register} id={index + 1} key={index} />
+          <Specs register={register} id={index + initialLength} key={index} />
         ))}
-        {/* <Specs /> */}
-        <div className="flex gap-[30px]">
-          <button
-            className="w-[100px] p-2 rounded-sm text-center bg-green-500  text-white"
-            type="button"
-            onClick={handleAddInput}
-          >
-            Add
-          </button>
-          <button
-            className="w-[100px] p-2 rounded-sm text-center bg-red-500  text-white"
-            type="button"
-            disabled={inputCount === 0}
-            onClick={handleSubInput}
-          >
-            Remove
-          </button>
-        </div>
       </div>
-    </>
+
+      {/* <Specs /> */}
+      <div>
+        <button
+          className="p-4 bg-green-500 rounded-md text-white"
+          type="button"
+          onClick={handleAddInput}
+        >
+          Thêm
+        </button>
+        <button
+          className="p-4 bg-red-500 rounded-md text-white"
+          style={{ marginLeft: "20px" }}
+          type="button"
+          disabled={inputCount === 0}
+          onClick={handleSubInput}
+        >
+          Xóa
+        </button>
+      </div>
+    </div>
   );
 };

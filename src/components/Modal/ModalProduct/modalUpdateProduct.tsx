@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import categoryApi from "../../../apis/category/categoryApi";
 import productApi from "../../../apis/product/product";
+import { notifyError, notifySuccess } from "../../../utils/notify";
 
 export default function ModalUpdateProduct({
   setOpenModalUpdateProduct,
@@ -17,6 +18,8 @@ export default function ModalUpdateProduct({
   const [selectValue, setSelectValue] = useState([]);
   const [product, setProduct] = useState<any>();
   const [resetModal, setResetModal] = useState(0);
+
+  console.log(_id)
 
   const {
     register,
@@ -56,11 +59,14 @@ export default function ModalUpdateProduct({
     };
 
     const result = await productApi.updateProduct(payload);
-    console.log("result", result);
-    console.log("payload", payload);
+    if (result.msg = "Thành công ") {
+      notifySuccess("Success");
+      setResetModal(resetModal + 1);
+      reset();
+    } else notifyError("Fail");
+    // console.log("result", result);
+    // console.log("payload", payload);
     // setReload((ref: number) => ref + 1);
-    reset();
-    setResetModal(resetModal + 1);
   };
 
   const getBase64 = (file: any, cb: any) => {
@@ -91,7 +97,7 @@ export default function ModalUpdateProduct({
   useEffect(() => {
     (async () => {
       const result = await categoryApi.getCategory();
-      const sendId = '_id='+_id
+      const sendId = "_id=" + _id;
       const resultProduct = await productApi.getDetilaProduct(sendId);
       //   console.log("detail", resultProduct);
       setCategory(result.data);
@@ -106,11 +112,14 @@ export default function ModalUpdateProduct({
     })();
   }, [resetModal]);
 
+  console.log('product',product)
+
   useEffect(() => {
     product &&
       (async () => {
         const result = await categoryApi.getSelectCategory(product.category);
-        setSpecs(result.data.specsModel);
+        console.log(product.category);
+        setSpecs(result.data?.specsModel);
         // console.log("123", result.data.specsModel);
       })();
   }, [product]);
@@ -288,7 +297,7 @@ const SpecsCategory = ({
   }, []);
   return (
     <div className="flex flex-col gap-[10px]">
-      {listSpecs.map((item: any, index: any) => {
+      {listSpecs?.map((item: any, index: any) => {
         setValue(`spec${index + 1}`, item.name);
         return (
           <ShowSpecs

@@ -128,6 +128,7 @@ export default function ModalCreate({ setOpenModal, setReload }: any) {
                     <div className="">Name: </div>
                     <input
                       {...register("name")}
+                      required
                       className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="username"
                       type="text"
@@ -138,6 +139,7 @@ export default function ModalCreate({ setOpenModal, setReload }: any) {
                     <div className="">Code: </div>
                     <input
                       {...register("code")}
+                      required
                       className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="username"
                       type="text"
@@ -149,6 +151,7 @@ export default function ModalCreate({ setOpenModal, setReload }: any) {
                     <div className="">Price: </div>
                     <input
                       {...register("price")}
+                      required
                       className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="username"
                       type="text"
@@ -160,6 +163,7 @@ export default function ModalCreate({ setOpenModal, setReload }: any) {
                     <div className="">Sale: </div>
                     <input
                       {...register("sale")}
+                      required
                       className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="username"
                       type="text"
@@ -287,6 +291,7 @@ const ShowSpecs = ({ register, id, name, values }: Props) => {
       <div className="specs-input flex">
         <input
           //   {...register(`spec${id}`)}
+    
           type="text"
           value={name}
           disabled

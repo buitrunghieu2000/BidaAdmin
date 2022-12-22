@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { IResUserList } from "../../apis/user/user.type";
+import userApi from "../../apis/user/userApi";
 import Pagination from "../../components/Pangination/Pagination";
 import { USER_MODEL } from "../../models/user.model";
 
 type Props = {};
-
 function Userlist(props: Props) {
+
   let newUserList = [];
   const LIMIT = 5;
   const total = 20;
@@ -15,17 +16,12 @@ function Userlist(props: Props) {
   const [order, setOrder] = useState("ACS");
 
   React.useEffect(() => {
-    fetch("https://jsonplaceholder.typicode.com/users")
-      .then((response) => response.json())
-      .then((json) => setUserList(json));
+    (async () => {
+      const result = await userApi.getUserList();
+      console.log(result);
+      setUserList(result.data);
+    })();
   }, []);
-
-  const handleRemove = (removeId: number) => {
-    newUserList = userList.filter(
-      (item: USER_MODEL, index: number) => item.id !== removeId
-    );
-    setUserList(newUserList);
-  };
 
   const sorting = (col: string) => {
     if (order === "ACS") {
@@ -126,6 +122,15 @@ function Userlist(props: Props) {
                 </svg>
               </div>
             </th>
+
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Role</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">
+                Email Verify
+              </div>
+            </th>
             <th
               className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
               onClick={() => sorting("email")}
@@ -149,7 +154,15 @@ function Userlist(props: Props) {
               </div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-              <div className="flex items-center justify-center">Address</div>
+              <div className="flex items-center justify-center">Phone</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Access</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">
+                Cancel Bill
+              </div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
               <div className="flex items-center justify-center">Actions</div>
@@ -159,38 +172,40 @@ function Userlist(props: Props) {
         <tbody>
           {userList.length > 0 ? (
             userList
-              .filter((value: USER_MODEL, index: number) => {
+              .filter((value: any, index: number) => {
                 if (searchItem == "") {
                   return value;
                 } else if (
                   value.name.toLowerCase().includes(searchItem.toLowerCase()) ||
-                  value.email
-                    .toLowerCase()
-                    .includes(searchItem.toLowerCase()) ||
-                  value.address.street
-                    .toLowerCase()
-                    .includes(searchItem.toLowerCase()) ||
-                    value.id.toString()
-                      .includes(searchItem.toLowerCase())
+                  value.role.toLowerCase().includes(searchItem.toLowerCase()) 
                 ) {
                   return value;
                 }
               })
-              .map((item: USER_MODEL, index: number) => (
+              .map((item: any, index: number) => (
                 <tr
                   className="bg-gray-100 text-center border-b text-sm text-gray-600"
                   key={index}
                 >
-                  <td className="p-2 border-r">{item.id}</td>
+                  <td className="p-2 border-r">{index + 1}</td>
                   <td className="p-2 border-r">{item.name}</td>
+                  <td className="p-2 border-r">{item.role}</td>
+                  <td className="p-2 border-r">
+                    {item.isEmailVerified.toString()}
+                  </td>
                   <td className="p-2 border-r">{item.email}</td>
-                  <td className="p-2 border-r">{item.address.street}</td>
+                  <td className="p-2 border-r">{item.phone}</td>
+                  <td className="p-2 border-r">{item.enable.toString()}</td>
+                  <td className="p-2 border-r">{item.warning}</td>
                   <td>
-                    <a className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
-                      Edit
-                    </a>
-                    <a className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
-                      <span onClick={() => handleRemove(item.id)}>Remove</span>
+                    <a
+                      className={
+                        item?.enable === false
+                          ? "bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                          : "bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                      }
+                    >
+                      {item?.enable === false ? "Enable" : "Disable"}
                     </a>
                   </td>
                 </tr>

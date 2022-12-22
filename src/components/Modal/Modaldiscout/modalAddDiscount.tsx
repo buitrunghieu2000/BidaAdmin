@@ -3,8 +3,12 @@ import { Button, Upload } from "antd";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import discountApi from "../../../apis/discount/discount.api";
+import { notifyError, notifySuccess } from "../../../utils/notify";
 
-export default function ModalAddDiscount({ setShowModalDiscount }: any) {
+export default function ModalAddDiscount({
+  setShowModalDiscount,
+  reload,
+}: any) {
   const {
     register,
     handleSubmit,
@@ -12,7 +16,7 @@ export default function ModalAddDiscount({ setShowModalDiscount }: any) {
     reset,
   } = useForm<any>({});
 
-  const submit = async(data: any, e: any) => {
+  const submit = async (data: any, e: any) => {
     e.preventDefault();
     const payload = {
       code: data.code,
@@ -28,11 +32,15 @@ export default function ModalAddDiscount({ setShowModalDiscount }: any) {
       is_oid: Boolean(data.is_oid),
       value: Number(data.value),
     };
-    
-    console.log(payload);
-        const result  = await discountApi.addDiscount(payload)
-        console.log(result);
-    reset();
+
+    // console.log(payload);
+    const result = await discountApi.addDiscount(payload);
+    console.log(result);
+    if ((result.msg = "Thành công ")) {
+      notifySuccess("Success");
+      reload((ref: any) => ref + 1);
+      reset();
+    } else notifyError("Fail");
   };
 
   const handleSelect = (e: any) => {
@@ -59,6 +67,7 @@ export default function ModalAddDiscount({ setShowModalDiscount }: any) {
                     <div className="flex-1 text-end">Code: </div>
                     <input
                       {...register("code")}
+                      required
                       className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="username"
                       type="text"
@@ -69,6 +78,7 @@ export default function ModalAddDiscount({ setShowModalDiscount }: any) {
                     <div className="flex-1 text-end">Max Price: </div>
                     <input
                       {...register("maxPrice")}
+                      required
                       className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="username"
                       type="text"
@@ -79,6 +89,7 @@ export default function ModalAddDiscount({ setShowModalDiscount }: any) {
                     <div className="flex-1 text-end">Min Price: </div>
                     <input
                       {...register("minPrice")}
+                      required
                       className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="username"
                       type="text"
@@ -89,6 +100,7 @@ export default function ModalAddDiscount({ setShowModalDiscount }: any) {
                     <div className="flex-1 text-end">Quantity: </div>
                     <input
                       {...register("quantity")}
+                      required
                       className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="username"
                       type="text"
@@ -99,6 +111,7 @@ export default function ModalAddDiscount({ setShowModalDiscount }: any) {
                     <div className="flex-1 text-end">Value: </div>
                     <input
                       {...register("value")}
+                      required
                       className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                       id="username"
                       type="text"
@@ -216,9 +229,10 @@ export default function ModalAddDiscount({ setShowModalDiscount }: any) {
                       Date Start
                     </label>
                     <input
+                      {...register("dateStart")}
+                      required
                       type="date"
                       id="dateStart"
-                      {...register("dateStart")}
                     />
                   </div>
 
@@ -233,6 +247,7 @@ export default function ModalAddDiscount({ setShowModalDiscount }: any) {
                       type="date"
                       id="dateEnd"
                       {...register("dateEnd")}
+                      required
                     />
                   </div>
                 </div>
