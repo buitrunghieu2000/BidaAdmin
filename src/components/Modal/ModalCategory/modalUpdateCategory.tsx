@@ -15,6 +15,8 @@ export default function ModalUpdateCategory({
     slug: string;
   };
 
+  console.log(_id, idCategory)
+
   const [category, setCategory] = useState<any>({});
   const [selectValue, setSelectValue] = useState([]);
   const [specs, setSpecs] = useState<Array<any>>([]);

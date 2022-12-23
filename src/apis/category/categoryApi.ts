@@ -19,6 +19,11 @@ const categoryApi = {
     const url = "/category/edit"; //params : page, filter
     return axiosClient.put(url, data);
   },
+
+  editDiscountCategory(payload:any): Promise<ReturnReponse<any>> {
+    const url = '/discount/edit'; //params : page, filter
+    return axiosClient.put(url,payload);
+  },
 };
 
 export default categoryApi;

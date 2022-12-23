@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import categoryApi from "../../apis/category/categoryApi";
 import { IResUserList } from "../../apis/user/user.type";
 import ModalCreateCategory from "../../components/Modal/ModalCategory/modalCreateCategory";
+import ModalDiscountCategory from "../../components/Modal/ModalCategory/modalCreateDiscountCategory";
 import ModalUpdateCategory from "../../components/Modal/ModalCategory/modalUpdateCategory";
 import Pagination from "../../components/Pangination/Pagination";
 import { USER_MODEL } from "../../models/user.model";
@@ -16,72 +17,55 @@ function Category(props: Props) {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [showModalCreateCategory, setShowModalCreateCategory] = useState(false);
   const [showModalUpdateCategory, setShowModalUpdateCategory] = useState(false);
-  const [categoryList, setCategoryList] = useState([
-    // {
-    //   id: 1,
-    //   name: "phone",
-    //   quantity: 30,
-    // },
-    // {
-    //   id: 2,
-    //   name: "desktop",
-    //   quantity: 60,
-    // },
-    // {
-    //   id: 3,
-    //   name: "laptop",
-    //   quantity: 90,
-    // },
-    // {
-    //   id: 4,
-    //   name: "laptop",
-    //   quantity: 90,
-    // },
-  ]);
+  const [showModalDiscountCategory, setShowModalDiscountCategory] = useState(false);
+  const [categoryList, setCategoryList] = useState([]);
   const [searchItem, setSearchItem] = useState("");
   const [idCategory, setIdCategory] = useState("");
   const [idCategorySelect, setIdCategorySelect] = useState("");
   const [order, setOrder] = useState("ACS");
 
-  
   const handleRemove = (removeId: number) => {
     newUserList = categoryList.filter(
       (item: any, index: number) => item.id !== removeId
-      );
-      setCategoryList(newUserList);
-    };
+    );
+    setCategoryList(newUserList);
+  };
 
-    const handleGetIDProduct = (_id: any, idCategory: any) => {
-      setIdCategory(_id)
-      setIdCategorySelect(idCategory)
-      setShowModalUpdateCategory(true);
-    }
-    
-    
-    const sorting = (col: string) => {
-      if (order === "ACS") {
-        const sorted = [...categoryList].sort((a: any, b: any) =>
+  const handleGetIDProduct = (_id: any, idCategory: any) => {
+    setIdCategory(_id);
+    setIdCategorySelect(idCategory);
+    setShowModalUpdateCategory(true);
+  };
+
+  const handleGetIDCategory= (idCategory: any) => {
+    setIdCategorySelect(idCategory);
+    setShowModalDiscountCategory(true);
+  };
+
+  const sorting = (col: string) => {
+    if (order === "ACS") {
+      const sorted = [...categoryList].sort((a: any, b: any) =>
         a[col] > b[col] ? 1 : -1
-        );
-        setCategoryList(sorted);
-        setOrder("DCS");
-      }
-      if (order === "DCS") {
-        const sorted = [...categoryList].sort((a: any, b: any) =>
+      );
+      setCategoryList(sorted);
+      setOrder("DCS");
+    }
+    if (order === "DCS") {
+      const sorted = [...categoryList].sort((a: any, b: any) =>
         a[col] < b[col] ? 1 : -1
-        );
-        setCategoryList(sorted);
-        setOrder("ACS");
-      }
-    };
-    // console.log(searchItem)
-    React.useEffect(() => {
-      (async () => {
-        const result = await categoryApi.getCategory();
-        console.log(result);
-        setCategoryList(result.data);
-      })();
-    }, []);
+      );
+      setCategoryList(sorted);
+      setOrder("ACS");
+    }
+  };
+  // console.log(searchItem)
+  React.useEffect(() => {
+    (async () => {
+      const result = await categoryApi.getCategory();
+      console.log(result);
+      setCategoryList(result.data);
+    })();
+  }, []);
 
   return (
     <div className="table w-full p-2 max-h-screen">
@@ -159,14 +143,22 @@ function Category(props: Props) {
                 >
                   <td className="p-2 border-r">{index + 1}</td>
                   <td className="p-2 border-r">{item.name}</td>
-                  <td>
+                  <td className="flex gap-4 justify-center">
                     <a
                       onClick={() => {
-                        handleGetIDProduct(item.name, item._id)
+                        handleGetIDProduct(item.name, item._id);
                       }}
                       className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
                     >
                       Edit
+                    </a>
+                    <a
+                      onClick={() => {
+                        handleGetIDCategory(item._id);
+                      }}
+                      className="bg-orange-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                    >
+                      Discount
                     </a>
                     <a className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
                       <span onClick={() => handleRemove(item.id)}>Remove</span>
@@ -188,7 +180,16 @@ function Category(props: Props) {
       )}
       {showModalUpdateCategory && (
         <ModalUpdateCategory
-          setOpenModalUpdateCategory={setShowModalUpdateCategory} _id={idCategory} idCategory={idCategorySelect}
+          setOpenModalUpdateCategory={setShowModalUpdateCategory}
+          _id={idCategory}
+          idCategory={idCategorySelect}
+        />
+      )}
+
+      {showModalDiscountCategory && (
+        <ModalDiscountCategory
+        setOpenModalDiscountCategory={setShowModalDiscountCategory}
+          _idCategory={idCategorySelect}
         />
       )}
       <Pagination

@@ -1,17 +1,19 @@
 import React, { useState } from "react";
 import { IResUserList } from "../../apis/user/user.type";
 import userApi from "../../apis/user/userApi";
+import ModalDiscountUser from "../../components/Modal/User/modalCreateDiscountCategory";
 import Pagination from "../../components/Pangination/Pagination";
 import { USER_MODEL } from "../../models/user.model";
 
 type Props = {};
 function Userlist(props: Props) {
-
   let newUserList = [];
   const LIMIT = 5;
   const total = 20;
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [userList, setUserList] = useState([]);
+  const [showModalDiscountUser, setShowModalDiscountUser] = useState(false);
+  const [idUserSelect, setIdUserSelect] = useState("");
   const [searchItem, setSearchItem] = useState("");
   const [order, setOrder] = useState("ACS");
 
@@ -40,6 +42,23 @@ function Userlist(props: Props) {
     }
   };
   // console.log(searchItem)
+
+  const handleGetIDUser = (idUser: any) => {
+    setIdUserSelect(idUser);
+    setShowModalDiscountUser(true);
+  };
+
+  const handleEnableUser = async (_id: any, enable: boolean) => {
+    
+    const payload = {
+      _id: _id,
+      enable: !enable,
+    };
+
+    const result = await userApi.enableUser(payload);
+    console.log(payload);
+    console.log(result);
+  };
 
   return (
     <div className="table w-full p-2 max-h-screen">
@@ -177,7 +196,7 @@ function Userlist(props: Props) {
                   return value;
                 } else if (
                   value.name.toLowerCase().includes(searchItem.toLowerCase()) ||
-                  value.role.toLowerCase().includes(searchItem.toLowerCase()) 
+                  value.role.toLowerCase().includes(searchItem.toLowerCase())
                 ) {
                   return value;
                 }
@@ -199,6 +218,17 @@ function Userlist(props: Props) {
                   <td className="p-2 border-r">{item.warning}</td>
                   <td>
                     <a
+                      onClick={() => {
+                        handleGetIDUser(item._id);
+                      }}
+                      className="bg-orange-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                    >
+                      Discount
+                    </a>
+                    <a
+                      onClick={() => {
+                        handleEnableUser(item._id, item.enable);
+                      }}
                       className={
                         item?.enable === false
                           ? "bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
@@ -217,6 +247,12 @@ function Userlist(props: Props) {
           )}
         </tbody>
       </table>
+      {showModalDiscountUser && (
+        <ModalDiscountUser
+          setOpenModalDiscountUser={setShowModalDiscountUser}
+          _idUser={idUserSelect}
+        />
+      )}
       <Pagination
         limit={LIMIT}
         currentPage={currentPage}
