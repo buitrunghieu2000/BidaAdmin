@@ -9,6 +9,11 @@ const authApi = {
     const url = "/auth/login"; //params : page, filter
     return axiosClient.post(url, data);
   },
+
+  getInfo(): Promise<ReturnReponse<any>> {
+    const url = "/auth/profile"; //params : page, filter
+    return axiosClient.get(url);
+  },
 };
 
 export default authApi;

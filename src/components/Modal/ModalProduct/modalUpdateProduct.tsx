@@ -19,7 +19,7 @@ export default function ModalUpdateProduct({
   const [product, setProduct] = useState<any>();
   const [resetModal, setResetModal] = useState(0);
 
-  console.log(_id)
+  // console.log(_id)
 
   const {
     register,
@@ -59,6 +59,7 @@ export default function ModalUpdateProduct({
     };
 
     const result = await productApi.updateProduct(payload);
+    console.log('payload',payload)
     if (result.msg = "Thành công ") {
       notifySuccess("Success");
       setResetModal(resetModal + 1);
@@ -112,13 +113,13 @@ export default function ModalUpdateProduct({
     })();
   }, [resetModal]);
 
-  console.log('product',product)
+  // console.log('product',product)
 
   useEffect(() => {
     product &&
       (async () => {
         const result = await categoryApi.getSelectCategory(product.category);
-        console.log(product.category);
+        // console.log(product.category);
         setSpecs(result.data?.specsModel);
         // console.log("123", result.data.specsModel);
       })();
