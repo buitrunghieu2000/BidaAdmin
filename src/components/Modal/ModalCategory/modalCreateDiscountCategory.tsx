@@ -96,24 +96,30 @@ export default function ModalDiscountCategory({
                   <div>Discount: </div>
                   <select name="" id="" onChange={handleSelect}>
                     <option value="Select">Select</option>
-                    {listDiscount.map((item: any, index: number) => (
-                      <option key={index} value={item.code}>
-                        {item.code}
-                      </option>
-                    ))}
+                    {listDiscount
+                      .filter((value: any, index: number) => {
+                        if (value.enable === true) {
+                          return value;
+                        } else return "";
+                      })
+                      .map((item: any, index: number) => (
+                        <option key={index} value={item.code}>
+                          {item.code}
+                        </option>
+                      ))}
                   </select>
                 </div>
               </div>
               <div className="relative left-[10%] flex gap-[10px]">
                 <button
-                disabled={disabled}
+                  disabled={disabled}
                   type="submit"
                   className="w-[100px] p-2 rounded-sm text-center bg-green-500  text-white"
                 >
                   Submit
                 </button>
                 <button
-                disabled={disabled}
+                  disabled={disabled}
                   onClick={handleDeleteDiscout}
                   type="button"
                   className="w-[100px] p-2 rounded-sm text-center bg-red-500  text-white"

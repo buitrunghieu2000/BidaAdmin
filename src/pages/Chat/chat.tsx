@@ -115,7 +115,7 @@ function Chat({}: Props) {
   return (
     <div className="container mx-auto bg-white">
       <div className="min-w-full border rounded lg:grid lg:grid-cols-3">
-        <div className="border-r border-gray-300 lg:col-span-1">
+        <div className="border-r border-gray-300 lg:col-span-1 ">
           <div className="mx-3 my-3">
             <div className="relative text-gray-600">
               <span className="absolute inset-y-0 left-0 flex items-center pl-2">
@@ -129,7 +129,7 @@ function Chat({}: Props) {
             </div>
           </div>
 
-          <ul className="overflow-auto h-[32rem]">
+          <ul className="h-[32rem]">
             <h2 className="my-2 mb-2 ml-2 text-lg text-gray-600">Chats</h2>
             <li>
 
@@ -143,12 +143,12 @@ function Chat({}: Props) {
                       >
                         <img className="object-cover w-10 h-10 rounded-full"
                         src="https://cdn.pixabay.com/photo/2018/01/15/07/51/woman-3083383__340.jpg" alt="username" />
-                        <div className="w-full pb-2">
+                        <div className="max-w-[90%] pb-2">
                           <div className="flex justify-between">
                             <span className="block ml-2 font-semibold text-gray-600">{item.saler.name}</span>
                             <span className="block ml-2 text-sm text-gray-600">{formatDate(new Date(item.last_message.createdAt))}</span>
                           </div>
-                          <span className="block ml-2 text-sm text-gray-600" style={{
+                          <span className="block ml-2 text-sm text-gray-600 w-[90%] overflow-hidden whitespace-nowrap text-ellipsis" style={{
                               fontWeight:
                                 item.last_message.isCustomer || item.seen
                                   ? "normal"
@@ -165,12 +165,12 @@ function Chat({}: Props) {
                       >
                         <img className="object-cover w-10 h-10 rounded-full"
                         src="https://cdn.pixabay.com/photo/2018/01/15/07/51/woman-3083383__340.jpg" alt="username" />
-                        <div className="w-full pb-2">
+                        <div className="max-w-[90%] pb-2">
                           <div className="flex justify-between">
                             <span className="block ml-2 font-semibold text-gray-600">{item.customer.name}</span>
                             <span className="block ml-2 text-sm text-gray-600">{formatDate(new Date(item.last_message.createdAt))}</span>
                           </div>
-                          <span className="block ml-2 text-sm text-gray-600" style={{
+                          <span className="block ml-2 text-sm text-gray-600 w-[90%] overflow-hidden whitespace-nowrap text-ellipsis" style={{
                               fontWeight:
                                 !item.last_message.isCustomer || item.seen
                                   ? "normal"

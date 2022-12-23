@@ -59,10 +59,11 @@ export default function ModalUpdateProduct({
     };
 
     const result = await productApi.updateProduct(payload);
-    console.log('payload',payload)
-    if (result.msg = "Thành công ") {
+    console.log("payload", payload);
+    if ((result.msg = "Thành công ")) {
       notifySuccess("Success");
       setResetModal(resetModal + 1);
+      setReload((ref: number) => ref + 1);
       reset();
     } else notifyError("Fail");
     // console.log("result", result);

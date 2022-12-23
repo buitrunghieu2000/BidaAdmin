@@ -97,11 +97,17 @@ export default function ModalDiscountUser({
                   <div>Discount: </div>
                   <select name="" id="" onChange={handleSelect}>
                     <option value="Select">Select</option>
-                    {listDiscount.map((item: any, index: number) => (
-                      <option key={index} value={item.code}>
-                        {item.code}
-                      </option>
-                    ))}
+                    {listDiscount
+                      .filter((value: any, index: number) => {
+                        if (value.enable === true) {
+                          return value;
+                        } else return "";
+                      })
+                      .map((item: any, index: number) => (
+                        <option key={index} value={item.code}>
+                          {item.code}
+                        </option>
+                      ))}
                   </select>
                 </div>
               </div>

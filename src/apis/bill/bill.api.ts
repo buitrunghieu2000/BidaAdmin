@@ -16,6 +16,16 @@ const billApi = {
     const url = '/bill/read'; //params : page, filter
     return axiosClient.post(url,payload);
   },
+
+  getStatuslBill(status: any): Promise<ReturnReponse<any>> {
+    const url = `/bill/list${status}` //params : page, filter
+    return axiosClient.get(url);
+  },
+
+  updateBill(payload:any): Promise<ReturnReponse<any>> {
+    const url = '/bill/update'; //params : page, filter
+    return axiosClient.post(url,payload);
+  },
 };
 
 export default billApi;

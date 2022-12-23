@@ -7,6 +7,7 @@ import ModalDiscountCategory from "../../components/Modal/ModalCategory/modalCre
 import ModalUpdateCategory from "../../components/Modal/ModalCategory/modalUpdateCategory";
 import Pagination from "../../components/Pangination/Pagination";
 import { USER_MODEL } from "../../models/user.model";
+import { notifyError, notifySuccess } from "../../utils/notify";
 
 type Props = {};
 
@@ -26,9 +27,10 @@ function Category(props: Props) {
 
   const handleRemove = (removeId: number) => {
     newUserList = categoryList.filter(
-      (item: any, index: number) => item.id !== removeId
+      (item: any, index: number) => item._id !== removeId
     );
     setCategoryList(newUserList);
+    notifySuccess("Success");
   };
 
   const handleGetIDProduct = (_id: any, idCategory: any) => {
@@ -93,7 +95,7 @@ function Category(props: Props) {
             type="text"
             id="simple-search"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search"
+            placeholder="Name"
             onChange={(e) => setSearchItem(e.target.value)}
           />
         </div>
@@ -130,7 +132,6 @@ function Category(props: Props) {
                 if (searchItem == "") {
                   return value;
                 } else if (
-                  index.toString().includes(searchItem.toLowerCase()) ||
                   value.name.toLowerCase().includes(searchItem.toLowerCase())
                 ) {
                   return value;
@@ -161,7 +162,7 @@ function Category(props: Props) {
                       Discount
                     </a>
                     <a className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
-                      <span onClick={() => handleRemove(item.id)}>Remove</span>
+                      <span onClick={() => handleRemove(item._id)}>Remove</span>
                     </a>
                   </td>
                 </tr>

@@ -15,7 +15,6 @@ function BillList(props: Props) {
   const [idBill, setIdBill] = useState("");
   const [showModalBill, setShowModalBill] = useState(false);
   const [showModalUpdateBill, setShowModalUpdateBill] = useState(false);
-
   const [billList, setBillList] = useState([
     // {
     //   id: 1,
@@ -58,9 +57,20 @@ function BillList(props: Props) {
 
   const handleSelect = (e: any) => {
     console.log(e.target.value);
+    (async()=>{
+      const resultStatus = await billApi.getStatuslBill(`?status=${e.target.value}`)
+      console.log(resultStatus)
+      setBillList(resultStatus.data)
+      // if(resultStatus.statusCode === 200) {
+      // } 
+    })()
   };
 
-  const handleViewBil = (_id: any) => {
+  const handleViewBill = (_id: any) => {
+    setIdBill(_id)
+  }
+
+  const handleUpdateBill = (_id: any) => {
     setIdBill(_id)
   }
 
@@ -68,7 +78,6 @@ function BillList(props: Props) {
   React.useEffect(() => {
     (async () => {
       const result = await billApi.getListBill();
-      // console.log(result);
       setBillList(result.data);
     })();
   }, []);
@@ -101,7 +110,7 @@ function BillList(props: Props) {
             type="text"
             id="simple-search"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search"
+            placeholder="Name"
             onChange={(e) => setSearchItem(e.target.value)}
           />
         </div>
@@ -110,15 +119,16 @@ function BillList(props: Props) {
             onChange={handleSelect}
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
           >
-            <option value="">Select</option>
-            <option value="preparing">Preparing</option>
-            <option value="delivering">Delivering</option>
-            <option value="done">Done</option>
-            <option value="canceled">Canceled</option>
+            <option value="">All</option>
+            <option value="Ordered">Ordered</option>
+            <option value="Confirmed">Confirmed</option>
+            <option value="Delivering">Delivering</option>
+            <option value="Done">Done</option>
+            <option value="Canceled">Canceled</option>
           </select>
         </div>
       </form>
-        <table className="border block whitespace-nowrap max-w-[80vw] overflow-x-auto">
+        <table className="border whitespace-nowrap w-full">
           <thead>
             <tr className="bg-gray-50 border-b">
               <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
@@ -171,7 +181,7 @@ function BillList(props: Props) {
                   if (searchItem == "") {
                     return value;
                   } else if (
-                    value.name.toString().includes(searchItem.toLowerCase())
+                    value.account.name.toString().includes(searchItem.toLowerCase())
                   ) {
                     return value;
                   }
@@ -204,7 +214,7 @@ function BillList(props: Props) {
                     <td className="flex justify-center items-center m-[10px] gap-[8px]">
                       <a
                         onClick={() => {
-                          handleViewBil(item._id)
+                          handleViewBill(item._id)
                           setShowModalBill(true);
                         }}
                         className="bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
@@ -214,6 +224,7 @@ function BillList(props: Props) {
                       <a
                         onClick={() => {
                           setShowModalUpdateBill(true);
+                          handleUpdateBill(item._id)
                         }}
                         className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
                       >
@@ -232,7 +243,7 @@ function BillList(props: Props) {
 
       {showModalBill && <ModalBill setShowModalBill={setShowModalBill} _id={idBill}/>}
       {showModalUpdateBill && (
-        <ModalUpdateBill setShowModalUpdateBill={setShowModalUpdateBill} />
+        <ModalUpdateBill setShowModalUpdateBill={setShowModalUpdateBill} _id={idBill}/>
       )}
       <Pagination
         limit={LIMIT}

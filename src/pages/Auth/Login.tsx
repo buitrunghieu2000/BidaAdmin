@@ -29,10 +29,12 @@ const Login = (props: Props) => {
     }
     return;
   };
+
   const submit = (data: any, e: any) => {
     console.log(data);
     login(data);
   };
+  
   return (
     <section className="h-screen">
       <div className="container px-6 py-12 h-full m-auto">

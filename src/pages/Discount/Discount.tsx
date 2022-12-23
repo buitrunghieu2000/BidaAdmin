@@ -7,6 +7,7 @@ import ModalAddDiscount from "../../components/Modal/Modaldiscout/modalAddDiscou
 import Pagination from "../../components/Pangination/Pagination";
 import { USER_MODEL } from "../../models/user.model";
 import { formatDate } from "../../utils/dateFormater";
+import { moneyFormater } from "../../utils/moneyFormater";
 import { notifyError, notifySuccess } from "../../utils/notify";
 
 type Props = {};
@@ -93,7 +94,7 @@ function DiscountList(props: Props) {
             type="text"
             id="simple-search"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search"
+            placeholder="Code"
             onChange={(e) => setSearchItem(e.target.value)}
           />
         </div>
@@ -192,10 +193,10 @@ function DiscountList(props: Props) {
                   <td className="p-2 border-r">{item.is_oid.toString()}</td>
                   <td className="p-2 border-r">{item.is_percent.toString()}</td>
                   <td className="p-2 border-r">{item.is_ship.toString()}</td>
-                  <td className="p-2 border-r">{item.maxPrice}</td>
-                  <td className="p-2 border-r">{item.minPrice}</td>
+                  <td className="p-2 border-r">{moneyFormater(item.maxPrice)}</td>
+                  <td className="p-2 border-r">{moneyFormater(item.maxPrice)}</td>
                   <td className="p-2 border-r">{item.quantity}</td>
-                  <td className="p-2 border-r">{item.value}</td>
+                  <td className="p-2 border-r">{item.value < 100 ? item.value + "%" : moneyFormater(item.value)}</td>
                   <td className="flex justify-center items-center m-[10px] gap-[8px]">
                     <a
                       className={

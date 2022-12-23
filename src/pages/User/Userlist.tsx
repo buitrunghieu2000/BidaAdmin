@@ -4,6 +4,7 @@ import userApi from "../../apis/user/userApi";
 import ModalDiscountUser from "../../components/Modal/User/modalCreateDiscountCategory";
 import Pagination from "../../components/Pangination/Pagination";
 import { USER_MODEL } from "../../models/user.model";
+import { notifyError, notifySuccess } from "../../utils/notify";
 
 type Props = {};
 function Userlist(props: Props) {
@@ -16,14 +17,7 @@ function Userlist(props: Props) {
   const [idUserSelect, setIdUserSelect] = useState("");
   const [searchItem, setSearchItem] = useState("");
   const [order, setOrder] = useState("ACS");
-
-  React.useEffect(() => {
-    (async () => {
-      const result = await userApi.getUserList();
-      console.log(result);
-      setUserList(result.data);
-    })();
-  }, []);
+  const [reload, setReload] = useState(0);
 
   const sorting = (col: string) => {
     if (order === "ACS") {
@@ -49,16 +43,27 @@ function Userlist(props: Props) {
   };
 
   const handleEnableUser = async (_id: any, enable: boolean) => {
-    
     const payload = {
       _id: _id,
       enable: !enable,
     };
 
     const result = await userApi.enableUser(payload);
-    console.log(payload);
+    // console.log(payload);
     console.log(result);
+    if (result.msg == "Thành công ") {
+      notifySuccess("Success");
+      setReload(reload + 1);
+    } else notifyError("Fail");
   };
+
+  React.useEffect(() => {
+    (async () => {
+      const result = await userApi.getUserList();
+      console.log(result);
+      setUserList(result.data);
+    })();
+  }, [reload]);
 
   return (
     <div className="table w-full p-2 max-h-screen">
@@ -86,7 +91,7 @@ function Userlist(props: Props) {
             type="text"
             id="simple-search"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Search"
+            placeholder="Name, role"
             required
             onChange={(e) => setSearchItem(e.target.value)}
           />
@@ -216,7 +221,7 @@ function Userlist(props: Props) {
                   <td className="p-2 border-r">{item.phone}</td>
                   <td className="p-2 border-r">{item.enable.toString()}</td>
                   <td className="p-2 border-r">{item.warning}</td>
-                  <td>
+                  <td className="flex gap-4 justify-center">
                     <a
                       onClick={() => {
                         handleGetIDUser(item._id);
