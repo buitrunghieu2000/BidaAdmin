@@ -193,12 +193,12 @@ function Category(props: Props) {
           _idCategory={idCategorySelect}
         />
       )}
-      <Pagination
+      {/* <Pagination
         limit={LIMIT}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         total={total}
-      />
+      /> */}
     </div>
   );
 }

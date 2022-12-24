@@ -258,12 +258,12 @@ function Userlist(props: Props) {
           _idUser={idUserSelect}
         />
       )}
-      <Pagination
+      {/* <Pagination
         limit={LIMIT}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         total={total}
-      />
+      /> */}
     </div>
   );
 }

@@ -1,9 +1,23 @@
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import billApi from "../../../apis/bill/bill.api";
+import { notifyError, notifySuccess } from "../../../utils/notify";
 
-export default function ModalUpdateBill({ setShowModalUpdateBill, _id }: any) {
-  const [statusBill, setStatusBill] = useState("Ordered");
+export default function ModalUpdateBill({
+  setShowModalUpdateBill,
+  _id,
+  status,
+}: any) {
+  const checkStatus = [
+    "Ordered",
+    "Confirmed",
+    "Delivering",
+    "Done",
+    "Canceled",
+  ];
+  console.log(status);
+  const [statusBill, setStatusBill] = useState(status);
+  let idx = 0;
 
   const { register, handleSubmit } = useForm<any>();
 
@@ -12,7 +26,13 @@ export default function ModalUpdateBill({ setShowModalUpdateBill, _id }: any) {
     setStatusBill(e.target.value);
   };
 
-  const submit = async(data: any, e: any) => {
+  checkStatus.map((i: any, index: number) => {
+    if (i === status) {
+      idx = index;
+    }
+  });
+
+  const submit = async (data: any, e: any) => {
     // console.log(data);
     const payload = {
       _id: _id,
@@ -21,7 +41,11 @@ export default function ModalUpdateBill({ setShowModalUpdateBill, _id }: any) {
     };
 
     const updateResult = await billApi.updateBill(payload);
-    console.log(payload)
+    if (updateResult.statusCode === 200) {
+      notifySuccess("Success");
+    } else notifyError("Fail");
+    console.log(updateResult);
+    console.log(payload);
   };
 
   return (
@@ -44,11 +68,13 @@ export default function ModalUpdateBill({ setShowModalUpdateBill, _id }: any) {
                     onChange={handleSelect}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                   >
-                    <option value="Ordered">Ordered</option>
-                    <option value="Confirmed">Confirmed</option>
-                    <option value="Delivering">Delivering</option>
-                    <option value="Done">Done</option>
-                    <option value="Canceled">Canceled</option>
+                    <option value={status}>{status}</option>
+                    {checkStatus.map((i: any, index: number) => {
+                      if (status !== "Canceled")
+                        if (idx === index + 1 || idx === index - 1) {
+                          return <option value={i}>{i}</option>;
+                        }
+                    })}
                   </select>
                 </div>
               </div>
@@ -62,6 +88,7 @@ export default function ModalUpdateBill({ setShowModalUpdateBill, _id }: any) {
                   </label>
                   <textarea
                     {...register("desc")}
+                    required
                     id="message"
                     rows={4}
                     className="block shadow p-2.5 w-full text-sm text-gray-900  rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 resize-none"

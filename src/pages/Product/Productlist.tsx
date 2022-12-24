@@ -20,7 +20,7 @@ function Productlist(props: Props) {
   const navigate = useNavigate();
   const LIMIT = 5;
   const [total, setTotal] = useState(0);
-  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const [showModal, setShowModal] = useState(false);
   const [showModalImport, setShowModalImport] = useState(false);
   const [showModalColor, setShowModalColor] = useState(false);
@@ -33,6 +33,7 @@ function Productlist(props: Props) {
   const [order, setOrder] = useState("ACS");
   const [idColor, setIdcolor] = useState("ACS");
   const [_idProduct, set_idProduct] = useState("");
+
   // const [codeProduct, setCodeProduct] = useState(0);
 
   const handleRemove = (removeId: number) => {
@@ -81,9 +82,10 @@ function Productlist(props: Props) {
 
   useEffect(() => {
     (async () => {
-      const result = await productApi.getProduct();
-      console.log("rerender");
-      console.log("result", result);
+      const skip = currentPage * LIMIT;
+      const result = await productApi.getProduct(skip, LIMIT);
+      // console.log("rerender");
+      // console.log("result", result);
       setProductlist(result.data.data);
       setTotal(result.data.count);
       result.data.data.map((item: any, index: number) => {
@@ -93,9 +95,10 @@ function Productlist(props: Props) {
         );
       });
     })();
-  }, [reLoad]);
+  }, [reLoad, currentPage]);
 
   console.log(reLoad);
+  console.log("productList", productList);
 
   return (
     <>

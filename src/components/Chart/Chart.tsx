@@ -1,66 +1,17 @@
 import {
-  CartesianGrid, Legend,
-  Line, LineChart, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis,
-  YAxis
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
+  Pie,
+  PieChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
 } from "recharts";
+import { formatDate } from "../../utils/dateFormater";
 
-const data = [
-  {
-    name: "Jan",
-    product: 20,
-    revanue: 8000000,
-  },
-  {
-    name: "Feb",
-    product: 30,
-    revanue: 1000000,
-  },
-  {
-    name: "Tue",
-    product: 40,
-    revanue: 12000000,
-  },
-  {
-    name: "Apr",
-    product: 50,
-    revanue: 14000000,
-  },
-  {
-    name: "May",
-    product: 50,
-    revanue: 14000000,
-  },
-  {
-    name: "Jun",
-    product: 20,
-    revanue: 8000000,
-  },
-  {
-    name: "July",
-    product: 15,
-    revanue: 7500000,
-  },
-  {
-    name: "Aug",
-    product: 35,
-    revanue: 14500000,
-  },
-  {
-    name: "Oct",
-    product: 30,
-    revanue: 13000000,
-  },
-  {
-    name: "Nov",
-    product: 20,
-    revanue: 8000000,
-  },
-  {
-    name: "Dec",
-    product: 50,
-    revanue: 30000000,
-  },
-];
 const data01 = [
   { name: "Group A", value: 400 },
   { name: "Group B", value: 300 },
@@ -106,13 +57,26 @@ export const Productchart = () => {
   );
 };
 
-export const Revanuechart = () => {
+export const Revanuechart = (data: any) => {
+  // console.log(data);
+
+
+
+  // const dataChart = [
+  //   {
+  //     time: "April",
+  //     revenue: 10000,
+  //     product: 25,
+  //   },
+  // ];
+
+  // console.log(dataChart);
   return (
     <ResponsiveContainer width="100%" height="100%">
       <LineChart
         width={500}
         height={300}
-        data={data}
+        // data={dataChart}
         margin={{
           top: 5,
           right: 30,
@@ -121,13 +85,23 @@ export const Revanuechart = () => {
         }}
       >
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="name" />
+        <XAxis dataKey="time" />
         <YAxis yAxisId="left" />
         <YAxis yAxisId="right" orientation="right" />
         <Tooltip />
         <Legend />
-        <Line yAxisId="left" type="monotone" dataKey="revanue" stroke="#8884d8" />
-        <Line yAxisId="right" type="monotone" dataKey="product" stroke="#82ca9d" />
+        <Line
+          yAxisId="left"
+          type="monotone"
+          dataKey="revenue"
+          stroke="#8884d8"
+        />
+        <Line
+          yAxisId="right"
+          type="monotone"
+          dataKey="product"
+          stroke="#82ca9d"
+        />
       </LineChart>
     </ResponsiveContainer>
   );

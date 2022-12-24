@@ -229,12 +229,12 @@ function DiscountList(props: Props) {
           reload={setReload}
         />
       )}
-      <Pagination
+      {/* <Pagination
         limit={LIMIT}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         total={total}
-      />
+      /> */}
     </div>
   );
 }

@@ -7,8 +7,8 @@ const billApi = {
     return axiosClient.post(url, payload);
   },
 
-  getListBill(): Promise<ReturnReponse<any>> {
-    const url = "/bill/list"; //params : page, filter
+  getListBill(skip: number, limit: number): Promise<any> {
+    const url = `/bill/list?skip=${skip}&limit=${limit}`; //params : page, filter
     return axiosClient.get(url);
   },
 

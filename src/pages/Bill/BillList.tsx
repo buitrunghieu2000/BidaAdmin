@@ -9,12 +9,14 @@ type Props = {};
 
 function BillList(props: Props) {
   let newBillList = [];
-  const LIMIT = 5;
-  const total = 20;
+  const LIMIT = 15;
+  // const total = 20;
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [total, setTotal] = useState(0);
   const [idBill, setIdBill] = useState("");
   const [showModalBill, setShowModalBill] = useState(false);
   const [showModalUpdateBill, setShowModalUpdateBill] = useState(false);
+  const [statusBill, setStatusbill] = useState("");
   const [billList, setBillList] = useState([
     // {
     //   id: 1,
@@ -34,8 +36,6 @@ function BillList(props: Props) {
   ]);
   const [searchItem, setSearchItem] = useState("");
   const [order, setOrder] = useState("ACS");
-
-
 
   const sorting = (col: string) => {
     if (order === "ACS") {
@@ -57,32 +57,34 @@ function BillList(props: Props) {
 
   const handleSelect = (e: any) => {
     console.log(e.target.value);
-    (async()=>{
-      const resultStatus = await billApi.getStatuslBill(`?status=${e.target.value}`)
-      console.log(resultStatus)
-      setBillList(resultStatus.data)
+    (async () => {
+      const resultStatus = await billApi.getStatuslBill(
+        `?status=${e.target.value}`
+      );
+      console.log(resultStatus);
+      setBillList(resultStatus.data);
       // if(resultStatus.statusCode === 200) {
-      // } 
-    })()
+      // }
+    })();
   };
 
   const handleViewBill = (_id: any) => {
-    setIdBill(_id)
-  }
+    setIdBill(_id);
+  };
 
   const handleUpdateBill = (_id: any) => {
-    setIdBill(_id)
-  }
-
+    setIdBill(_id);
+  };
 
   React.useEffect(() => {
     (async () => {
-      const result = await billApi.getListBill();
+      const skip = currentPage * LIMIT;
+      const result = await billApi.getListBill(skip,LIMIT);
       setBillList(result.data);
+      console.log(result.count)
+      setTotal(result.count);
     })();
-  }, []);
-
-
+  }, [currentPage]);
 
   return (
     <div className="table w-full p-2 max-h-screen">
@@ -128,122 +130,125 @@ function BillList(props: Props) {
           </select>
         </div>
       </form>
-        <table className="border whitespace-nowrap w-full">
-          <thead>
-            <tr className="bg-gray-50 border-b">
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">ID</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Name</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Phone</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Email</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Address</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Sale</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Fhip Fee</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Toltal</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Status</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Payed</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Refund</div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">
-                  Authorize
-                </div>
-              </th>
-              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">Actions</div>
-              </th>
+      <table className="border whitespace-nowrap w-full">
+        <thead>
+          <tr className="bg-gray-50 border-b">
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">ID</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Name</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Phone</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Email</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Address</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Sale</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Fhip Fee</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Toltal</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Status</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Payed</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Refund</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Authorize</div>
+            </th>
+            <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+              <div className="flex items-center justify-center">Actions</div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {billList?.length > 0 ? (
+            billList
+              .filter((value: any, index: number) => {
+                if (searchItem == "") {
+                  return value;
+                } else if (
+                  value.account.name
+                    .toString()
+                    .includes(searchItem.toLowerCase())
+                ) {
+                  return value;
+                }
+              })
+              .map((item: any, index: number) => (
+                <tr
+                  className="bg-gray-100 text-center border-b text-sm text-gray-600"
+                  key={index}
+                >
+                  <td className="p-2 border-r ">{index + 1}</td>
+                  <td className="p-2 border-r ">{item.account.name}</td>
+                  <td className="p-2 border-r ">{item.account.phone}</td>
+                  <td className="p-2 border-r ">{item.account.email}</td>
+                  <td className="p-2 border-r ">{item.address.address}</td>
+                  <td className="p-2 border-r ">
+                    {(item.discount * 100).toFixed()}%
+                  </td>
+                  <td className="p-2 border-r ">{moneyFormater(item.ship)}</td>
+                  <td className="p-2 border-r ">{moneyFormater(item.total)}</td>
+                  <td className="p-2 border-r ">
+                    {item.status[0].statusTimeline}
+                  </td>
+                  <td className="p-2 border-r ">{item.paid.toString()}</td>
+                  <td className="p-2 border-r ">{item.refund.toString()}</td>
+                  <td className="p-2 border-r ">{item.verify.toString()}</td>
+                  <td className="flex justify-center items-center m-[10px] gap-[8px]">
+                    <a
+                      onClick={() => {
+                        handleViewBill(item._id);
+                        setShowModalBill(true);
+                      }}
+                      className="bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                    >
+                      View
+                    </a>
+                    <a
+                      onClick={() => {
+                        setShowModalUpdateBill(true);
+                        handleUpdateBill(item._id);
+                        setStatusbill(item.status[0].statusTimeline);
+                      }}
+                      className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                    >
+                      Update
+                    </a>
+                  </td>
+                </tr>
+              ))
+          ) : (
+            <tr>
+              <td>-</td>
             </tr>
-          </thead>
-          <tbody>
-            {billList?.length > 0 ? (
-              billList
-                .filter((value: any, index: number) => {
-                  if (searchItem == "") {
-                    return value;
-                  } else if (
-                    value.account.name.toString().includes(searchItem.toLowerCase())
-                  ) {
-                    return value;
-                  }
-                })
-                .map((item: any, index: number) => (
-                  <tr
-                    className="bg-gray-100 text-center border-b text-sm text-gray-600"
-                    key={index}
-                  >
-                    <td className="p-2 border-r ">{index + 1}</td>
-                    <td className="p-2 border-r ">{item.account.name}</td>
-                    <td className="p-2 border-r ">{item.account.phone}</td>
-                    <td className="p-2 border-r ">{item.account.email}</td>
-                    <td className="p-2 border-r ">{item.address.address}</td>
-                    <td className="p-2 border-r ">
-                      {(item.discount * 100).toFixed()}%
-                    </td>
-                    <td className="p-2 border-r ">
-                      {moneyFormater(item.ship)}
-                    </td>
-                    <td className="p-2 border-r ">
-                      {moneyFormater(item.total)}
-                    </td>
-                    <td className="p-2 border-r ">
-                      {item.status[0].statusTimeline}
-                    </td>
-                    <td className="p-2 border-r ">{item.paid.toString()}</td>
-                    <td className="p-2 border-r ">{item.refund.toString()}</td>
-                    <td className="p-2 border-r ">{item.verify.toString()}</td>
-                    <td className="flex justify-center items-center m-[10px] gap-[8px]">
-                      <a
-                        onClick={() => {
-                          handleViewBill(item._id)
-                          setShowModalBill(true);
-                        }}
-                        className="bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
-                      >
-                        View
-                      </a>
-                      <a
-                        onClick={() => {
-                          setShowModalUpdateBill(true);
-                          handleUpdateBill(item._id)
-                        }}
-                        className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
-                      >
-                        Update
-                      </a>
-                    </td>
-                  </tr>
-                ))
-            ) : (
-              <tr>
-                <td>-</td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+          )}
+        </tbody>
+      </table>
 
-      {showModalBill && <ModalBill setShowModalBill={setShowModalBill} _id={idBill}/>}
+      {showModalBill && (
+        <ModalBill setShowModalBill={setShowModalBill} _id={idBill} />
+      )}
       {showModalUpdateBill && (
-        <ModalUpdateBill setShowModalUpdateBill={setShowModalUpdateBill} _id={idBill}/>
+        <ModalUpdateBill
+          setShowModalUpdateBill={setShowModalUpdateBill}
+          _id={idBill}
+          status={statusBill}
+        />
       )}
       <Pagination
         limit={LIMIT}

@@ -11,17 +11,16 @@ type Props = {
 const Pagination = (props: Props) => {
   const { total, limit, currentPage, setCurrentPage } = props;
 
-
   const pages = Math.ceil(total / limit);
-  
-//   const skip = async () => {
-//     const result = await productApi.getSkipProduct(
-//       limit,
-//       (currentPage - 1) * 10
-//     );
-//     console.log("skip", result);
-//   };
-// skip()
+
+  //   const skip = async () => {
+  //     const result = await productApi.getSkipProduct(
+  //       limit,
+  //       (currentPage - 1) * 10
+  //     );
+  //     console.log("skip", result);
+  //   };
+  // skip()
 
   return (
     <div className="flex justify-center mt-20">
@@ -55,7 +54,6 @@ const Pagination = (props: Props) => {
         onClick={() => setCurrentPage(currentPage + 1)}
         // Disable khi trang hien tai la trang cuoi cung
         disabled={currentPage >= pages - 1}
-      
       >
         <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20">
           <path
