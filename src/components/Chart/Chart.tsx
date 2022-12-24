@@ -7,58 +7,58 @@ import {
 const data = [
   {
     name: "Jan",
-    uv: 4000,
-    pv: 2400,
+    product: 20,
+    revanue: 8000000,
   },
   {
     name: "Feb",
-    uv: 3000,
-    pv: 1398,
+    product: 30,
+    revanue: 1000000,
   },
   {
     name: "Tue",
-    uv: 2000,
-    pv: 9800,
+    product: 40,
+    revanue: 12000000,
   },
   {
     name: "Apr",
-    uv: 2780,
-    pv: 3908,
+    product: 50,
+    revanue: 14000000,
   },
   {
     name: "May",
-    uv: 1890,
-    pv: 4800,
+    product: 50,
+    revanue: 14000000,
   },
   {
     name: "Jun",
-    uv: 2390,
-    pv: 3800,
+    product: 20,
+    revanue: 8000000,
   },
   {
     name: "July",
-    uv: 3490,
-    pv: 4300,
+    product: 15,
+    revanue: 7500000,
   },
   {
     name: "Aug",
-    uv: 3490,
-    pv: 4300,
+    product: 35,
+    revanue: 14500000,
   },
   {
     name: "Oct",
-    uv: 3490,
-    pv: 4300,
+    product: 30,
+    revanue: 13000000,
   },
   {
     name: "Nov",
-    uv: 3490,
-    pv: 4300,
+    product: 20,
+    revanue: 8000000,
   },
   {
     name: "Dec",
-    uv: 3490,
-    pv: 4300,
+    product: 50,
+    revanue: 30000000,
   },
 ];
 const data01 = [
@@ -126,8 +126,8 @@ export const Revanuechart = () => {
         <YAxis yAxisId="right" orientation="right" />
         <Tooltip />
         <Legend />
-        <Line yAxisId="left" type="monotone" dataKey="pv" stroke="#8884d8" />
-        <Line yAxisId="right" type="monotone" dataKey="uv" stroke="#82ca9d" />
+        <Line yAxisId="left" type="monotone" dataKey="revanue" stroke="#8884d8" />
+        <Line yAxisId="right" type="monotone" dataKey="product" stroke="#82ca9d" />
       </LineChart>
     </ResponsiveContainer>
   );

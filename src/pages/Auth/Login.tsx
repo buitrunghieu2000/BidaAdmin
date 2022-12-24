@@ -5,7 +5,8 @@ import { useDispatch } from "react-redux";
 import { IReqLogin } from "../../apis/auth/auth.interface";
 import authApi from "../../apis/auth/authApi";
 import { saveToLocalStorage } from "../../helper/base.helpers";
-import { updateAuthStatus } from "../../Redux/authSlice";
+import { updateAuthRole, updateAuthStatus } from "../../Redux/authSlice";
+import { notifyError } from "../../utils/notify";
 import { signInSchema } from "../../validate/auth";
 type Props = {};
 
@@ -23,11 +24,18 @@ const Login = (props: Props) => {
 
   const login = async (params: IReqLogin) => {
     const result = await authApi.login(params);
+
     if (result.data.user.role === "Customer") {
       saveToLocalStorage("token", result.data.tokens.access.token);
       dispatch(updateAuthStatus(true));
+      dispatch(updateAuthRole("Customer"));
+    } else if(result.data.user.role === "Sale") {
+      saveToLocalStorage("token", result.data.tokens.access.token);
+      dispatch(updateAuthStatus(true));
+      dispatch(updateAuthRole("Sale"));
+    }else {
+      notifyError("Wrong Role");
     }
-    return;
   };
 
   const submit = (data: any, e: any) => {
