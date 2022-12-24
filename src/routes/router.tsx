@@ -57,7 +57,7 @@ const Router = (props: Props) => {
           className="content flex-1  p-[20px]"
           style={{ background: "#e2e8f0" }}
         >
-          {role === "Customer" ? (
+          {role === "Admin" ? (
             <Routes>
               <Route path="/" element={<Dashboard />} />
               <Route path="/userlist" element={<Userlist />} />
