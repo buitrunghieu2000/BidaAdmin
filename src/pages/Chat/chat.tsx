@@ -132,7 +132,7 @@ function Chat({}: Props) {
             <h2 className="my-2 mb-2 ml-2 text-lg text-gray-600">Chats</h2>
             <li>
 
-            {user?.role === "Customer"
+            {user?.role === "Admin"
                   ? chat?.map((item: any, index: number) => (
 
                       <a

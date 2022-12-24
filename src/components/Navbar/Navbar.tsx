@@ -17,7 +17,7 @@ const Navbar = (props: Props) => {
 
   return (
     <div className="bg-blue-500 border-b">
-      {role === "Customer" ? (
+      {role === "Admin" ? (
         <nav className="relative px-4 py-4 flex justify-between items-center bg-white">
         <Link to="/" className="text-3xl font-bold leading-none">
           <img

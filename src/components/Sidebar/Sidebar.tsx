@@ -8,7 +8,7 @@ const Sidebar = (props: Props) => {
   const role = useSelector((state: RootState) => state.auth.role);
   return (
     <>
-    {role === "Customer" ? (
+    {role === "Admin" ? (
       <div className="h-full flex-col flex-auto flex-shrink-0 antialiased bg-white-50 text-gray-800 overflow-hidden">
       <div className="flex flex-col w-64 bg-white h-full border-r">
         <div className="flex items-center justify-center h-14 border-b ">

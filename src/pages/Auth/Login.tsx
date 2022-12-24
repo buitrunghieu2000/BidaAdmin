@@ -25,10 +25,10 @@ const Login = (props: Props) => {
   const login = async (params: IReqLogin) => {
     const result = await authApi.login(params);
 
-    if (result.data.user.role === "Customer") {
+    if (result.data.user.role === "Admin") {
       saveToLocalStorage("token", result.data.tokens.access.token);
       dispatch(updateAuthStatus(true));
-      dispatch(updateAuthRole("Customer"));
+      dispatch(updateAuthRole("Admin"));
     } else if(result.data.user.role === "Sale") {
       saveToLocalStorage("token", result.data.tokens.access.token);
       dispatch(updateAuthStatus(true));

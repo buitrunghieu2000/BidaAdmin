@@ -6,7 +6,7 @@ export interface authState {
 
 const initialState: authState = {
     isAuth: false,
-    role: "Customer"
+    role: "Admin"
 }
 export const authSlice = createSlice({
     name: 'Auth',
