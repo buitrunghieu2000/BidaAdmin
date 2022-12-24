@@ -59,6 +59,8 @@ function DiscountList(props: Props) {
       setReload(reload + 1);
     } else notifyError("Fail");
   };
+
+
   console.log(searchItem);
   useEffect(() => {
     (async () => {

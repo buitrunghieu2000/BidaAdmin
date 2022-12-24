@@ -15,6 +15,7 @@ import {
 import { Result, Tooltip } from "antd";
 import { formatDate } from "../../utils/dateFormater";
 import { moneyFormater } from "../../utils/moneyFormater";
+import ModalChart from "../../components/Modal/ModalChart/ModalChart";
 type Props = {};
 
 const Dashboard = (props: Props) => {
@@ -24,6 +25,7 @@ const Dashboard = (props: Props) => {
   const [type, setType] = useState("bill");
   const [dataChart, setDataChart] = useState({ graph: [], products: [] });
   const [productList, setProductList] = useState<Array<any>>([]);
+  const [showModalChart, setShowModalChart] = useState(false);
 
   const dataTest = [
     {
@@ -37,7 +39,7 @@ const Dashboard = (props: Props) => {
     return {
       time: formatDate(item.time),
       revenue: item.total,
-      product: 1,
+      product: item.count,
     };
   });
 
@@ -74,31 +76,31 @@ const Dashboard = (props: Props) => {
       });
       console.log("api", result.data);
       setDataChart(result.data);
-      setProductList(result.data.products)
+      setProductList(result.data.products);
     })();
   }, [dateEnd, dateStart, type, step]);
 
   return (
     <div className="layout">
-      <div className="widget grid grid-cols-4 gap-4">
+      {/* <div className="widget grid grid-cols-4 gap-4">
         <Widget percent={12} quantity={100} icon={"fa-solid fa-tv"} />
         <Widget percent={8} quantity={100} icon={"fa-solid fa-mobile"} />
         <Widget percent={20} quantity={200} icon={"fa-solid fa-laptop"} />
         <Widget percent={5} quantity={100} icon={"fa-solid fa-desktop"} />
-      </div>
+      </div> */}
       <div className="flex justify-between items-center pt-4 pb-4">
         <div className="flex items-center justify-between gap-4">
           <label htmlFor="dateStart">Ngày bắt đầu</label>
-          <input onChange={onDateStart} id="dateEnd" type="date"></input>
+          <input className="border rounded p-2 bg-blue-300" onChange={onDateStart} id="dateEnd" type="date"></input>
         </div>
         <div className="flex items-center justify-between gap-4">
           <label htmlFor="dateEnd">Ngày kết thúc</label>
-          <input onChange={onDateEnd} id="dateEnd" type="date"></input>
+          <input className="border rounded p-2 bg-blue-300" onChange={onDateEnd} id="dateEnd" type="date"></input>
         </div>
 
         <div className="flex items-center justify-between gap-4">
           <label htmlFor="">Thống kê theo</label>
-          <select id="step" onChange={handleSetStep}>
+          <select className="border rounded p-2 bg-blue-300" id="step" onChange={handleSetStep}>
             <option>Chọn</option>
 
             <option key="1" value="second">
@@ -118,7 +120,7 @@ const Dashboard = (props: Props) => {
 
         <div className="flex items-center justify-between gap-4">
           <label htmlFor="">Thống kê theo</label>
-          <select id="step" onChange={handleSetType}>
+          <select className="border rounded p-2 bg-blue-300" id="step" onChange={handleSetType}>
             <option>Chọn</option>
 
             <option key="1" value="bill">
@@ -128,6 +130,17 @@ const Dashboard = (props: Props) => {
               Nhập kho
             </option>
           </select>
+        </div>
+
+        <div className="flex items-center justify-between gap-4">
+          <button
+            onClick={() => {
+              setShowModalChart(true);
+            }}
+            className="p-2 bg-green-400 rounded text-white"
+          >
+            Xuất dữ liệu
+          </button>
         </div>
       </div>
 
@@ -177,14 +190,12 @@ const Dashboard = (props: Props) => {
                 <div className="flex items-center justify-center">Code</div>
               </th>
               <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                <div className="flex items-center justify-center">
-                  Name
-                </div>
+                <div className="flex items-center justify-center">Name</div>
               </th>
               <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
                 <div className="flex items-center justify-center">Quantity</div>
               </th>
-              
+
               <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
                 <div className="flex items-center justify-center">Sold</div>
               </th>
@@ -216,6 +227,13 @@ const Dashboard = (props: Props) => {
           </tbody>
         </table>
       </div>
+      {showModalChart && (
+        <ModalChart
+          setOpenModalChart={setShowModalChart}
+          dateStart={new Date(dateStart).getTime()}
+          dateEnd={new Date(dateEnd).getTime()}
+        />
+      )}
     </div>
   );
 };

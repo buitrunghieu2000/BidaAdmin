@@ -3,10 +3,12 @@ import { Button, Upload } from "antd";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import categoryApi from "../../../apis/category/categoryApi";
+import { notifyError, notifySuccess } from "../../../utils/notify";
 import Specs from "./specs";
 
 export default function ModalCreateCategory({
   setOpenModalCreateCategory,
+  setReload,
 }: any) {
   type FormValues = {
     name: string;
@@ -76,10 +78,11 @@ export default function ModalCreateCategory({
     };
 
     const result = await categoryApi.createCategory(payload);
-    console.log(result);
-
-    console.log(payload);
-    reset();
+    if (result.statusCode === 200) {
+      notifySuccess("Success");
+      setReload((ref: number) => ref + 1);
+      reset();
+    } else notifyError("Fail");
   };
 
   return (

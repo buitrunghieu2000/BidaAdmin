@@ -38,6 +38,7 @@ const productApi = {
     const url = '/discount/edit'; //params : page, filter
     return axiosClient.put(url,payload);
   },
+
 };
 
 export default productApi;

@@ -12,7 +12,7 @@ import ModalUpdateProduct from "../../components/Modal/ModalProduct/modalUpdateP
 
 import Pagination from "../../components/Pangination/Pagination";
 import { moneyFormater } from "../../utils/moneyFormater";
-import { notifySuccess } from "../../utils/notify";
+import { notifyError, notifySuccess } from "../../utils/notify";
 type Props = {};
 
 function Productlist(props: Props) {
@@ -33,6 +33,8 @@ function Productlist(props: Props) {
   const [order, setOrder] = useState("ACS");
   const [idColor, setIdcolor] = useState("ACS");
   const [_idProduct, set_idProduct] = useState("");
+  const [enable, setEnable] = useState(0);
+
 
   // const [codeProduct, setCodeProduct] = useState(0);
 
@@ -40,6 +42,23 @@ function Productlist(props: Props) {
     newProductList = productList.filter((item: any) => item._id !== removeId);
     notifySuccess("Remove Success");
     setProductlist(newProductList);
+  };
+
+  const handleEditProuct = async (status: boolean, code: any) => {
+    const payload = {
+      code: code,
+      enable: !status,
+    };
+
+    console.log(payload);
+
+
+    const resultEnable = await productApi.updateProduct(payload);
+    console.log(resultEnable);
+    if ((resultEnable.msg = "Thành công ")) {
+      setEnable(enable + 1);
+      notifySuccess("Success");
+    } else notifyError("Fail");
   };
 
   const hadnleAddColor = (_id: any) => {
@@ -95,7 +114,7 @@ function Productlist(props: Props) {
         );
       });
     })();
-  }, [reLoad, currentPage]);
+  }, [reLoad, currentPage, enable]);
 
   console.log(reLoad);
   console.log("productList", productList);
@@ -247,12 +266,11 @@ function Productlist(props: Props) {
                       item={item}
                       handleImportProduct={handleImportProduct}
                       hadnleAddColor={hadnleAddColor}
-                      setShowModalDiscount={setShowModalDiscount}
-                      handleRemove={handleRemove}
                       handleUpdateProduct={handleUpdateProduct}
                       id={index}
                       key={item._id}
                       handleImportDiscount={handleImportDiscount}
+                      handleEnableProduct={handleEditProuct}
                     />
                   ))
               ) : (
@@ -315,11 +333,10 @@ const ProductRow = (props: any) => {
     item,
     handleImportProduct,
     hadnleAddColor,
-    setShowModalDiscount,
-    handleRemove,
     handleUpdateProduct,
     id,
     handleImportDiscount,
+    handleEnableProduct,
   } = props;
 
   const [colorQuantity, setColorQuantity] = useState(item.totalQuantity);
@@ -397,10 +414,16 @@ const ProductRow = (props: any) => {
           <span>Edit</span>
         </a>
         <a
-          onClick={() => handleRemove(item._id)}
-          className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+          className={
+            item.enable === false
+              ? "bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+              : "bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+          }
+          onClick={() => {
+            handleEnableProduct(item.enable, item.code);
+          }}
         >
-          <span>Remove</span>
+          {item.enable === false ? "Enable" : "Disable"}
         </a>
       </td>
     </tr>

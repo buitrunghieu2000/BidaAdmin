@@ -24,6 +24,8 @@ function Category(props: Props) {
   const [idCategory, setIdCategory] = useState("");
   const [idCategorySelect, setIdCategorySelect] = useState("");
   const [order, setOrder] = useState("ACS");
+  const [reLoad, setReload] = useState(0);
+
 
   const handleRemove = (removeId: number) => {
     newUserList = categoryList.filter(
@@ -67,7 +69,7 @@ function Category(props: Props) {
       console.log(result);
       setCategoryList(result.data);
     })();
-  }, []);
+  }, [reLoad]);
 
   return (
     <div className="table w-full p-2 max-h-screen">
@@ -161,9 +163,9 @@ function Category(props: Props) {
                     >
                       Discount
                     </a>
-                    <a className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
+                    {/* <a className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
                       <span onClick={() => handleRemove(item._id)}>Remove</span>
-                    </a>
+                    </a> */}
                   </td>
                 </tr>
               ))
@@ -177,6 +179,7 @@ function Category(props: Props) {
       {showModalCreateCategory && (
         <ModalCreateCategory
           setOpenModalCreateCategory={setShowModalCreateCategory}
+          setReload={setReload}
         />
       )}
       {showModalUpdateCategory && (
@@ -184,6 +187,7 @@ function Category(props: Props) {
           setOpenModalUpdateCategory={setShowModalUpdateCategory}
           _id={idCategory}
           idCategory={idCategorySelect}
+          setReload={setReload}
         />
       )}
 

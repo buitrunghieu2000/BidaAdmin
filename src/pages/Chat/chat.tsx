@@ -242,7 +242,16 @@ function Chat({}: Props) {
                   Tạo mới
                 </button>
               ) : (
-                <></>
+                <button
+                  type="button"
+                  className="p-2 bg-blue-500 rounded-sm"
+                  style={{
+                    marginLeft: "auto",
+                  }}
+                  onClick={handleNew}
+                >
+                  Tạo mới
+                </button>
               )}
               <span className="absolute w-3 h-3 bg-green-600 rounded-full left-10 top-3"></span>
             </div>

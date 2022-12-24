@@ -3,19 +3,21 @@ import { Button, Upload } from "antd";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import categoryApi from "../../../apis/category/categoryApi";
+import { notifyError, notifySuccess } from "../../../utils/notify";
 import Specs from "./specs";
 
 export default function ModalUpdateCategory({
   setOpenModalUpdateCategory,
   _id,
   idCategory,
+  setReload,
 }: any) {
   type FormValues = {
     name: string;
     slug: string;
   };
 
-  console.log(_id, idCategory)
+  console.log(_id, idCategory);
 
   const [category, setCategory] = useState<any>({});
   const [selectValue, setSelectValue] = useState([]);
@@ -63,8 +65,8 @@ export default function ModalUpdateCategory({
     });
     temp.forEach((item) => {
       const a = item.split(";");
-      a.map((item: any) => newArray.push({ value: item }));
-      values.push(newArray);
+      a.map((item: any) => newArray.push(item));
+      values.push(newArray.join(";"));
       newArray = [];
     });
     name.forEach((item, index) => {
@@ -76,7 +78,7 @@ export default function ModalUpdateCategory({
     data.specsModel = specs_model;
 
     const payload = {
-        _id: idCategory,
+      _id: idCategory,
       name: nameCategory,
       specsModel: data.specsModel,
       image_base64: imagesBase64,
@@ -84,12 +86,16 @@ export default function ModalUpdateCategory({
       slug: slug,
     };
 
-    const result = await categoryApi.editCategory(payload);
-    console.log(result);
-
-    console.log('payload',payload);
-    reset();
+    // const result = await categoryApi.editCategory(payload);
+    console.log("payload", payload);
+    // console.log(result);
+    // if (result.statusCode === 200) {
+    //   notifySuccess("Success");
+    //   setReload((ref: number) => ref + 1);
+    //   reset();
+    // } else notifyError("Fail");
   };
+
   function toDataUrl(url: any, callback: any) {
     var xhr = new XMLHttpRequest();
     xhr.onload = function () {
@@ -107,7 +113,7 @@ export default function ModalUpdateCategory({
   useEffect(() => {
     (async () => {
       const result = await categoryApi.getSelectCategory(_id);
-    //   console.log('123',result);
+      //   console.log('123',result);
       setCategory(result.data);
       toDataUrl(result.data.image_url, function (res: any) {
         const base64 = res.split(",");
@@ -155,7 +161,11 @@ export default function ModalUpdateCategory({
                     >
                       <Button>Upload Img</Button>
                     </Upload.Dragger>
-                    <img src={category.image_url} alt="" className="w-[105px] h-[100px] object-cover"/>
+                    <img
+                      src={category.image_url}
+                      alt=""
+                      className="w-[105px] h-[100px] object-cover"
+                    />
                   </div>
                   <div>
                     <div className="text-center">Icon: </div>
@@ -177,7 +187,11 @@ export default function ModalUpdateCategory({
                     >
                       <Button>Upload Icon</Button>
                     </Upload.Dragger>
-                    <img src={category.icon_url} alt=""  className="w-[105px] h-[100px] object-cover"/>
+                    <img
+                      src={category.icon_url}
+                      alt=""
+                      className="w-[105px] h-[100px] object-cover"
+                    />
                   </div>
                 </div>
               </div>
@@ -241,7 +255,7 @@ const ListCategory = ({
       });
     }
   }, [list]);
-//   console.log("list", list);
+  //   console.log("list", list);
   return (
     <div className="flex flex-col items-center">
       <label>Specs</label>
@@ -258,7 +272,7 @@ const ListCategory = ({
                 placeholder="Name Spec"
               />
               <textarea
-              className="h-10 pt-2 resize-none"
+                className="h-10 pt-2 resize-none"
                 style={{ width: "230px" }}
                 {...register(`values_${index}`)}
                 defaultValue={item.specs}
