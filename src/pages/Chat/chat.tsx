@@ -1,5 +1,5 @@
 import { useForm } from "react-hook-form";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import chatApi from "../../apis/chat/chatApi";
 import authApi from "../../apis/auth/authApi";
 
@@ -7,13 +7,13 @@ type Props = {};
 
 function Chat({}: Props) {
   const { handleSubmit, reset, register } = useForm();
-  const [chat, setChat] = React.useState<any>();
-  const [user, setUser] = React.useState<any>();
-  const [message, setMessage] = React.useState<any>();
+  const [chat, setChat] = useState<any>();
+  const [user, setUser] = useState<any>();
+  const [message, setMessage] = useState<any>();
   const [_id, setID] = useState("63a5ef1e006040191061f1e6");
   const [limit, setLimit] = useState(10);
 
-  React.useEffect(() => {
+  useEffect(() => {
     const timeoutID = window.setInterval(() => {
       (async () => {
         const list = await chatApi.getListChat();
@@ -23,7 +23,7 @@ function Chat({}: Props) {
     return () => window.clearTimeout(timeoutID);
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     (async () => {
       const result = await authApi.getInfo();
       setUser(result.data);
@@ -31,7 +31,7 @@ function Chat({}: Props) {
     })();
   }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (_id) {
       const timeoutID = window.setInterval(() => {
         (async () => {
@@ -64,7 +64,7 @@ function Chat({}: Props) {
     if (res == 200) setID(res.data.data);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const list = document.getElementById("scrollableDiv");
     list && list.addEventListener("scroll", loadMore);
     return () => {

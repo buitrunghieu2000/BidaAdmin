@@ -14,7 +14,7 @@ export default function ModalUpdateProduct({
   const [category, setCategory] = useState<Array<any>>([]);
   const [selectCategory, setSelectCategory] = useState("");
   const [specs, setSpecs] = useState<Array<any>>([]);
-  const [imagesBase64, setImagesBase64] = React.useState<any>("");
+  const [imagesBase64, setImagesBase64] = useState<any>("");
   const [selectValue, setSelectValue] = useState([]);
   const [product, setProduct] = useState<any>();
   const [resetModal, setResetModal] = useState(0);
@@ -282,8 +282,8 @@ const SpecsCategory = ({
   listSpecs: any;
   listDetail: any;
 }) => {
-  const [arr, setArr] = React.useState<any[]>([]);
-  React.useEffect(() => {
+  const [arr, setArr] = useState<any[]>([]);
+  useEffect(() => {
     if (listDetail) {
       const specs = [];
       for (const [key, value] of Object.entries(listDetail)) {
@@ -292,7 +292,7 @@ const SpecsCategory = ({
       setArr(specs);
     }
   }, [listDetail]);
-  React.useEffect(() => {
+  useEffect(() => {
     return () => {
       setArr([]);
     };

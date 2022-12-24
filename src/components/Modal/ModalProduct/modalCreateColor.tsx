@@ -11,7 +11,7 @@ export default function ModalColor({ setOpenModalColor, _id, setReload }: any) {
     image_base64: Array<any>;
   };
 
-  const [imagesBase64, setImagesBase64] = React.useState<any>("");
+  const [imagesBase64, setImagesBase64] = useState<any>("");
 
   const getBase64 = (file: any, cb: any) => {
     let reader = new FileReader();

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import billApi from "../../apis/bill/bill.api";
 import ModalBill from "../../components/Modal/ModalBill/modalBill";
 import ModalUpdateBill from "../../components/Modal/ModalBill/modalUpdateBill";
@@ -76,7 +76,7 @@ function BillList(props: Props) {
     setIdBill(_id);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     (async () => {
       const skip = currentPage * LIMIT;
       const result = await billApi.getListBill(skip,LIMIT);

@@ -19,7 +19,7 @@ export default function ModalCreate({ setOpenModal, setReload }: any) {
   const [category, setCategory] = useState<Array<any>>([]);
   const [selectCategory, setSelectCategory] = useState("");
   const [specs, setSpecs] = useState<Array<any>>([]);
-  const [imagesBase64, setImagesBase64] = React.useState<any>("");
+  const [imagesBase64, setImagesBase64] = useState<any>("");
   const [selectValue, setSelectValue] = useState([]);
 
   const {

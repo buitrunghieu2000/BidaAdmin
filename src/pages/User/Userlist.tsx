@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { IResUserList } from "../../apis/user/user.type";
 import userApi from "../../apis/user/userApi";
 import ModalDiscountUser from "../../components/Modal/User/modalCreateDiscountCategory";
@@ -57,7 +57,7 @@ function Userlist(props: Props) {
     } else notifyError("Fail");
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     (async () => {
       const result = await userApi.getUserList();
       console.log(result);

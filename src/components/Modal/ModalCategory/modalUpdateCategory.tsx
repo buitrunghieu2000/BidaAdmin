@@ -21,8 +21,8 @@ export default function ModalUpdateCategory({
   const [selectValue, setSelectValue] = useState([]);
   const [specs, setSpecs] = useState<Array<any>>([]);
 
-  const [imagesBase64, setImagesBase64] = React.useState<any>("");
-  const [iconBase64, setIconBase64] = React.useState<any>("");
+  const [imagesBase64, setImagesBase64] = useState<any>("");
+  const [iconBase64, setIconBase64] = useState<any>("");
 
   const getBase64 = (file: any, cb: any) => {
     let reader = new FileReader();
@@ -228,7 +228,7 @@ const ListCategory = ({
   list: any;
   setValue: any;
 }) => {
-  React.useEffect(() => {
+  useEffect(() => {
     if (list) {
       list.map((item: any, index: number) => {
         const specs: any = [];
@@ -279,7 +279,7 @@ const ExtendableInputs = ({
   register: any;
   initialLength: number;
 }) => {
-  const [inputCount, setInputCount] = React.useState(0);
+  const [inputCount, setInputCount] = useState(0);
 
   // React.useEffect(() => {
   //   if (initialLength > 0) setInputCount(initialLength);

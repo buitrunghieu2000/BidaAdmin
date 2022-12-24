@@ -1,5 +1,5 @@
 import { PlusSquareOutlined } from "@ant-design/icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import categoryApi from "../../apis/category/categoryApi";
 import { IResUserList } from "../../apis/user/user.type";
 import ModalCreateCategory from "../../components/Modal/ModalCategory/modalCreateCategory";
@@ -61,7 +61,7 @@ function Category(props: Props) {
     }
   };
   // console.log(searchItem)
-  React.useEffect(() => {
+  useEffect(() => {
     (async () => {
       const result = await categoryApi.getCategory();
       console.log(result);

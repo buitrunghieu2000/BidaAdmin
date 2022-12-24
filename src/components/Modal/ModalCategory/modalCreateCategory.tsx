@@ -14,8 +14,8 @@ export default function ModalCreateCategory({
   };
 
   const [category, setCategory] = useState("");
-  const [imagesBase64, setImagesBase64] = React.useState<any>("");
-  const [iconBase64, setIconBase64] = React.useState<any>("");
+  const [imagesBase64, setImagesBase64] = useState<any>("");
+  const [iconBase64, setIconBase64] = useState<any>("");
 
   const getBase64 = (file: any, cb: any) => {
     let reader = new FileReader();
@@ -175,7 +175,7 @@ export default function ModalCreateCategory({
 }
 
 const ExtendableInputs = ({ register }: { register: any }) => {
-  const [inputCount, setInputCount] = React.useState(1);
+  const [inputCount, setInputCount] = useState(1);
 
   const handleAddInput = () => setInputCount(inputCount + 1);
   const handleSubInput = () => setInputCount(inputCount - 1);
