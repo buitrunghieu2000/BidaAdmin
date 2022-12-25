@@ -5,7 +5,7 @@ type Props = {
   currentPage: number;
   total: number;
   limit: number;
-  setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
+  setCurrentPage: any;
 };
 
 const Pagination = (props: Props) => {
