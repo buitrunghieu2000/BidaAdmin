@@ -162,8 +162,7 @@ function Productlist(props: Props) {
           </div>
         </form>
 
-        <div className="overflow-x-auto">
-          <table className="border w-full">
+          <table className="border w-full whitespace-nowrap">
             <thead>
               <tr className="bg-gray-50 border-b">
                 <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
@@ -280,7 +279,6 @@ function Productlist(props: Props) {
               )}
             </tbody>
           </table>
-        </div>
 
         <div className="absolute bottom-0 left-[40%]">
           <Pagination

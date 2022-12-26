@@ -86,14 +86,14 @@ export default function ModalUpdateCategory({
       slug: slug,
     };
 
-    // const result = await categoryApi.editCategory(payload);
+    const result = await categoryApi.editCategory(payload);
     console.log("payload", payload);
-    // console.log(result);
-    // if (result.statusCode === 200) {
-    //   notifySuccess("Success");
-    //   setReload((ref: number) => ref + 1);
-    //   reset();
-    // } else notifyError("Fail");
+    console.log(result);
+    if (result.msg === "Thành công ") {
+      notifySuccess("Success");
+      setReload((ref: number) => ref + 1);
+      reset();
+    } else notifyError("Fail");
   };
 
   function toDataUrl(url: any, callback: any) {

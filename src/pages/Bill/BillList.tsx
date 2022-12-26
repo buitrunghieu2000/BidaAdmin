@@ -4,6 +4,8 @@ import ModalBill from "../../components/Modal/ModalBill/modalBill";
 import ModalUpdateBill from "../../components/Modal/ModalBill/modalUpdateBill";
 import Pagination from "../../components/Pangination/Pagination";
 import { moneyFormater } from "../../utils/moneyFormater";
+import { formatDate } from "../../utils/dateFormater";
+import dayjs from "dayjs";
 
 type Props = {};
 
@@ -56,13 +58,13 @@ function BillList(props: Props) {
   // console.log(searchItem)
 
   const handleSelect = (e: any) => {
-    console.log(e.target.value);
+    // console.log(e.target.value);
     (async () => {
       const resultStatus = await billApi.getStatuslBill(
         `?status=${e.target.value}`
       );
-      console.log(resultStatus);
-      setBillList(resultStatus.data);
+      // console.log(resultStatus);
+      setBillList(resultStatus.data.reverse());
       // if(resultStatus.statusCode === 200) {
       // }
     })();
@@ -79,9 +81,9 @@ function BillList(props: Props) {
   useEffect(() => {
     (async () => {
       const skip = currentPage * LIMIT;
-      const result = await billApi.getListBill(skip,LIMIT);
-      setBillList(result.data);
-      console.log(result.count)
+      const result = await billApi.getListBill(skip, LIMIT);
+      setBillList(result.data.reverse());
+      // console.log(result.count);
       setTotal(result.count);
     })();
   }, [currentPage]);
@@ -134,7 +136,7 @@ function BillList(props: Props) {
         <thead>
           <tr className="bg-gray-50 border-b">
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-              <div className="flex items-center justify-center">ID</div>
+              <div className="flex items-center justify-center">Created</div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
               <div className="flex items-center justify-center">Name</div>
@@ -193,13 +195,15 @@ function BillList(props: Props) {
                   className="bg-gray-100 text-center border-b text-sm text-gray-600"
                   key={index}
                 >
-                  <td className="p-2 border-r ">{index + 1}</td>
+                  <td className="p-2 border-r ">
+                    {dayjs(item.createdAt).format('DD-MM-YYYY hh:mm:ssA')}
+                  </td>
                   <td className="p-2 border-r ">{item.account.name}</td>
                   <td className="p-2 border-r ">{item.account.phone}</td>
                   <td className="p-2 border-r ">{item.account.email}</td>
                   <td className="p-2 border-r ">{item.address.address}</td>
                   <td className="p-2 border-r ">
-                    {(item.discount * 100).toFixed()}%
+                    {moneyFormater(item.discount)}
                   </td>
                   <td className="p-2 border-r ">{moneyFormater(item.ship)}</td>
                   <td className="p-2 border-r ">{moneyFormater(item.total)}</td>
@@ -219,6 +223,7 @@ function BillList(props: Props) {
                     >
                       View
                     </a>
+
                     <a
                       onClick={() => {
                         setShowModalUpdateBill(true);

@@ -41,7 +41,7 @@ export default function ModalUpdateBill({
     };
 
     const updateResult = await billApi.updateBill(payload);
-    if (updateResult.statusCode === 200) {
+    if (updateResult.statusCode === 200 && (status !== "Canceled" && status !== "Done") ) {
       notifySuccess("Success");
     } else notifyError("Fail");
     console.log(updateResult);
@@ -70,8 +70,8 @@ export default function ModalUpdateBill({
                   >
                     <option value={status}>{status}</option>
                     {checkStatus.map((i: any, index: number) => {
-                      if (status !== "Canceled")
-                        if (idx === index + 1 || idx === index - 1) {
+                      if (status !== "Canceled" && status !== "Done")
+                        if (idx === index - 1) {
                           return <option value={i}>{i}</option>;
                         }
                     })}
