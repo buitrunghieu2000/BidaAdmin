@@ -6,6 +6,7 @@ import Pagination from "../../components/Pangination/Pagination";
 import { moneyFormater } from "../../utils/moneyFormater";
 import { formatDate } from "../../utils/dateFormater";
 import dayjs from "dayjs";
+import { notifyError, notifySuccess } from "../../utils/notify";
 
 type Props = {};
 
@@ -19,25 +20,10 @@ function BillList(props: Props) {
   const [showModalBill, setShowModalBill] = useState(false);
   const [showModalUpdateBill, setShowModalUpdateBill] = useState(false);
   const [statusBill, setStatusbill] = useState("");
-  const [billList, setBillList] = useState([
-    // {
-    //   id: 1,
-    //   code: "502",
-    //   name: "Binh Pham",
-    //   phone: "0925100721",
-    //   email: "binhpham@gmail.com",
-    //   address: "Sg",
-    //   sale: "50%",
-    //   shipfee: "50000",
-    //   total: "100000",
-    //   status: "Is delivering",
-    //   payed: "not pay",
-    //   refund: "no",
-    //   authorize: "yes",
-    // },
-  ]);
+  const [billList, setBillList] = useState([]);
   const [searchItem, setSearchItem] = useState("");
   const [order, setOrder] = useState("ACS");
+  const [reload, setReload] = useState(0);
 
   const sorting = (col: string) => {
     if (order === "ACS") {
@@ -78,6 +64,27 @@ function BillList(props: Props) {
     setIdBill(_id);
   };
 
+  const handleRefundBill = (_id: any) => {
+    console.log(_id);
+  };
+
+  const handleVerifyBill = async (_id: any, verify: boolean) => {
+    const payload = {
+      _id: _id,
+    };
+    if (!verify) {
+      const result = await billApi.verifyBill(payload);
+      // console.log(payload);
+      // console.log(result);
+      if (result.msg == "Thành công ") {
+        notifySuccess("Success");
+        setReload(reload + 1);
+      } else notifyError("Fail");
+    } else {
+      return;
+    }
+  };
+
   useEffect(() => {
     (async () => {
       const skip = currentPage * LIMIT;
@@ -86,7 +93,7 @@ function BillList(props: Props) {
       // console.log(result.count);
       setTotal(result.count);
     })();
-  }, [currentPage]);
+  }, [currentPage, reload]);
 
   return (
     <div className="table w-full p-2 max-h-screen">
@@ -169,7 +176,7 @@ function BillList(props: Props) {
               <div className="flex items-center justify-center">Refund</div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-              <div className="flex items-center justify-center">Authorize</div>
+              <div className="flex items-center justify-center">Verify</div>
             </th>
             <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
               <div className="flex items-center justify-center">Actions</div>
@@ -220,7 +227,7 @@ function BillList(props: Props) {
                         handleViewBill(item._id);
                         setShowModalBill(true);
                       }}
-                      className="bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                      className="bg-pink-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
                     >
                       View
                     </a>
@@ -234,6 +241,26 @@ function BillList(props: Props) {
                       className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
                     >
                       Update
+                    </a>
+                    <a
+                      onClick={() => {
+                        handleRefundBill(item._id);
+                      }}
+                      className="bg-orange-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                    >
+                      Refund
+                    </a>
+                    <a
+                      onClick={() => {
+                        handleVerifyBill(item._id, item.verify);
+                      }}
+                      className={
+                        item?.verify === false
+                          ? "bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                          : "bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                      }
+                    >
+                      {item?.verify === false ? "Enable" : "Disable"}
                     </a>
                   </td>
                 </tr>

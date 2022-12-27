@@ -17,6 +17,11 @@ const billApi = {
     return axiosClient.post(url,payload);
   },
 
+  verifyBill(payload:any): Promise<ReturnReponse<any>> {
+    const url = '/bill/verify'; //params : page, filter
+    return axiosClient.post(url,payload);
+  },
+
   getStatuslBill(status: any): Promise<ReturnReponse<any>> {
     const url = `/bill/list${status}` //params : page, filter
     return axiosClient.get(url);
