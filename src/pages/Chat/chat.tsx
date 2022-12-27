@@ -139,7 +139,7 @@ function Chat({}: Props) {
                       onClick={() => handleGetMessage(item._id)}
                     >
                       <img
-                        className="object-cover w-10 h-10 rounded-full"
+                        className="object-contain w-10 h-10 rounded-full"
                         src="https://cdn.pixabay.com/photo/2018/01/15/07/51/woman-3083383__340.jpg"
                         alt="username"
                       />
@@ -173,7 +173,7 @@ function Chat({}: Props) {
                       onClick={() => handleGetMessage(item._id)}
                     >
                       <img
-                        className="object-cover w-10 h-10 rounded-full"
+                        className="object-contain w-10 h-10 rounded-full"
                         src="https://cdn.pixabay.com/photo/2018/01/15/07/51/woman-3083383__340.jpg"
                         alt="username"
                       />
@@ -207,7 +207,7 @@ function Chat({}: Props) {
           <div className="w-full">
             <div className="relative flex items-center p-3 border-b border-gray-300">
               <img
-                className="object-cover w-10 h-10 rounded-full"
+                className="object-contain w-10 h-10 rounded-full"
                 src="https://cdn.pixabay.com/photo/2018/01/15/07/51/woman-3083383__340.jpg"
                 alt="username"
               />

@@ -14,6 +14,11 @@ const userApi = {
     return axiosClient.post(url,payload);
   },
 
+  sendMail(payload:any): Promise<ReturnReponse<any>> {
+    const url = '/users/mail'; //params : page, filter
+    return axiosClient.post(url,payload);
+  },
+
   editDiscountUser(payload:any): Promise<ReturnReponse<any>> {
     const url = '/discount/edit'; //params : page, filter
     return axiosClient.put(url,payload);

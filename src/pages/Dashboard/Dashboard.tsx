@@ -27,15 +27,8 @@ const Dashboard = (props: Props) => {
   const [productList, setProductList] = useState<Array<any>>([]);
   const [showModalChart, setShowModalChart] = useState(false);
 
-  const dataTest = [
-    {
-      time: "April",
-      revenue: 10000,
-      product: 25,
-    },
-  ];
-
   const data = dataChart.graph.map((item: any, index: number) => {
+
     return {
       time: formatDate(item.time),
       revenue: item.total,
@@ -82,25 +75,33 @@ const Dashboard = (props: Props) => {
 
   return (
     <div className="layout">
-      {/* <div className="widget grid grid-cols-4 gap-4">
-        <Widget percent={12} quantity={100} icon={"fa-solid fa-tv"} />
-        <Widget percent={8} quantity={100} icon={"fa-solid fa-mobile"} />
-        <Widget percent={20} quantity={200} icon={"fa-solid fa-laptop"} />
-        <Widget percent={5} quantity={100} icon={"fa-solid fa-desktop"} />
-      </div> */}
       <div className="flex justify-between items-center pt-4 pb-4">
         <div className="flex items-center justify-between gap-4">
           <label htmlFor="dateStart">Ngày bắt đầu</label>
-          <input className="border rounded p-2 bg-blue-300" onChange={onDateStart} id="dateEnd" type="date"></input>
+          <input
+            className="border rounded p-2 bg-blue-300"
+            onChange={onDateStart}
+            id="dateEnd"
+            type="date"
+          ></input>
         </div>
         <div className="flex items-center justify-between gap-4">
           <label htmlFor="dateEnd">Ngày kết thúc</label>
-          <input className="border rounded p-2 bg-blue-300" onChange={onDateEnd} id="dateEnd" type="date"></input>
+          <input
+            className="border rounded p-2 bg-blue-300"
+            onChange={onDateEnd}
+            id="dateEnd"
+            type="date"
+          ></input>
         </div>
 
         <div className="flex items-center justify-between gap-4">
           <label htmlFor="">Thống kê theo</label>
-          <select className="border rounded p-2 bg-blue-300" id="step" onChange={handleSetStep}>
+          <select
+            className="border rounded p-2 bg-blue-300"
+            id="step"
+            onChange={handleSetStep}
+          >
             <option>Chọn</option>
 
             <option key="1" value="second">
@@ -120,7 +121,11 @@ const Dashboard = (props: Props) => {
 
         <div className="flex items-center justify-between gap-4">
           <label htmlFor="">Thống kê theo</label>
-          <select className="border rounded p-2 bg-blue-300" id="step" onChange={handleSetType}>
+          <select
+            className="border rounded p-2 bg-blue-300"
+            id="step"
+            onChange={handleSetType}
+          >
             <option>Chọn</option>
 
             <option key="1" value="bill">
@@ -147,19 +152,22 @@ const Dashboard = (props: Props) => {
       <div className="w-100% h-[400px] mt-[20px] flex mb-6">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
-            width={500}
-            height={300}
+            width={400}
+            height={500}
             data={data}
             margin={{
-              top: 5,
+              top: 10,
               right: 30,
-              left: 20,
+              left: 100,
               bottom: 5,
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="time" />
-            <YAxis yAxisId="left" />
+            <YAxis
+              yAxisId="left"
+              tickFormatter={(number) => `${Intl.NumberFormat().format(number)}`}
+            />
             <YAxis yAxisId="right" orientation="right" />
             <Tooltip />
             <Legend />

@@ -280,7 +280,7 @@ function Productlist(props: Props) {
             </tbody>
           </table>
 
-        <div className="absolute bottom-0 left-[40%]">
+        <div className="">
           <Pagination
             limit={LIMIT}
             currentPage={currentPage}
@@ -343,7 +343,7 @@ const ProductRow = (props: any) => {
     <tr className="bg-gray-100 text-center border-b text-sm text-gray-600">
       <td className="p-2 border-r">{id + 1}</td>
       <td className="p-2 border-r w-[100px] h-[100px]">
-        <img src={item.image_url} className="w-full h-full object-cover" />
+        <img src={item.image_url} className="w-full h-full object-contain" />
       </td>
       <td className="p-2 border-r w-[200px]">{item.name}</td>
       <td className="p-2 border-r ">

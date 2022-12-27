@@ -164,7 +164,7 @@ export default function ModalUpdateCategory({
                     <img
                       src={category.image_url}
                       alt=""
-                      className="w-[105px] h-[100px] object-cover"
+                      className="w-[105px] h-[100px] object-contain"
                     />
                   </div>
                   <div>
@@ -190,7 +190,7 @@ export default function ModalUpdateCategory({
                     <img
                       src={category.icon_url}
                       alt=""
-                      className="w-[105px] h-[100px] object-cover"
+                      className="w-[105px] h-[100px] object-contain"
                     />
                   </div>
                 </div>

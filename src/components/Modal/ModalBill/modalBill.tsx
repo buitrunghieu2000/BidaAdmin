@@ -30,7 +30,7 @@ export default function ModalBill({ setShowModalBill, _id }: any) {
                     <img
                       src={item.product.colors.filter((i: any) => item.color == i.color)[0].image_url}
                       alt=""
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-contain"
                     />
                   </div>
                   <div className="flex-1">

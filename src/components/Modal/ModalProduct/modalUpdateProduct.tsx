@@ -211,7 +211,7 @@ export default function ModalUpdateProduct({
                     <img
                       src={product?.image_url}
                       alt=""
-                      className="w-[280px] h-[150px] object-cover"
+                      className="w-[280px] h-[150px] object-contain"
                     />
                   </div>
 

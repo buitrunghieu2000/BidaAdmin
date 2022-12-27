@@ -64,7 +64,7 @@ function BillList(props: Props) {
         `?status=${e.target.value}`
       );
       // console.log(resultStatus);
-      setBillList(resultStatus.data.reverse());
+      setBillList(resultStatus.data);
       // if(resultStatus.statusCode === 200) {
       // }
     })();
@@ -82,7 +82,7 @@ function BillList(props: Props) {
     (async () => {
       const skip = currentPage * LIMIT;
       const result = await billApi.getListBill(skip, LIMIT);
-      setBillList(result.data.reverse());
+      setBillList(result.data);
       // console.log(result.count);
       setTotal(result.count);
     })();
@@ -190,13 +190,14 @@ function BillList(props: Props) {
                   return value;
                 }
               })
+              .reverse()
               .map((item: any, index: number) => (
                 <tr
                   className="bg-gray-100 text-center border-b text-sm text-gray-600"
                   key={index}
                 >
                   <td className="p-2 border-r ">
-                    {dayjs(item.createdAt).format('DD-MM-YYYY hh:mm:ssA')}
+                    {dayjs(item.createdAt).format("DD-MM-YYYY hh:mm:ssA")}
                   </td>
                   <td className="p-2 border-r ">{item.account.name}</td>
                   <td className="p-2 border-r ">{item.account.phone}</td>
