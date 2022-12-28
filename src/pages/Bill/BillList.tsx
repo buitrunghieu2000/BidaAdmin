@@ -116,7 +116,7 @@ function BillList(props: Props) {
             type="text"
             id="simple-search"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Phone"
+            placeholder="Name, Phone"
             onChange={(e) => setSearchItem(e.target.value)}
           />
         </div>
@@ -226,7 +226,7 @@ function BillList(props: Props) {
                         handleViewBill(item._id);
                         setShowModalBill(true);
                       }}
-                      className="bg-pink-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                      className="bg-pink-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer "
                     >
                       View
                     </a>
@@ -248,10 +248,10 @@ function BillList(props: Props) {
                       className={
                         item?.verify === false
                           ? "bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
-                          : "bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                          : "bg-gray-500 p-2 text-white text-xs font-thin select-none  hover:text-white"
                       }
                     >
-                      {item?.verify === false ? "Enable" : "Disable"}
+                      {item?.verify === false ? "Verify" : "Verified"}
                     </a>
                   </td>
                 </tr>
