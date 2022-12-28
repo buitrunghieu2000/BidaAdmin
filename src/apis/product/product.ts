@@ -3,11 +3,14 @@ import { ReturnReponse } from "../response.interface";
 import { IResProduct } from "./product.type";
 
 const productApi = {
-  getProduct(skip: number, limit: number): Promise<ReturnReponse<IResProduct>> {
-    const url = `/product/list?skip=${skip}&limit=${limit}`; //params : page, filter
+  getProduct(skip: number, limit: number, category: string): Promise<ReturnReponse<IResProduct>> {
+    const url = `/product/list?skip=${skip}&limit=${limit}&category=${category}`; //params : page, filter
     return axiosClient.get(url);
   },
-  getSkipProduct(skip: number, limit: number): Promise<ReturnReponse<IResProduct>> {
+  getSkipProduct(
+    skip: number,
+    limit: number
+  ): Promise<ReturnReponse<IResProduct>> {
     const url = `/product/list?skip=${skip}&limit=${limit}`; //params : page, filter
     return axiosClient.get(url);
   },
@@ -34,11 +37,10 @@ const productApi = {
     return axiosClient.post(url, payload);
   },
 
-  editDiscount(payload:any): Promise<ReturnReponse<any>> {
-    const url = '/discount/edit'; //params : page, filter
-    return axiosClient.put(url,payload);
+  editDiscount(payload: any): Promise<ReturnReponse<any>> {
+    const url = "/discount/edit"; //params : page, filter
+    return axiosClient.put(url, payload);
   },
-
 };
 
 export default productApi;

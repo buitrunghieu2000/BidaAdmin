@@ -1,6 +1,7 @@
 import { PlusSquareOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import categoryApi from "../../apis/category/categoryApi";
 import { ProductModel } from "../../apis/product/model/productModel";
 import productApi from "../../apis/product/product";
 import { IReqProduct } from "../../apis/product/product.interface";
@@ -13,6 +14,7 @@ import ModalUpdateProduct from "../../components/Modal/ModalProduct/modalUpdateP
 import Pagination from "../../components/Pangination/Pagination";
 import { moneyFormater } from "../../utils/moneyFormater";
 import { notifyError, notifySuccess } from "../../utils/notify";
+import Category from "../Category/Createcategory";
 type Props = {};
 
 function Productlist(props: Props) {
@@ -34,10 +36,10 @@ function Productlist(props: Props) {
   const [idColor, setIdcolor] = useState("ACS");
   const [_idProduct, set_idProduct] = useState("");
   const [enable, setEnable] = useState(0);
-
+  const [category, setCategory] = useState<Array<any>>([]);
+  const [filterCategory, setFilterCategory] = useState("")
 
   // const [codeProduct, setCodeProduct] = useState(0);
-
   const handleRemove = (removeId: number) => {
     newProductList = productList.filter((item: any) => item._id !== removeId);
     notifySuccess("Remove Success");
@@ -50,11 +52,10 @@ function Productlist(props: Props) {
       enable: !status,
     };
 
-    console.log(payload);
-
+    // console.log(payload);
 
     const resultEnable = await productApi.updateProduct(payload);
-    console.log(resultEnable);
+    // console.log(resultEnable);
     if ((resultEnable.msg = "Thành công ")) {
       setEnable(enable + 1);
       notifySuccess("Success");
@@ -81,6 +82,11 @@ function Productlist(props: Props) {
     setShowModalUpdateProduct(true);
   };
 
+  const handleSelect = (e: any) => {
+    // console.log(e.target.value);
+    setFilterCategory(e.target.value)
+  };
+
   const sorting = (col: string) => {
     // console.log(col);
     if (order === "ACS") {
@@ -99,12 +105,16 @@ function Productlist(props: Props) {
     }
   };
 
+
   useEffect(() => {
     (async () => {
       const skip = currentPage * LIMIT;
-      const result = await productApi.getProduct(skip, LIMIT);
+      const result = await productApi.getProduct(skip, LIMIT, filterCategory);
+      const getCategory = await categoryApi.getCategory();
       // console.log("rerender");
       // console.log("result", result);
+      console.log(getCategory);
+      setCategory(getCategory.data);
       setProductlist(result.data.data);
       setTotal(result.data.count);
       result.data.data.map((item: any, index: number) => {
@@ -114,15 +124,30 @@ function Productlist(props: Props) {
         );
       });
     })();
-  }, [reLoad, currentPage, enable]);
+  }, [reLoad, currentPage, enable, filterCategory]);
 
-  console.log(reLoad);
-  console.log("productList", productList);
+  // console.log(reLoad);
+  // console.log("productList", productList);
 
   return (
     <>
       <div className="relative table w-full p-2 h-screen">
         <form className="flex items-center mb-[20px] w-[20%] mx-auto">
+          <select
+            title="selectCategory"
+            onChange={handleSelect}
+            className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-sm h-[40px] mr-2 p-2 "
+          >
+            <option key={-1} value="">
+              All
+            </option>
+            {category.map((item: any, index: number) => (
+              <option key={index} value={item.name}>
+                {item.name}
+              </option>
+            ))}
+          </select>
+
           <label htmlFor="simple-search" className="sr-only">
             Search
           </label>
@@ -162,123 +187,119 @@ function Productlist(props: Props) {
           </div>
         </form>
 
-          <table className="border w-full whitespace-nowrap">
-            <thead>
-              <tr className="bg-gray-50 border-b">
-                <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                  <div className="flex items-center justify-center">ID</div>
-                </th>
-                <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                  <div className="flex items-center justify-center">Image</div>
-                </th>
-                <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                  <div className="flex items-center justify-center">Name</div>
-                </th>
-                <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                  <div className="flex items-center justify-center">Color</div>
-                </th>
-                <th
-                  className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-                  onClick={() => sorting("price")}
-                >
-                  <div className="flex items-center justify-center">
-                    Price{" "}
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                      />
-                    </svg>
-                  </div>
-                </th>
-                <th
-                  className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-                  onClick={() => sorting("discount")}
-                >
-                  <div className="flex items-center justify-center">
-                    Discount
-                  </div>
-                </th>
-                <th
-                  className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
-                  onClick={() => sorting("discount")}
-                >
-                  <div className="flex items-center justify-center">
-                    Quantity
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      className="h-4 w-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth="2"
-                        d="M8 9l4-4 4 4m0 6l-4 4-4-4"
-                      />
-                    </svg>
-                  </div>
-                </th>
-                <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                  <div className="flex items-center justify-center">Sold</div>
-                </th>
-                <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                  <div className="flex items-center justify-center">Rating</div>
-                </th>
-                <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                  <div className="flex items-center justify-center">Status</div>
-                </th>
-                <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
-                  <div className="flex items-center justify-center">
-                    Actions
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {productList?.length > 0 ? (
-                productList
-                  .filter((value: any, index: number) => {
-                    if (searchItem == "") {
-                      return value;
-                    } else if (
-                      value.name
-                        .toLowerCase()
-                        .includes(searchItem.toLowerCase()) ||
-                      value.price.toString().includes(searchItem)
-                    ) {
-                      return value;
-                    }
-                  })
-                  .map((item: any, index: number) => (
-                    <ProductRow
-                      item={item}
-                      handleImportProduct={handleImportProduct}
-                      hadnleAddColor={hadnleAddColor}
-                      handleUpdateProduct={handleUpdateProduct}
-                      id={index}
-                      key={item._id}
-                      handleImportDiscount={handleImportDiscount}
-                      handleEnableProduct={handleEditProuct}
+        <table className="border w-full whitespace-nowrap">
+          <thead>
+            <tr className="bg-gray-50 border-b">
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div className="flex items-center justify-center">ID</div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div className="flex items-center justify-center">Image</div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div className="flex items-center justify-center">Name</div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div className="flex items-center justify-center">Color</div>
+              </th>
+              <th
+                className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
+                onClick={() => sorting("price")}
+              >
+                <div className="flex items-center justify-center">
+                  Price{" "}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8 9l4-4 4 4m0 6l-4 4-4-4"
                     />
-                  ))
-              ) : (
-                <tr>
-                  <td>-</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                  </svg>
+                </div>
+              </th>
+              <th
+                className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
+                onClick={() => sorting("discount")}
+              >
+                <div className="flex items-center justify-center">Discount</div>
+              </th>
+              <th
+                className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500"
+                onClick={() => sorting("discount")}
+              >
+                <div className="flex items-center justify-center">
+                  Quantity
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-4 w-4"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M8 9l4-4 4 4m0 6l-4 4-4-4"
+                    />
+                  </svg>
+                </div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div className="flex items-center justify-center">Sold</div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div className="flex items-center justify-center">Rating</div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div className="flex items-center justify-center">Status</div>
+              </th>
+              <th className="p-2 border-r cursor-pointer text-sm font-thin text-gray-500">
+                <div className="flex items-center justify-center">Actions</div>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {productList?.length > 0 ? (
+              productList
+                .filter((value: any, index: number) => {
+                  if (searchItem == "") {
+                    return value;
+                  } else if (
+                    value.name
+                      .toLowerCase()
+                      .includes(searchItem.toLowerCase()) ||
+                    value.price.toString().includes(searchItem)
+                  ) {
+                    return value;
+                  }
+                })
+                .map((item: any, index: number) => (
+                  <ProductRow
+                    item={item}
+                    handleImportProduct={handleImportProduct}
+                    hadnleAddColor={hadnleAddColor}
+                    handleUpdateProduct={handleUpdateProduct}
+                    id={index}
+                    key={item._id}
+                    handleImportDiscount={handleImportDiscount}
+                    handleEnableProduct={handleEditProuct}
+                  />
+                ))
+            ) : (
+              <tr>
+                <td>-</td>
+              </tr>
+            )}
+          </tbody>
+        </table>
 
         <div className="">
           <Pagination

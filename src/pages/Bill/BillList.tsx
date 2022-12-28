@@ -64,10 +64,6 @@ function BillList(props: Props) {
     setIdBill(_id);
   };
 
-  const handleRefundBill = (_id: any) => {
-    console.log(_id);
-  };
-
   const handleVerifyBill = async (_id: any, verify: boolean) => {
     const payload = {
       _id: _id,
@@ -95,6 +91,7 @@ function BillList(props: Props) {
     })();
   }, [currentPage, reload]);
 
+  console.log(billList);
   return (
     <div className="table w-full p-2 max-h-screen">
       <form className="flex items-center mb-[20px] w-[20%] mx-auto">
@@ -121,7 +118,7 @@ function BillList(props: Props) {
             type="text"
             id="simple-search"
             className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-            placeholder="Name"
+            placeholder="Phone"
             onChange={(e) => setSearchItem(e.target.value)}
           />
         </div>
@@ -186,18 +183,19 @@ function BillList(props: Props) {
         <tbody>
           {billList?.length > 0 ? (
             billList
+              .reverse()
               .filter((value: any, index: number) => {
                 if (searchItem == "") {
                   return value;
                 } else if (
-                  value.account.name
+                  value.account.phone
                     .toString()
                     .includes(searchItem.toLowerCase())
                 ) {
                   return value;
                 }
               })
-              .reverse()
+
               .map((item: any, index: number) => (
                 <tr
                   className="bg-gray-100 text-center border-b text-sm text-gray-600"
@@ -241,14 +239,6 @@ function BillList(props: Props) {
                       className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
                     >
                       Update
-                    </a>
-                    <a
-                      onClick={() => {
-                        handleRefundBill(item._id);
-                      }}
-                      className="bg-orange-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
-                    >
-                      Refund
                     </a>
                     <a
                       onClick={() => {
