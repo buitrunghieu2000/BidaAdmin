@@ -48,9 +48,10 @@ const Profile = (props: Props) => {
                       Username
                     </label>
                     <input
+                      disabled
                       type="text"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      value={profile.name}
+                      value={profile?.name}
                     />
                   </div>
                 </div>
@@ -63,9 +64,10 @@ const Profile = (props: Props) => {
                       Email address
                     </label>
                     <input
+                      disabled
                       type="email"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      value={profile.email}
+                      value={profile?.email}
                     />
                   </div>
                 </div>
@@ -77,7 +79,6 @@ const Profile = (props: Props) => {
                 Contact Information
               </h6>
               <div className="flex flex-wrap">
-                
                 <div className="w-full lg:w-12/12 px-4">
                   <div className="relative w-full mb-3">
                     <label
@@ -87,6 +88,7 @@ const Profile = (props: Props) => {
                       Address
                     </label>
                     <input
+                      disabled
                       type="text"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       value={""}
@@ -102,14 +104,13 @@ const Profile = (props: Props) => {
                       Phone
                     </label>
                     <input
+                      disabled
                       type="text"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
-                      value={profile.phone}
+                      value={profile?.phone}
                     />
                   </div>
                 </div>
-                
-                
               </div>
 
               <hr className="mt-6 border-b-1 border-blueGray-300" />
@@ -127,6 +128,7 @@ const Profile = (props: Props) => {
                       About me
                     </label>
                     <textarea
+                      disabled
                       typeof="text"
                       className="border-0 px-3 py-3 placeholder-blueGray-300 text-blueGray-600 bg-white rounded text-sm shadow focus:outline-none focus:ring w-full ease-linear transition-all duration-150"
                       rows={4}

@@ -39,12 +39,12 @@ export default function ModalChart({
     });
     console.log("results", results);
     console.log("data", data);
-    // if (results.status === 200) {
-    //   if (results.data.success === "Fail") notifyError(results.data.msg);
-    //   else notifySuccess(results.data.msg);
-    //   reset();
-    //   // console.log(data);
-    // }
+    if (results.status === 200) {
+      if (results.data.success === "Fail") notifyError(results.data.msg);
+      else notifySuccess(results.data.msg);
+      reset();
+      // console.log(data);
+    }
   };
 
   return (

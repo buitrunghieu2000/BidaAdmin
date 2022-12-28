@@ -142,8 +142,8 @@ function Productlist(props: Props) {
               All
             </option>
             {category.map((item: any, index: number) => (
-              <option key={index} value={item.name}>
-                {item.name}
+              <option key={index} value={item?.name}>
+                {item?.name}
               </option>
             ))}
           </select>
@@ -273,10 +273,10 @@ function Productlist(props: Props) {
                   if (searchItem == "") {
                     return value;
                   } else if (
-                    value.name
+                    value?.name
                       .toLowerCase()
                       .includes(searchItem.toLowerCase()) ||
-                    value.price.toString().includes(searchItem)
+                    value?.price.toString().includes(searchItem)
                   ) {
                     return value;
                   }
@@ -288,7 +288,7 @@ function Productlist(props: Props) {
                     hadnleAddColor={hadnleAddColor}
                     handleUpdateProduct={handleUpdateProduct}
                     id={index}
-                    key={item._id}
+                    key={item?._id}
                     handleImportDiscount={handleImportDiscount}
                     handleEnableProduct={handleEditProuct}
                   />
@@ -364,9 +364,9 @@ const ProductRow = (props: any) => {
     <tr className="bg-gray-100 text-center border-b text-sm text-gray-600">
       <td className="p-2 border-r">{id + 1}</td>
       <td className="p-2 border-r w-[100px] h-[100px]">
-        <img src={item.image_url} className="w-full h-full object-contain" />
+        <img src={item?.image_url} className="w-full h-full object-contain" />
       </td>
-      <td className="p-2 border-r w-[200px]">{item.name}</td>
+      <td className="p-2 border-r w-[200px]">{item?.name}</td>
       <td className="p-2 border-r ">
         <select
           className="w-full"
@@ -374,35 +374,35 @@ const ProductRow = (props: any) => {
             setColorQuantity(e.target.value);
           }}
         >
-          <option value={item.totalQuantity}>All</option>
+          <option value={item?.totalQuantity}>All</option>
 
-          {item.colors.map((color: any, index: number) => (
+          {item?.colors.map((color: any, index: number) => (
             <option key={index} value={color?.quantity}>
-              {color.color}
+              {color?.color}
             </option>
           ))}
         </select>
       </td>
-      <td className="p-2 border-r ">{moneyFormater(item.price)}</td>
-      <td className="p-2 border-r ">{item.sale}%</td>
+      <td className="p-2 border-r ">{moneyFormater(item?.price)}</td>
+      <td className="p-2 border-r ">{item?.sale}%</td>
       <td className="p-2 border-r ">{colorQuantity}</td>
-      <td className="p-2 border-r">{item.sold}</td>
-      <td className="p-2 border-r">{item.rating || 0}</td>
+      <td className="p-2 border-r">{item?.sold}</td>
+      <td className="p-2 border-r">{item?.rating || 0}</td>
       <td className="p-2 border-r ">
         <span
           className={`inline-block p-2 rounded-lg capitalize ${
-            item.enable === true
+            item?.enable === true
               ? "text-green-700  bg-successStock"
               : "text-red-700 bg-red-100"
           } `}
         >
-          {item.enable ? "InStock" : "Stocked"}
+          {item?.enable ? "InStock" : "Stocked"}
         </span>
       </td>
       <td className="flex justify-center items-center mb-[40px] mt-[40px] gap-[8px]">
         <a
           onClick={() => {
-            handleImportProduct(item.code);
+            handleImportProduct(item?.code);
           }}
           className="bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
         >
@@ -426,7 +426,7 @@ const ProductRow = (props: any) => {
         </a>
         <a
           onClick={() => {
-            handleUpdateProduct(item._id);
+            handleUpdateProduct(item?._id);
           }}
           className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
         >
@@ -434,15 +434,15 @@ const ProductRow = (props: any) => {
         </a>
         <a
           className={
-            item.enable === false
+            item?.enable === false
               ? "bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
               : "bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
           }
           onClick={() => {
-            handleEnableProduct(item.enable, item.code);
+            handleEnableProduct(item?.enable, item?.code);
           }}
         >
-          {item.enable === false ? "Enable" : "Disable"}
+          {item?.enable === false ? "Enable" : "Disable"}
         </a>
       </td>
     </tr>

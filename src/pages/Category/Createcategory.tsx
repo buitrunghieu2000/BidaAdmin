@@ -134,7 +134,7 @@ function Category(props: Props) {
                 if (searchItem == "") {
                   return value;
                 } else if (
-                  value.name.toLowerCase().includes(searchItem.toLowerCase())
+                  value?.name.toLowerCase().includes(searchItem.toLowerCase())
                 ) {
                   return value;
                 }
@@ -145,11 +145,11 @@ function Category(props: Props) {
                   key={index}
                 >
                   <td className="p-2 border-r">{index + 1}</td>
-                  <td className="p-2 border-r">{item.name}</td>
+                  <td className="p-2 border-r">{item?.name}</td>
                   <td className="flex gap-4 justify-center">
                     <a
                       onClick={() => {
-                        handleGetIDProduct(item.name, item._id);
+                        handleGetIDProduct(item?.name, item?._id);
                       }}
                       className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
                     >
@@ -157,14 +157,14 @@ function Category(props: Props) {
                     </a>
                     <a
                       onClick={() => {
-                        handleGetIDCategory(item._id);
+                        handleGetIDCategory(item?._id);
                       }}
                       className="bg-orange-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
                     >
                       Discount
                     </a>
                     {/* <a className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
-                      <span onClick={() => handleRemove(item._id)}>Remove</span>
+                      <span onClick={() => handleRemove(item?._id)}>Remove</span>
                     </a> */}
                   </td>
                 </tr>

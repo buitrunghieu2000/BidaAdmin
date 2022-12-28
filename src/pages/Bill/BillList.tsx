@@ -79,13 +79,30 @@ function BillList(props: Props) {
     }
   };
 
+  const handleRefundyBill = async (_id: any, refund: boolean) => {
+    const payload = {
+      _id: _id,
+    };
+    if (!refund) {
+      const result = await billApi.refundBill(payload);
+      // console.log(payload);
+      // console.log(result);
+      if (result.msg == "Thành công ") {
+        notifySuccess("Success");
+        setReload(reload + 1);
+      } else notifyError("Fail");
+    } else {
+      return;
+    }
+  };
+
   useEffect(() => {
     (async () => {
       const skip = currentPage * LIMIT;
       const result = await billApi.getListBill(skip, LIMIT);
 
       setBillList(result.data);
-      // console.log(result.count);
+      console.log(result);
       setTotal(result.count);
     })();
   }, [currentPage, reload]);
@@ -186,12 +203,12 @@ function BillList(props: Props) {
                 if (searchItem == "") {
                   return value;
                 } else if (
-                  value.account.name
+                  value?.account.name
                     .toString()
                     .trim()
                     .toLowerCase()
                     .includes(searchItem.toLowerCase()) ||
-                  value.account.phone.toString().includes(searchItem)
+                  value?.account.phone.toString().includes(searchItem)
                 ) {
                   return value;
                 }
@@ -203,27 +220,37 @@ function BillList(props: Props) {
                   key={index}
                 >
                   <td className="p-2 border-r ">
-                    {dayjs(item.createdAt).format("DD-MM-YYYY hh:mm:ssA")}
+                    {dayjs(item?.createdAt).format("DD-MM-YYYY hh:mm:ssA")}
                   </td>
-                  <td className="p-2 border-r ">{item.account.name}</td>
-                  <td className="p-2 border-r ">{item.account.phone}</td>
-                  <td className="p-2 border-r ">{item.account.email}</td>
-                  <td className="p-2 border-r ">{item.address.address}</td>
+                  <td className="p-2 border-r ">{item?.account?.name}</td>
+                  <td className="p-2 border-r ">{item?.account?.phone}</td>
+                  <td className="p-2 border-r ">{item?.account?.email}</td>
+                  <td className="p-2 border-r ">{item?.address?.address}</td>
                   <td className="p-2 border-r ">
-                    {moneyFormater(item.discount)}
+                    {moneyFormater(item?.discount)}
                   </td>
-                  <td className="p-2 border-r ">{moneyFormater(item.ship)}</td>
-                  <td className="p-2 border-r ">{moneyFormater(item.total)}</td>
+                  <td className="p-2 border-r ">{moneyFormater(item?.ship)}</td>
                   <td className="p-2 border-r ">
-                    {item.status[0].statusTimeline}
+                    {moneyFormater(item?.total)}
                   </td>
-                  <td className="p-2 border-r ">{item.paid.toString()}</td>
-                  <td className="p-2 border-r ">{item.refund.toString()}</td>
-                  <td className="p-2 border-r ">{item.verify.toString()}</td>
+                  <td className="p-2 border-r ">
+                    {item?.status[0].statusTimeline}
+                  </td>
+                  <td
+                    className={
+                      item?.paid === true
+                        ? "p-2 border-r bg-blue-500 text-white"
+                        : "p-2 border-r bg-purple-500 text-white"
+                    }
+                  >
+                    {item?.paid === true ? "VNPay" : "COD"}
+                  </td>
+                  <td className="p-2 border-r ">{item?.refund.toString()}</td>
+                  <td className="p-2 border-r ">{item?.verify.toString()}</td>
                   <td className="flex justify-center items-center m-[10px] gap-[8px]">
                     <a
                       onClick={() => {
-                        handleViewBill(item._id);
+                        handleViewBill(item?._id);
                         setShowModalBill(true);
                       }}
                       className="bg-pink-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer "
@@ -234,8 +261,8 @@ function BillList(props: Props) {
                     <a
                       onClick={() => {
                         setShowModalUpdateBill(true);
-                        handleUpdateBill(item._id);
-                        setStatusbill(item.status[0].statusTimeline);
+                        handleUpdateBill(item?._id);
+                        setStatusbill(item?.status[0].statusTimeline);
                       }}
                       className="bg-blue-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
                     >
@@ -243,15 +270,27 @@ function BillList(props: Props) {
                     </a>
                     <a
                       onClick={() => {
-                        handleVerifyBill(item._id, item.verify);
+                        handleVerifyBill(item?._id, item?.verify);
                       }}
                       className={
                         item?.verify === false
-                          ? "bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
-                          : "bg-gray-500 p-2 text-white text-xs font-thin select-none  hover:text-white"
+                          ? "bg-green-500 w-[60px] p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                          : "bg-gray-500 w-[60px] p-2 text-white text-xs font-thin select-none  hover:text-white"
                       }
                     >
                       {item?.verify === false ? "Verify" : "Verified"}
+                    </a>
+                    <a
+                      onClick={() => {
+                        handleRefundyBill(item?._id, item?.refund);
+                      }}
+                      className={
+                        item?.refund === false
+                          ? "bg-orange-500 w-[60px] p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
+                          : "bg-gray-500 w-[60px] p-2 text-white text-xs font-thin select-none  hover:text-white"
+                      }
+                    >
+                      {item?.refund === false ? "Refund" : "Refund"}
                     </a>
                   </td>
                 </tr>

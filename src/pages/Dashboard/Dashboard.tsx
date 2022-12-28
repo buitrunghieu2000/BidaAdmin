@@ -28,15 +28,12 @@ const Dashboard = (props: Props) => {
   const [showModalChart, setShowModalChart] = useState(false);
 
   const data = dataChart.graph.map((item: any, index: number) => {
-
     return {
-      time: formatDate(item.time),
-      revenue: item.total,
-      product: item.count,
+      time: formatDate(item?.time),
+      revenue: item?.total,
+      product: item?.count,
     };
   });
-
-  // console.log(dataTest, data);
 
   const handleSetType = (e: any) => {
     const value = e.target.value;
@@ -58,6 +55,8 @@ const Dashboard = (props: Props) => {
     console.log("end", dateStart);
     setDateEnd(value);
   };
+
+  console.log("dataChart", data);
 
   useEffect(() => {
     (async () => {
@@ -166,12 +165,15 @@ const Dashboard = (props: Props) => {
             <XAxis dataKey="time" />
             <YAxis
               yAxisId="left"
-              tickFormatter={(number) => `${Intl.NumberFormat().format(number)}`}
+              tickFormatter={(number) =>
+                `${Intl.NumberFormat().format(number)}`
+              }
             />
             <YAxis yAxisId="right" orientation="right" />
-            <Tooltip />
             <Legend />
+            <Tooltip />
             <Line
+              activeDot={{ r: 8 }}
               yAxisId="left"
               type="monotone"
               dataKey="revenue"

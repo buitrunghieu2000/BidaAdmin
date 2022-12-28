@@ -220,10 +220,10 @@ function Userlist(props: Props) {
                     if (searchItem == "") {
                       return value;
                     } else if (
-                      value.name
+                      value?.name
                         .toLowerCase()
                         .includes(searchItem.toLowerCase()) ||
-                      value.role
+                      value?.role
                         .toLowerCase()
                         .includes(searchItem.toLowerCase())
                     ) {
@@ -237,30 +237,30 @@ function Userlist(props: Props) {
                     >
                       <td className="p-2 border-r">
                         <input
-                          checked={selectedId.includes(item.email)}
+                          checked={selectedId.includes(item?.email)}
                           className="w-[20px] h-[20px]"
                           type="checkBox"
                           name=""
                           id="select"
                           onClick={(e: any) => {
-                            handleCheck(e, item.email);
+                            handleCheck(e, item?.email);
                           }}
                           onChange={() => {}}
                         />
                       </td>
-                      <td className="p-2 border-r">{item.name}</td>
-                      <td className="p-2 border-r">{item.role}</td>
+                      <td className="p-2 border-r">{item?.name}</td>
+                      <td className="p-2 border-r">{item?.role}</td>
                       <td className="p-2 border-r">
-                        {item.isEmailVerified.toString()}
+                        {item?.isEmailVerified.toString()}
                       </td>
-                      <td className="p-2 border-r">{item.email}</td>
-                      <td className="p-2 border-r">{item.phone}</td>
-                      <td className="p-2 border-r">{item.enable.toString()}</td>
-                      <td className="p-2 border-r">{item.warning}</td>
+                      <td className="p-2 border-r">{item?.email}</td>
+                      <td className="p-2 border-r">{item?.phone}</td>
+                      <td className="p-2 border-r">{item?.enable.toString()}</td>
+                      <td className="p-2 border-r">{item?.warning}</td>
                       <td className="flex gap-4 justify-center">
                         <a
                           onClick={() => {
-                            handleGetIDUser(item._id);
+                            handleGetIDUser(item?._id);
                           }}
                           className="bg-orange-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
                         >
@@ -268,7 +268,7 @@ function Userlist(props: Props) {
                         </a>
                         <a
                           onClick={() => {
-                            handleEnableUser(item._id, item.enable);
+                            handleEnableUser(item?._id, item?.enable);
                           }}
                           className={
                             item?.enable === false

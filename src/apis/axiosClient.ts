@@ -2,7 +2,7 @@ import axios, { AxiosRequestHeaders } from "axios";
 import { getFromLocalStorage } from "../helper/base.helpers";
 
 const axiosClient = axios.create({
-  baseURL: "https://be-dabit.onrender.com/api", //sever de minh call api
+  baseURL: "https://dabit-store-server.herokuapp.com/api", //sever de minh call api
   // baseURL: "http://localhost:8000/api", //sever de minh call api
   headers: {
     "Content-Type": "application/json",

@@ -176,7 +176,7 @@ function DiscountList(props: Props) {
                 if (searchItem == "") {
                   return value;
                 } else if (
-                  value.code.toLowerCase().includes(searchItem.toLowerCase())
+                  value?.code.toLowerCase().includes(searchItem.toLowerCase())
                 ) {
                   return value;
                 }
@@ -187,30 +187,30 @@ function DiscountList(props: Props) {
                   key={index}
                 >
                   <td className="p-2 border-r">{index + 1}</td>
-                  <td className="p-2 border-r">{item.code}</td>
-                  <td className="p-2 border-r">{formatDate(item.dateStart)}</td>
-                  <td className="p-2 border-r">{formatDate(item.dateStart)}</td>
-                  <td className="p-2 border-r">{item.enable.toString()}</td>
-                  <td className="p-2 border-r">{item.is_oic.toString()}</td>
-                  <td className="p-2 border-r">{item.is_oid.toString()}</td>
-                  <td className="p-2 border-r">{item.is_percent.toString()}</td>
-                  <td className="p-2 border-r">{item.is_ship.toString()}</td>
-                  <td className="p-2 border-r">{moneyFormater(item.maxPrice)}</td>
-                  <td className="p-2 border-r">{moneyFormater(item.maxPrice)}</td>
-                  <td className="p-2 border-r">{item.quantity}</td>
-                  <td className="p-2 border-r">{item.value < 100 ? item.value + "%" : moneyFormater(item.value)}</td>
+                  <td className="p-2 border-r">{item?.code}</td>
+                  <td className="p-2 border-r">{formatDate(item?.dateStart)}</td>
+                  <td className="p-2 border-r">{formatDate(item?.dateStart)}</td>
+                  <td className="p-2 border-r">{item?.enable.toString()}</td>
+                  <td className="p-2 border-r">{item?.is_oic.toString()}</td>
+                  <td className="p-2 border-r">{item?.is_oid.toString()}</td>
+                  <td className="p-2 border-r">{item?.is_percent.toString()}</td>
+                  <td className="p-2 border-r">{item?.is_ship.toString()}</td>
+                  <td className="p-2 border-r">{moneyFormater(item?.maxPrice)}</td>
+                  <td className="p-2 border-r">{moneyFormater(item?.maxPrice)}</td>
+                  <td className="p-2 border-r">{item?.quantity}</td>
+                  <td className="p-2 border-r">{item?.value < 100 ? item?.value + "%" : moneyFormater(item?.value)}</td>
                   <td className="flex justify-center items-center m-[10px] gap-[8px]">
                     <a
                       className={
-                        item.enable === false
+                        item?.enable === false
                           ? "bg-green-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
                           : "bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer"
                       }
                       onClick={() => {
-                        handleEditDiscount(item.enable, item.code);
+                        handleEditDiscount(item?.enable, item?.code);
                       }}
                     >
-                      {item.enable === false ? "Enable" : "Disable"}
+                      {item?.enable === false ? "Enable" : "Disable"}
                     </a>
                     {/* <a className="bg-red-500 p-2 text-white hover:shadow-lg text-xs font-thin cursor-pointer">
                       <span onClick={() => handleRemove(item.id)}>Remove</span>

@@ -31,6 +31,11 @@ const billApi = {
     const url = '/bill/update'; //params : page, filter
     return axiosClient.post(url,payload);
   },
+
+  refundBill(payload:any): Promise<ReturnReponse<any>> {
+    const url = '/bill/refund'; //params : page, filter
+    return axiosClient.post(url,payload);
+  },
 };
 
 export default billApi;
