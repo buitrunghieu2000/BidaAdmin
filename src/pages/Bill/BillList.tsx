@@ -41,7 +41,6 @@ function BillList(props: Props) {
       setOrder("ACS");
     }
   };
-  // console.log(searchItem)
 
   const handleSelect = (e: any) => {
     // console.log(e.target.value);
@@ -63,7 +62,6 @@ function BillList(props: Props) {
   const handleUpdateBill = (_id: any) => {
     setIdBill(_id);
   };
-
   const handleVerifyBill = async (_id: any, verify: boolean) => {
     const payload = {
       _id: _id,
@@ -85,13 +83,13 @@ function BillList(props: Props) {
     (async () => {
       const skip = currentPage * LIMIT;
       const result = await billApi.getListBill(skip, LIMIT);
+
       setBillList(result.data);
       // console.log(result.count);
       setTotal(result.count);
     })();
   }, [currentPage, reload]);
 
-  console.log(billList);
   return (
     <div className="table w-full p-2 max-h-screen">
       <form className="flex items-center mb-[20px] w-[20%] mx-auto">
@@ -188,9 +186,12 @@ function BillList(props: Props) {
                 if (searchItem == "") {
                   return value;
                 } else if (
-                  value.account.phone
+                  value.account.name
                     .toString()
-                    .includes(searchItem.toLowerCase())
+                    .trim()
+                    .toLowerCase()
+                    .includes(searchItem.toLowerCase()) ||
+                  value.account.phone.toString().includes(searchItem)
                 ) {
                   return value;
                 }
