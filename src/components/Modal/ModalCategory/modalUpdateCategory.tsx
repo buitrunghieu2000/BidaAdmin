@@ -92,6 +92,7 @@ export default function ModalUpdateCategory({
     if (result.msg === "Thành công ") {
       notifySuccess("Success");
       setReload((ref: number) => ref + 1);
+      setOpenModalUpdateCategory(false);
       reset();
     } else notifyError("Fail");
   };

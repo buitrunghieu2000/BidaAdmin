@@ -2,15 +2,19 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Upload } from "antd";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import productApi from "../../../apis/product/product"
+import productApi from "../../../apis/product/product";
 import { notifyError, notifySuccess } from "../../../utils/notify";
 
-export default function ModalImport({ setOpenModalImport, _id, setReload }: any) {
+export default function ModalImport({
+  setOpenModalImport,
+  _id,
+  setReload,
+}: any) {
   type FormValues = {
     quantity: number;
     price: number;
   };
-  
+
   const [colorModal, setColorModal] = useState<Array<any>>([]);
   const [colorSubmit, setColorSubmit] = useState("");
 
@@ -21,7 +25,7 @@ export default function ModalImport({ setOpenModalImport, _id, setReload }: any)
     reset,
   } = useForm<FormValues>({});
 
-  const submit = async(data: any, e: any) => {
+  const submit = async (data: any, e: any) => {
     e.preventDefault();
     const payload = {
       data: [
@@ -29,20 +33,20 @@ export default function ModalImport({ setOpenModalImport, _id, setReload }: any)
           code: _id,
           color: colorSubmit,
           quantity: Number(data.quantity),
-          price: data.price,
+          price: Number(data.price),
         },
       ],
     };
     // console.log(payload);
     const result = await productApi.importProduct(payload);
     console.log("resultApi", result);
-    if(result.failure.length === 0) {
-      notifySuccess("Import Success")
+    if (result.failure.length === 0) {
+      notifySuccess("Import Success");
       setReload((ref: number) => ref + 1);
       setColorSubmit("");
       reset();
     } else {
-      notifyError("Import Fail")
+      notifyError("Import Fail");
     }
   };
 
@@ -55,7 +59,7 @@ export default function ModalImport({ setOpenModalImport, _id, setReload }: any)
 
   useEffect(() => {
     (async () => {
-      const sendId = 'code='+ _id
+      const sendId = "code=" + _id;
       const result = await productApi.getDetilaProduct(sendId);
       // console.log(result);
       setColorModal(result.data.colors);
